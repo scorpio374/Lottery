@@ -1,10 +1,7 @@
 package com.xmtq.lottery.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap.Config;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,9 +14,10 @@ import android.view.Window;
 import android.view.WindowManager.BadTokenException;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 
-public abstract class BaseActivity extends Activity implements OnClickListener {
+public abstract class BaseActivity extends SherlockFragmentActivity implements OnClickListener {
 //	protected MainApp softApplication;
 	// protected boolean isAllowFullScreen;// 是否允许全屏
 	protected boolean hasMenu;// 是否有菜单显示
@@ -64,7 +62,7 @@ public abstract class BaseActivity extends Activity implements OnClickListener {
 	protected FragmentManager mFragmentManager;
 	protected FragmentTransaction mFragmentTransaction;
 
-	protected String mCurrentFragmentMenuTag;
+	protected String mCurrentFragmentMenuTag = "debug";
 
 	protected void attachFragment(int layout, Fragment f, String tag) {
 		if (f != null) {
