@@ -29,6 +29,7 @@ public abstract class BaseActivity extends SherlockFragmentActivity implements O
 	public final static int pageItemSize = 10;
 	public String userid;
 	// new add
+	// xm add test
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
