@@ -3,10 +3,10 @@
 
     <drawable name="red">#7f00</drawable>
     <drawable name="blue">#770000ff</drawable>
-    <drawable name="green">#7700ff00</drawable>
-    <drawable name="yellow">#77ffff00</drawable>
+    <drawable name="green">#019b79</drawable>
+    <drawable name="gray">#3a3e4d</drawable>
 
-    <color name="black_text">#272727</color>
+    <color name="yellow">#b69966</color>
     <color name="white_text">#FFFFFF</color>
     <color name="bg_tab_title">#ef551c</color>
     <color name="bg_gray">#f2f2f2</color>
@@ -14,7 +14,7 @@
     <color name="background_transpant">#55000000</color>
     <color name="transparent">#00000000</color>
     <color name="red">#FF0000</color>
-    <color name="green">#00FF00</color>
+    <color name="green">#019b79</color>
     <color name="blue">#0091a8</color>
     <color name="black">#525252</color>
     <color name="userinfocolor">#535353</color>
@@ -30,11 +30,12 @@
     <color name="tvision_black">#424449</color>
     <color name="white">#FFFFFF</color>
     <color name="login_out_text">#424449</color>
-    <color name="gray">#535353</color>
-    <!-- <color name="soft_gray">#ececec</color> -->
-    <color name="soft_gray">#f2f2f2</color>
-    <color name="soft_gray2">#55eaeaea</color>
-    <color name="deep_gray">#cccccc</color>
+    <color name="gray">#3a3e4d</color>
+    <color name="soft_gray">#41444d</color>
+    <!-- <color name="soft_gray">#f2f2f2</color> -->
+    <!-- <color name="soft_gray2">#55eaeaea</color> -->
+    <color name="deep_gray">#2a2c38</color>
     <color name="light_gray">#d0d0d0</color>
+    <color name="edit_color">#86878c</color>
 
 </resources>
