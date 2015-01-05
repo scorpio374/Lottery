@@ -17,30 +17,28 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 
-public abstract class BaseActivity extends SherlockFragmentActivity implements OnClickListener {
-//	protected MainApp softApplication;
+public abstract class BaseActivity extends SherlockFragmentActivity implements
+		OnClickListener {
+	// protected MainApp softApplication;
 	// protected boolean isAllowFullScreen;// 是否允许全屏
 	protected boolean hasMenu;// 是否有菜单显示
 	private ProgressDialog progressDialog;
 	protected Resources resources;
 	protected SharedPrefHelper mSharedPrefHelper;
-//	public UserBean mUserBean;
+	// public UserBean mUserBean;
 	public int currentPage = 1;
 	public final static int pageItemSize = 10;
 	public String userid;
-	// new add
-	// xm add test
-	// xm add test2
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		resources = getResources();
-//		softApplication = (MainApp) getApplicationContext();
-//		userid = getSharedPreferences("userInfo", Context.MODE_PRIVATE)
-//				.getString(Config.USER_ID_PARAMS, "");
+		// softApplication = (MainApp) getApplicationContext();
+		// userid = getSharedPreferences("userInfo", Context.MODE_PRIVATE)
+		// .getString(Config.USER_ID_PARAMS, "");
 		mSharedPrefHelper = SharedPrefHelper.getInstance(this);
-//		mUserBean = mSharedPrefHelper.readUserBean();
+		// mUserBean = mSharedPrefHelper.readUserBean();
 		// if (isAllowFullScreen) {
 		setFullScreen(true);
 		// } else {
@@ -65,7 +63,7 @@ public abstract class BaseActivity extends SherlockFragmentActivity implements O
 	protected FragmentManager mFragmentManager;
 	protected FragmentTransaction mFragmentTransaction;
 
-	protected String mCurrentFragmentMenuTag = "debug";
+	protected String mCurrentFragmentMenuTag;
 
 	protected void attachFragment(int layout, Fragment f, String tag) {
 		if (f != null) {
