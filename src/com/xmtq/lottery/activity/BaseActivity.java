@@ -30,6 +30,7 @@ public abstract class BaseActivity extends SherlockFragmentActivity implements O
 	public String userid;
 	// new add
 	// xm add test
+	// xm add test2
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
