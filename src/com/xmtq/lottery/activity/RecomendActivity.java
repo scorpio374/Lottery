@@ -1,20 +1,17 @@
 package com.xmtq.lottery.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.simonvt.menudrawer.MenuDrawer;
-import net.simonvt.menudrawer.Position;
-import android.content.Intent;
+import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ListView;
+import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.adapter.RecomendListAdapter;
+import com.xmtq.lottery.fragment.BetRecordFragment;
+import com.xmtq.lottery.fragment.RecomendFragment;
 import com.xmtq.lottery.fragment.UserInfoFragment;
+import com.xmtq.lottery.view.slidingmenu.SlidingMenu;
+import com.xmtq.lottery.view.slidingmenu.app.SlidingFragmentActivity;
 
 /**
  * 首页推荐
@@ -22,59 +19,25 @@ import com.xmtq.lottery.fragment.UserInfoFragment;
  * @author mwz123
  * 
  */
-public class RecomendActivity extends BaseActivity {
+public class RecomendActivity extends SlidingFragmentActivity implements
+		OnClickListener {
 
-	private ImageButton imgBtnLeft, imgBtnRight;
-	private ListView recomend_list;
-
-	private MenuDrawer mLeftMenuDrawer;
-	private MenuDrawer mRightMenuDrawer;
 	private long exitTime;
 	private final static long TIME_DIFF = 2 * 1000;
+	private SlidingMenu menu;
 
-	@Override
-	public void setContentLayout() {
-		setContentView(R.layout.recomend);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		initView();
 	}
 
-	@Override
-	public void dealLogicBeforeInitView() {
-
-	}
-
-	@Override
 	public void initView() {
-		imgBtnLeft = (ImageButton) findViewById(R.id.recomend_left);
-		imgBtnRight = (ImageButton) findViewById(R.id.recomend_right);
-		imgBtnLeft.setOnClickListener(this);
-		imgBtnRight.setOnClickListener(this);
-		recomend_list = (ListView) findViewById(R.id.recomend_list);
-
 		initMenuDrawer();
 	}
 
 	@Override
-	public void dealLogicAfterInitView() {
-		List<String> mList = new ArrayList<String>();
-		for (int i = 0; i < 10; i++) {
-			mList.add(i + "");
-		}
-		RecomendListAdapter mAdapter = new RecomendListAdapter(
-				RecomendActivity.this, mList);
-		recomend_list.setAdapter(mAdapter);
-	}
-
-	@Override
-	public void onClickEvent(View view) {
+	public void onClick(View view) {
 		switch (view.getId()) {
-		case R.id.recomend_left:
-
-			mLeftMenuDrawer.openMenu(true);
-			break;
-
-		case R.id.recomend_right:
-			mRightMenuDrawer.openMenu(true);
-			break;
 
 		default:
 			break;
@@ -82,31 +45,42 @@ public class RecomendActivity extends BaseActivity {
 	}
 
 	private void initMenuDrawer() {
-		mFragmentManager = getSupportFragmentManager();
+		// left sliding menu
+		setBehindContentView(R.layout.menu_frame);
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.menu_frame, new UserInfoFragment()).commit();
+		
+		menu = getSlidingMenu();
+		menu.setMode(SlidingMenu.LEFT_RIGHT);
+		menu.setShadowWidthRes(R.dimen.shadow_width);
+		menu.setShadowDrawable(R.drawable.shadow);
+		menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+		menu.setFadeDegree(0.35f);
+		menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 
-		mLeftMenuDrawer = MenuDrawer.attach(this, MenuDrawer.Type.BEHIND,
-				Position.LEFT, MenuDrawer.MENU_DRAG_WINDOW);
-		mLeftMenuDrawer.setMenuView(R.layout.userinfo);
-		mLeftMenuDrawer.setTouchMode(MenuDrawer.TOUCH_MODE_BEZEL);
-		mLeftMenuDrawer.setMenuSize(getScreenWidth() / 5 * 4);
+		// middle view
+		setContentView(R.layout.content_frame);
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.content_frame, new RecomendFragment()).commit();
 
-		attachFragment(mLeftMenuDrawer.getMenuContainer().getId(),
-				new UserInfoFragment(), mCurrentFragmentMenuTag);
-		commitTransactions();
-
-		mRightMenuDrawer = MenuDrawer.attach(this, MenuDrawer.Type.BEHIND,
-				Position.RIGHT, MenuDrawer.MENU_DRAG_WINDOW);
-		mRightMenuDrawer.setMenuView(R.layout.fragment_history);
-		mRightMenuDrawer.setTouchMode(MenuDrawer.TOUCH_MODE_BEZEL);
-		mRightMenuDrawer.setMenuSize(getScreenWidth() / 5 * 4);
-
+		// right sliding menu
+		getSlidingMenu().setSecondaryMenu(R.layout.menu_frame_two);
+		getSlidingMenu().setSecondaryShadowDrawable(R.drawable.shadowright);
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.menu_frame_two, new BetRecordFragment()).commit();
+	}
+	
+	public void openLeftDrawer(){
+		menu.showMenu();
+	}
+	
+	public void openRightDrawer(){
+		menu.showSecondaryMenu();
 	}
 
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
-		mLeftMenuDrawer.closeMenu(true);
-		mRightMenuDrawer.closeMenu(true);
 		super.onDestroy();
 	}
 
@@ -114,13 +88,6 @@ public class RecomendActivity extends BaseActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			final int drawerState = mLeftMenuDrawer.getDrawerState();
-			if (drawerState == MenuDrawer.STATE_OPEN
-					|| drawerState == MenuDrawer.STATE_OPENING) {
-				mLeftMenuDrawer.closeMenu();
-				mRightMenuDrawer.closeMenu();
-				return true;
-			}
 			if ((System.currentTimeMillis() - exitTime) > TIME_DIFF) {
 				Toast.makeText(RecomendActivity.this, "再按一次退出",
 						Toast.LENGTH_SHORT).show();

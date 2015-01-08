@@ -27,5 +27,8 @@
     <dimen name="main_textsize">16sp</dimen>
     <dimen name="main_textsize2">18sp</dimen>
     <dimen name="main_textsize3">14sp</dimen>
+    
+    <dimen name="shadow_width">15dp</dimen>
+    <dimen name="slidingmenu_offset">60dp</dimen>
 
 </resources>
