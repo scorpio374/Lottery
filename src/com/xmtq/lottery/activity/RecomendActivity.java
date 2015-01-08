@@ -13,8 +13,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.adapter.RecomendListAdapter;
 import com.xmtq.lottery.fragment.UserInfoFragment;
-import com.xmtq.lotteryadapter.RecomendListAdapter;
 
 /**
  * 首页推荐

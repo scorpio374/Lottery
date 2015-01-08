@@ -7,10 +7,8 @@
 
     <RelativeLayout
         android:id="@+id/recomend_head"
-        android:layout_width="match_parent"
-        android:layout_height="50dip"
-        android:layout_alignParentTop="true"
-        android:background="#019b79" >
+        style="@style/head_style"
+        android:layout_alignParentTop="true" >
 
         <ImageButton
             android:id="@+id/recomend_left"

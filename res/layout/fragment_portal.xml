@@ -6,9 +6,7 @@
 
     <RelativeLayout
         android:id="@+id/record_head"
-        android:layout_width="match_parent"
-        android:layout_height="50dip"
-        android:background="#019b79" >
+        style="@style/head_style" >
 
         <ImageButton
             android:id="@+id/main_left"

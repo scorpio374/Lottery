@@ -14,7 +14,7 @@ public class PersonDataActivity extends BaseActivity {
 
 	@Override
 	public void setContentLayout() {
-		setContentView(R.layout.userdata);
+		setContentView(R.layout.userdata_first);
 
 	}
 
