@@ -6,11 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.activity.AccountDetailActivity;
 import com.xmtq.lottery.activity.BetRecordActivity;
+import com.xmtq.lottery.activity.ExtractMoneyActivity;
 import com.xmtq.lottery.activity.ModifiPasswordActivity;
 import com.xmtq.lottery.activity.PersonDataActivity;
+import com.xmtq.lottery.activity.RechargeMoneyActivity;
 
 /**
  * 个人中心
@@ -20,6 +24,7 @@ import com.xmtq.lottery.activity.PersonDataActivity;
  */
 public class UserInfoFragment extends BaseFragment {
 	private RelativeLayout rl_repassword, rl_bet_record, rl_userinfo;
+	private RelativeLayout account_information;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,10 +43,18 @@ public class UserInfoFragment extends BaseFragment {
 		rl_repassword = (RelativeLayout) v.findViewById(R.id.rl_repassword);
 		rl_bet_record = (RelativeLayout) v.findViewById(R.id.rl_bet_record);
 		rl_userinfo = (RelativeLayout) v.findViewById(R.id.rl_userinfo);
-
+		account_information = (RelativeLayout) v
+				.findViewById(R.id.account_information);
+		// 充值
+		TextView recharge_money = (TextView) v.findViewById(R.id.recharge);
+		// 提现
+		TextView extract_money = (TextView) v.findViewById(R.id.extract_money);
 		rl_bet_record.setOnClickListener(this);
 		rl_repassword.setOnClickListener(this);
 		rl_userinfo.setOnClickListener(this);
+		account_information.setOnClickListener(this);
+		recharge_money.setOnClickListener(this);
+		extract_money.setOnClickListener(this);
 	}
 
 	@Override
@@ -60,6 +73,12 @@ public class UserInfoFragment extends BaseFragment {
 			startActivity(intent);
 
 			break;
+		// 账户明细
+		case R.id.account_information:
+			intent = new Intent(getActivity(), AccountDetailActivity.class);
+			startActivity(intent);
+
+			break;
 		// 修改密码
 		case R.id.rl_repassword:
 			intent = new Intent(getActivity(), ModifiPasswordActivity.class);
@@ -67,9 +86,20 @@ public class UserInfoFragment extends BaseFragment {
 
 			break;
 
+		// 充值
+		case R.id.recharge:
+			intent = new Intent(getActivity(), RechargeMoneyActivity.class);
+			startActivity(intent);
+
+			break;
+		// 提现
+		case R.id.extract_money:
+			intent = new Intent(getActivity(), ExtractMoneyActivity.class);
+			startActivity(intent);
+
+			break;
 		default:
 			break;
 		}
 	}
-
 }

@@ -1,6 +1,7 @@
 package com.xmtq.lottery.activity;
 
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.example.lottery.R;
 
@@ -27,7 +28,6 @@ public class UserInfoActivity extends BaseActivity {
 	@Override
 	public void initView() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -38,7 +38,6 @@ public class UserInfoActivity extends BaseActivity {
 
 	@Override
 	public void onClickEvent(View view) {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.lottery.R;
@@ -20,6 +21,7 @@ import com.xmtq.lottery.adapter.BetRecordListAdapter;
 public class CheckBankActivity extends BaseActivity {
 
 	private ListView bank_savings_list;
+	private ImageButton btn_back;
 
 	@Override
 	public void setContentLayout() {
@@ -37,6 +39,8 @@ public class CheckBankActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 
 		bank_savings_list = (ListView) findViewById(R.id.bank_savings_list);
+		btn_back = (ImageButton) findViewById(R.id.back);
+		btn_back.setOnClickListener(this);
 	}
 
 	@Override
@@ -53,7 +57,14 @@ public class CheckBankActivity extends BaseActivity {
 
 	@Override
 	public void onClickEvent(View view) {
-		// TODO Auto-generated method stub
+		switch (view.getId()) {
+		case R.id.back:
+			this.finish();
+			break;
+
+		default:
+			break;
+		}
 
 	}
 

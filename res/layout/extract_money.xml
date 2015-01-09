@@ -273,10 +273,12 @@
                 android:textSize="@dimen/main_textsize" />
 
             <ImageView
+                android:id="@+id/img_checkbank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="5dip"
+                android:padding="5dip"
                 android:src="@drawable/checkbank" />
         </LinearLayout>
 

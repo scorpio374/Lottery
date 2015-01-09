@@ -43,6 +43,41 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
+        <activity
+            android:name="com.xmtq.lottery.activity.AddBankFirstActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.xmtq.lottery.activity.RechargeMoneyActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.xmtq.lottery.activity.CheckBankActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.xmtq.lottery.activity.AccountDetailLastweekActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.xmtq.lottery.activity.ExtractMoneyActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.xmtq.lottery.activity.UserInfoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.xmtq.lottery.activity.AccountDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
     </application>
 
 </manifest>

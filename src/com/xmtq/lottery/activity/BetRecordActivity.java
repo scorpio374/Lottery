@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.example.lottery.R;
@@ -18,6 +19,7 @@ import com.xmtq.lottery.adapter.BetRecordListAdapter;
 public class BetRecordActivity extends BaseActivity {
 
 	private ListView bet_record;
+	private ImageButton btn_back;
 
 	@Override
 	public void setContentLayout() {
@@ -35,6 +37,8 @@ public class BetRecordActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 
 		bet_record = (ListView) findViewById(R.id.record_all_list);
+		btn_back = (ImageButton) findViewById(R.id.back);
+		btn_back.setOnClickListener(this);
 	}
 
 	@Override
@@ -51,7 +55,14 @@ public class BetRecordActivity extends BaseActivity {
 
 	@Override
 	public void onClickEvent(View view) {
-		// TODO Auto-generated method stub
+		switch (view.getId()) {
+		case R.id.back:
+			this.finish();
+			break;
+
+		default:
+			break;
+		}
 
 	}
 
