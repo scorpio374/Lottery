@@ -15,7 +15,7 @@ import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.adapter.RecomendListAdapter;
 
 /**
- * 个人中心
+ * 首页推荐
  * 
  * @author mwz123
  * 

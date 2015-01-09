@@ -49,7 +49,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		setBehindContentView(R.layout.menu_frame);
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.menu_frame, new UserInfoFragment()).commit();
-		
+
 		menu = getSlidingMenu();
 		menu.setMode(SlidingMenu.LEFT_RIGHT);
 		menu.setShadowWidthRes(R.dimen.shadow_width);
@@ -64,17 +64,17 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 				.replace(R.id.content_frame, new RecomendFragment()).commit();
 
 		// right sliding menu
-		getSlidingMenu().setSecondaryMenu(R.layout.menu_frame_two);
-		getSlidingMenu().setSecondaryShadowDrawable(R.drawable.shadowright);
+		menu.setSecondaryMenu(R.layout.menu_frame_two);
+		menu.setSecondaryShadowDrawable(R.drawable.shadowright);
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.menu_frame_two, new BetRecordFragment()).commit();
 	}
-	
-	public void openLeftDrawer(){
+
+	public void openLeftDrawer() {
 		menu.showMenu();
 	}
-	
-	public void openRightDrawer(){
+
+	public void openRightDrawer() {
 		menu.showSecondaryMenu();
 	}
 
