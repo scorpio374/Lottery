@@ -61,7 +61,7 @@
             android:button="@null"
             android:gravity="center"
             android:text="全部"
-            android:textColor="@drawable/button_textcolor_selector"
+            android:textColor="@drawable/radiobtn_textcolor_selector"
             android:textSize="@dimen/main_textsize" />
 
         <ImageView
@@ -78,7 +78,7 @@
             android:button="@null"
             android:gravity="center"
             android:text="中奖"
-            android:textColor="@drawable/button_textcolor_selector"
+            android:textColor="@drawable/radiobtn_textcolor_selector"
             android:textSize="@dimen/main_textsize" />
 
         <ImageView
@@ -95,7 +95,7 @@
             android:button="@null"
             android:gravity="center"
             android:text="待开"
-            android:textColor="@drawable/button_textcolor_selector"
+            android:textColor="@drawable/radiobtn_textcolor_selector"
             android:textSize="@dimen/main_textsize" />
     </RadioGroup>
 

@@ -113,7 +113,7 @@
                 android:paddingBottom="10dip"
                 android:paddingTop="10dip"
                 android:text="10元"
-                android:textColor="@drawable/button_textcolor_selector"
+                android:textColor="@drawable/radiobtn_textcolor_selector"
                 android:textSize="@dimen/main_textsize" />
 
             <RadioButton
@@ -126,7 +126,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="50元"
-                android:textColor="@drawable/button_textcolor_selector"
+                android:textColor="@drawable/radiobtn_textcolor_selector"
                 android:textSize="@dimen/main_textsize" />
 
             <RadioButton
@@ -139,7 +139,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="100元"
-                android:textColor="@drawable/button_textcolor_selector"
+                android:textColor="@drawable/radiobtn_textcolor_selector"
                 android:textSize="@dimen/main_textsize" />
 
             <RadioButton
@@ -152,7 +152,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:text="500元"
-                android:textColor="@drawable/button_textcolor_selector"
+                android:textColor="@drawable/radiobtn_textcolor_selector"
                 android:textSize="@dimen/main_textsize" />
         </RadioGroup>
     </LinearLayout>

@@ -44,7 +44,7 @@ public class BetOrderDetailListAdapter extends BaseAdapter {
 			holder = new Holder();
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.bet_detail_list_item, null);
-
+			convertView.setTag(holder);
 		} else {
 			holder = (Holder) convertView.getTag();
 		}

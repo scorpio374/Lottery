@@ -119,7 +119,7 @@
                     android:paddingBottom="10dip"
                     android:paddingTop="10dip"
                     android:text="胜 1.55"
-                    android:textColor="@drawable/button_textcolor_selector"
+                    android:textColor="@drawable/radiobtn_textcolor_selector"
                     android:textSize="@dimen/main_textsize" />
 
                 <ImageView
@@ -136,7 +136,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:text="平 1.23"
-                    android:textColor="@drawable/button_textcolor_selector"
+                    android:textColor="@drawable/radiobtn_textcolor_selector"
                     android:textSize="@dimen/main_textsize" />
 
                 <ImageView
@@ -153,7 +153,7 @@
                     android:button="@null"
                     android:gravity="center"
                     android:text="负 1.55"
-                    android:textColor="@drawable/button_textcolor_selector"
+                    android:textColor="@drawable/radiobtn_textcolor_selector"
                     android:textSize="@dimen/main_textsize" />
             </RadioGroup>
         </LinearLayout>

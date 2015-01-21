@@ -44,7 +44,7 @@ public class RecomendListAdapter extends BaseAdapter {
 			holder = new Holder();
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.recomend_list_item, null);
-
+			convertView.setTag(holder);
 		} else {
 			holder = (Holder) convertView.getTag();
 		}

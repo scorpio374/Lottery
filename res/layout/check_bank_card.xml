@@ -62,7 +62,7 @@
             android:checked="true"
             android:gravity="center"
             android:text="储蓄卡"
-            android:textColor="@drawable/button_textcolor_selector"
+            android:textColor="@drawable/radiobtn_textcolor_selector"
             android:textSize="@dimen/main_textsize" />
 
         <RadioButton
@@ -74,7 +74,7 @@
             android:button="@null"
             android:gravity="center"
             android:text="信用卡"
-            android:textColor="@drawable/button_textcolor_selector"
+            android:textColor="@drawable/radiobtn_textcolor_selector"
             android:textSize="@dimen/main_textsize" />
     </RadioGroup>
 

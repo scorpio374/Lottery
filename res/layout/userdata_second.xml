@@ -61,7 +61,7 @@
             android:checked="true"
             android:gravity="center"
             android:text="身份信息"
-            android:textColor="@drawable/button_textcolor_selector"
+            android:textColor="@drawable/radiobtn_textcolor_selector"
             android:textSize="@dimen/main_textsize" />
 
         <RadioButton
@@ -73,7 +73,7 @@
             android:button="@null"
             android:gravity="center"
             android:text="提款银行卡"
-            android:textColor="@drawable/button_textcolor_selector"
+            android:textColor="@drawable/radiobtn_textcolor_selector"
             android:textSize="@dimen/main_textsize" />
     </RadioGroup>
     <!-- 身份信息 -->

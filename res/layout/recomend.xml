@@ -146,9 +146,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:padding="10dip"
                 android:background="@color/soft_gray"
                 android:orientation="horizontal"
+                android:padding="10dip"
                 android:visibility="visible" >
 
                 <TextView
@@ -191,7 +191,7 @@
                     android:gravity="center"
                     android:padding="10dip"
                     android:text="串关"
-                    android:textColor="@drawable/button_textcolor_selector"
+                    android:textColor="@drawable/radiobtn_textcolor_selector"
                     android:textSize="@dimen/main_textsize" />
 
                 <ImageView
@@ -208,7 +208,7 @@
                     android:gravity="center"
                     android:padding="10dip"
                     android:text="3倍"
-                    android:textColor="@drawable/button_textcolor_selector"
+                    android:textColor="@drawable/radiobtn_textcolor_selector"
                     android:textSize="@dimen/main_textsize" />
             </RadioGroup>
         </LinearLayout>
@@ -301,7 +301,6 @@
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
         android:layout_height="100dip"
-        android:layout_alignParentBottom="true"
         android:background="@color/soft_gray"
         android:orientation="horizontal"
         android:visibility="gone" >
