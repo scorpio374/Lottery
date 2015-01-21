@@ -1,0 +1,7 @@
+1、用户注册
+请求数据
+<?xml version="1.0" encoding="UTF-8" ?><message version="1.0"><header><transactiontype>10001_1.1</transactiontype><timestamp>20150121130522</timestamp><digest>7d8be1d295c77e71661b0cd49d88ed6b</digest><agenterid>10000001</agenterid><ipaddress>223131123122</ipaddress><source>WEB</source></header><body><elements><element><username>tangqi</username><mail>hntangqi374@163.com</mail><actpassword>tq123456</actpassword><mobile>13632809278</mobile><serialuid>12563245125</serialuid><type>1</type></element></elements></body></message>
+
+返回数据
+<?xml version="1.0" encoding="UTF-8"?>
+<message version="1.0"><header><transactiontype>10001_1.1</transactiontype><timestamp>20150121130521</timestamp><agenterid>10000001</agenterid><ipaddress>223131123122</ipaddress><source>WEB</source><digest>4250abe213df49138d7d9393d77310a5</digest></header><body><oelement><errorcode>0</errorcode><errormsg>操作成功</errormsg></oelement><element><uid>14244</uid><username>tangqi</username><money>0.00</money><prizeMoney>0.00</prizeMoney><perfectFlag>1</perfectFlag></element></body></message>

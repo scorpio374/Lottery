@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class LogUtil {
 	private static final boolean isLog = true;
-	private static final String DEFAULT_TAG = "callback";
+	private static final String DEFAULT_TAG = "Debug";
 
 	public static void log(String tag, int level, String msg, Throwable tr) {
 		if (isLog) {

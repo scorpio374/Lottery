@@ -1,12 +1,14 @@
 package com.xmtq.lottery.network;
 
-import java.io.StringWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import org.xmlpull.v1.XmlSerializer;
+import android.annotation.SuppressLint;
+import android.text.TextUtils;
 
-import android.util.Xml;
-
-import com.xmtq.lottery.parser.ErrorParser;
+import com.dvt.lottery.util.MD5;
+import com.xmtq.lottery.Consts;
+import com.xmtq.lottery.utils.LogUtil;
 
 public class RequestMaker {
 
@@ -17,6 +19,9 @@ public class RequestMaker {
 	}
 
 	private RequestMaker(String url) {
+		if (TextUtils.isEmpty(url)) {
+			url = Consts.host;
+		}
 		request = new Request(url);
 
 	}
@@ -24,7 +29,7 @@ public class RequestMaker {
 	private static RequestMaker requestMaker = null;
 
 	/**
-	 * 得到JsonMaker的实�?
+	 * 得到JsonMaker的实例
 	 * 
 	 * @param context
 	 * @return
@@ -39,339 +44,362 @@ public class RequestMaker {
 	}
 
 	/**
-	 * 组装获取内容详情的xml
-	 * 
-	 * @param contentId
-	 *            对象内容id
-	 * @param userId
-	 *            用户id
-	 * @param contentType
-	 *            内容类型�?vod节目 2频道 3节目�?4连续�?
-	 * @param userToken
-	 *            身份证明
-	 * @return
+	 * @param sb
 	 */
-	private String contentDetailXMLData(String contentId, String userId,
-			String userToken, String contentType) {
-		XmlSerializer xml = Xml.newSerializer();
-		StringWriter sw = new StringWriter();
-		try {
-			xml.setOutput(sw);
-			xml.startDocument("UTF-8", false);
-			// �?��
-			xml.startTag(null, "GetContentDetail");
-			// contentId
-			xml.startTag(null, "contentId");
-			xml.text(contentId);
-			xml.endTag(null, "contentId");
-			// userId
-			xml.startTag(null, "userId");
-			xml.text(userId);
-			xml.endTag(null, "userId");
-			// userToken
-			xml.startTag(null, "userToken");
-			xml.text(userToken);
-			xml.endTag(null, "userToken");
-			if (contentType != null) {
-				// contentType
-				xml.startTag(null, "contentType");
-				xml.text(contentType);
-				xml.endTag(null, "contentType");
-			}
-			//
-			xml.endTag(null, "GetContentDetail");
-			//
-			xml.endDocument();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return sw.toString();
+	protected String makeTag(String name, String value) {
+		return "<" + name + ">" + (value == null ? "" : value) + "</" + name
+				+ ">";
 	}
 
 	/**
-	 * 返回获取内容详情的请�?
+	 * 生成XML请求参数
 	 * 
-	 * @param contentId
-	 *            对象内容id
-	 * @param userId
-	 *            用户id
-	 * @param contentType
-	 *            （非必需）内容类型：1vod节目 2频道 3节目�?4连续�?
-	 * @param userToken
-	 *            身份证明
+	 * @param body
 	 * @return
 	 */
-	public Request getContentDetail(String contentId, String contentType,
-			String userId, String userToken) {
-
-		String body = contentDetailXMLData(contentId, userId, contentType,
-				userToken);
-		// Request request = new Request(
-		// ServerInterfaceDefinition.OPT_GETCONTENTDETAIL, body,
-		// new ErrorParser());
-
-		request.setBody(body);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCONTENTDETAIL);
-		request.setXmlParser(new ErrorParser());
-		return request;
-	}
-
-	private String createChannelList(String group, String count, String offset,
-			String userId, String userToken) {
-		XmlSerializer xml = Xml.newSerializer();
-		StringWriter sw = new StringWriter();
-		try {
-			xml.setOutput(sw);
-			xml.startDocument("UTF-8", false);
-			// �?��
-			xml.startTag(null, "GetChannelList");
-			// group
-			xml.startTag(null, "group");
-			xml.text(group);
-			xml.endTag(null, "group");
-			// count
-			xml.startTag(null, "count");
-			xml.text(count);
-			xml.endTag(null, "count");
-			// offset
-			xml.startTag(null, "offset");
-			xml.text(offset);
-			xml.endTag(null, "offset");
-			// userId
-			xml.startTag(null, "userId");
-			xml.text(userId);
-			xml.endTag(null, "userId");
-			// userToken
-			xml.startTag(null, "userToken");
-			xml.text(userToken);
-			xml.endTag(null, "userToken");
-
-			//
-			xml.endTag(null, "GetChannelList");
-			//
-			xml.endDocument();
-
-		} catch (Exception e) {
-			e.printStackTrace();
+	public String makeXml(String body, String transactiontype) {
+		String source = Consts.agenterkey;
+		if (body != null) {
+			source += body;
 		}
-		return sw.toString();
-	}
+		String digest = MD5.md5(source);
 
-//	/**
-//	 * 获得用户可以观看的频道列�?
-//	 * 
-//	 * @param group
-//	 *            频道分组名称，如“本地频道�?�?如为空则取全部频�?
-//	 * @param count
-//	 *            取多少条
-//	 * @param offset
-//	 *            相对第一条的偏移�?
-//	 * @param userId
-//	 *            用户业务编号
-//	 * @param userToken
-//	 *            业务管理平台为该用户分配的临时身份证�?
-//	 * @return
-//	 */
-//	public Request getChannelList(String group, String count, String offset,
-//			String userId, String userToken) {
-//
-//		String body = createChannelList(group, count, offset, userId, userToken);
-//		// body = body.replace(" standalone='no' ", "");
-//		// Request request = new Request(
-//		// ServerInterfaceDefinition.OPT_GETCHANNELLIST, body,
-//		// new ErrorParser());
-//		request.setBody(body);
-//		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-//		request.setXmlParser(new ChannelParser());
-//		return request;
-//	}
-
-	private String createScheduleList(String count, String channelId,
-			String offset, String startDateTime, String endDateTime,
-			String userId, String userToken) {
-		XmlSerializer xml = Xml.newSerializer();
-		StringWriter sw = new StringWriter();
-		try {
-			xml.setOutput(sw);
-			xml.startDocument("UTF-8", false);
-			// �?��
-			xml.startTag(null, "GetScheduleList");
-			// count
-			xml.startTag(null, "count");
-			xml.text(count);
-			xml.endTag(null, "count");
-			// channelId
-			xml.startTag(null, "channelId");
-			xml.text(channelId);
-			xml.endTag(null, "channelId");
-			// offset
-			xml.startTag(null, "offset");
-			xml.text(offset);
-			xml.endTag(null, "offset");
-			// startDateTime
-			xml.startTag(null, "startDateTime");
-			xml.text(startDateTime);
-			xml.endTag(null, "startDateTime");
-			// endDateTime
-			xml.startTag(null, "endDateTime");
-			xml.text(endDateTime);
-			xml.endTag(null, "endDateTime");
-			// userId
-			xml.startTag(null, "userId");
-			xml.text(userId);
-			xml.endTag(null, "userId");
-			// userToken
-			xml.startTag(null, "userToken");
-			xml.text(userToken);
-			xml.endTag(null, "userToken");
-			//
-			xml.endTag(null, "GetScheduleList");
-			//
-			xml.endDocument();
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		StringBuilder sb = new StringBuilder();
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+		sb.append("<message version=\"1.0\">");
+		sb.append(makeHeader(digest, transactiontype));
+		if (body != null) {
+			sb.append(body);
 		}
-		return sw.toString();
-	}
-
-//	/**
-//	 * 获得节目信息请求格式
-//	 * 
-//	 * @param count
-//	 *            取多少条
-//	 * @param channelId
-//	 *            请求的频道的contentId
-//	 * @param offset
-//	 *            相对第一条的偏移�?
-//	 * @param startDateTime
-//	 *            起始时间参数 ，格式为YYYYMMDDHH24MISS �?
-//	 * @param endDateTime
-//	 *            结束时间参数，格式为YYYYMMDDHH24MISS
-//	 *            ，前端服务需要返回由startDateTime和endDateTime确定的时间段内的节目单�?
-//	 * @param userId
-//	 *            用户业务编号
-//	 * @param userToken
-//	 *            业务管理平台为该用户分配的临时身份证�?
-//	 * @return
-//	 */
-//	public Request getScheduleList(String count, String channelId,
-//			String offset, String startDateTime, String endDateTime,
-//			String userId, String userToken) {
-//
-//		String body = createScheduleList(count, channelId, offset,
-//				startDateTime, endDateTime, userId, userToken);
-//		// Request request = new Request(
-//		// ServerInterfaceDefinition.OPT_GETSCHEDULELIST, body,
-//		// new ScheduleParser());
-//		request.setBody(body);
-//		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETSCHEDULELIST);
-//		request.setXmlParser(new ScheduleParser());
-//		return request;
-//	}
-
-	private String playLogXMLData(String contentId, String contentType,
-			String startTime, String endTime, String TVODStartTime,
-			String duration, String timeshiftDuration, String terminalId,
-			String userId, String userToken) {
-		XmlSerializer xml = Xml.newSerializer();
-		StringWriter sw = new StringWriter();
-		try {
-			xml.setOutput(sw);
-			xml.startDocument("UTF-8", false);
-			// �?��
-			xml.startTag(null, "PlayLogReport");
-			// contentId
-			xml.startTag(null, "contentId");
-			xml.text(contentId);
-			xml.endTag(null, "contentId");
-			// contentType
-			xml.startTag(null, "contentType");
-			xml.text(contentType);
-			xml.endTag(null, "contentType");
-			// startTime
-			xml.startTag(null, "startTime");
-			xml.text(startTime);
-			xml.endTag(null, "startTime");
-			// endTime
-			xml.startTag(null, "endTime");
-			xml.text(endTime);
-			xml.endTag(null, "endTime");
-			// TVODStartTime
-			xml.startTag(null, "TVODStartTime");
-			xml.text(TVODStartTime);
-			xml.endTag(null, "TVODStartTime");
-			// duration
-			xml.startTag(null, "duration");
-			xml.text(duration);
-			xml.endTag(null, "duration");
-			if (timeshiftDuration != null) {
-				// timeshiftDuration
-				xml.startTag(null, "timeshiftDuration");
-				xml.text(timeshiftDuration);
-				xml.endTag(null, "timeshiftDuration");
-			}
-			// userId
-			xml.startTag(null, "userId");
-			xml.text(userId);
-			xml.endTag(null, "userId");
-			// userToken
-			xml.startTag(null, "userToken");
-			xml.text(userToken);
-			xml.endTag(null, "userToken");
-			// terminalId
-			xml.startTag(null, "terminalId");
-			xml.text(terminalId);
-			xml.endTag(null, "terminalId");
-			//
-			xml.endTag(null, "PlayLogReport");
-			//
-			xml.endDocument();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return sw.toString();
+		sb.append("</message>");
+		return sb.toString();
 	}
 
 	/**
-	 * @param contentId
-	 *            当前选择的节目ID 当contenttype�?�?时为频道的contentid
-	 * @param contentType
-	 *            节目类型 1 点播 2 频道 3 回看
-	 * @param startTime
-	 *            起始时间，格�?YYYY-MM-DD HH24:MM:SS
-	 * @param endTime
-	 *            结束时间,格式 YYYY-MM-DD HH24:MM:SS
-	 * @param TVODStartTime
-	 *            （非必需，但是contenttype==3时必�?��TVOD�?��时间,
-	 *            对应于Schedule上的startdate和starttime, 格式 YYYY-MM-DD HH24:MM:SS
-	 * @param duration
-	 *            播放时长 (�?
-	 * @param timeshiftDuration
-	 *            （非必需�?时移播放时长(�?
-	 * @param terminalId
-	 *            终端设备ID
-	 * @param userId
-	 *            用户业务编号
-	 * @param userToken
-	 *            业务管理平台为该用户分配的临时身份证�?
-	 * @return
+	 * 生成HTTP POST请求头
 	 */
-	public Request getPlayLogReport(String contentId, String contentType,
-			String startTime, String endTime, String TVODStartTime,
-			String duration, String timeshiftDuration, String terminalId,
-			String userId, String userToken) {
+	@SuppressLint("SimpleDateFormat")
+	protected String makeHeader(String digest, String transactiontype) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		String timestamp = sdf.format(new Date());
+		StringBuilder sb = new StringBuilder();
 
-		String body = playLogXMLData(contentId, contentType, startTime,
-				endTime, TVODStartTime, duration, timeshiftDuration,
-				terminalId, userId, userToken);
-		// request = new Request(ServerInterfaceDefinition.OPT_PLAYLOGREPORT,
-		// body, new ErrorParser());
-		request.setBody(body);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_PLAYLOGREPORT);
-		request.setXmlParser(new ErrorParser());
+		sb.append("<header>");
+		sb.append(makeTag("transactiontype", transactiontype));
+		sb.append(makeTag("timestamp", timestamp));
+		sb.append(makeTag("digest", digest));
+		sb.append(makeTag("agenterid", Consts.agenterid));
+		sb.append(makeTag("ipaddress", "223131123122"));
+		sb.append(makeTag("source", "WEB"));
+		sb.append("</header>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * 用户注册
+	 */
+	public Request getUserRegister(String username, String mail,
+			String actpassword, String mobile, String serialuid, String type) {
+
+		String body = createUserRegister(username, mail, actpassword, mobile,
+				serialuid, type);
+		String xmlBody = makeXml(body, "10001_1.1");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		request.setBody(xmlBody);
+		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
+		request.setXmlParser(null);
 		return request;
 	}
+
+	private String createUserRegister(String username, String mail,
+			String actpassword, String mobile, String serialuid, String type) {
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element>");
+		sb.append(makeTag("username", "tangqi"));
+		sb.append(makeTag("mail", "hntangqi374@163.com"));
+		sb.append(makeTag("actpassword", "tq123456"));
+		sb.append(makeTag("mobile", "13632809278"));
+		sb.append(makeTag("serialuid", "12563245125"));
+		sb.append(makeTag("type", "1"));
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * 完善用户信息(no pass)
+	 */
+	public Request getPerfectUserInfo(String uid, String realname,
+			String cardid, String phone, String bankname, String bankcardid,
+			String bankaddress, String actpassword) {
+
+		String body = createPerfectUserInfo(uid, realname, cardid, phone,
+				bankname, bankcardid, bankaddress, actpassword);
+		String xmlBody = makeXml(body, "20003_1.1");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		request.setBody(xmlBody);
+		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
+		request.setXmlParser(null);
+		return request;
+	}
+
+	private String createPerfectUserInfo(String uid, String realname,
+			String cardid, String phone, String bankname, String bankcardid,
+			String bankaddress, String actpassword) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element drawaltype=\"0\">");
+		sb.append(makeTag("uid", "14244"));
+		sb.append(makeTag("realname", "唐麒"));
+		sb.append(makeTag("cardid", "431121199003080798"));
+		sb.append(makeTag("phone", "13632809278"));
+		sb.append(makeTag("bankname", "招商银行"));
+		sb.append(makeTag("bankcardid", "204943197136761361"));
+		sb.append(makeTag("bankaddress", "广东深圳"));
+		sb.append(makeTag("actpassword", "tq111111"));
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * 修改用户密码
+	 */
+	public Request getModifyPassword(String uid, String oldpassword,
+			String newpassword) {
+
+		String body = createModifyPassword(uid, oldpassword, newpassword);
+		String xmlBody = makeXml(body, "10003_1.1");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		request.setBody(xmlBody);
+		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
+		request.setXmlParser(null);
+		return request;
+	}
+
+	private String createModifyPassword(String uid, String oldpassword,
+			String newpassword) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element>");
+		sb.append(makeTag("uid", "14244"));
+		sb.append(makeTag("oldpassword", "tq123456"));
+		sb.append(makeTag("newpassword", "tq111111"));
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * 新用户登陆
+	 */
+	public Request getUserLogin(String username, String actpassword) {
+
+		String body = createUserLogin(username, actpassword);
+		String xmlBody = makeXml(body, "10008_1.1");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		request.setBody(xmlBody);
+		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
+		request.setXmlParser(null);
+		return request;
+	}
+
+	private String createUserLogin(String username, String actpassword) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element>");
+		sb.append(makeTag("username", "tangqi"));
+		sb.append(makeTag("actpassword", "tq111111"));
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * 检测用户名/手机/邮箱是否存在
+	 */
+	public Request getCheckUser(String parameter) {
+
+		String body = createCheckUser(parameter);
+		String xmlBody = makeXml(body, "10010");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		request.setBody(xmlBody);
+		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
+		request.setXmlParser(null);
+		return request;
+	}
+
+	private String createCheckUser(String parameter) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element>");
+		sb.append(makeTag("parameter", "hntangqi374@163.com"));
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * /** 发送短信验证码
+	 * 
+	 * @param tel
+	 *            手机号
+	 * @param type
+	 *            01：用户注册 02：修改密码
+	 * @return
+	 */
+	public Request getMessageVerification(String tel, String type) {
+
+		String body = createMessageVerification(tel, type);
+		String xmlBody = makeXml(body, "10011");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		request.setBody(xmlBody);
+		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
+		request.setXmlParser(null);
+		return request;
+	}
+
+	private String createMessageVerification(String tel, String type) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element>");
+		sb.append(makeTag("tel", "13632809278"));
+		sb.append(makeTag("type", "01"));
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * 用户账户明细查询(no pass)
+	 */
+	public Request getAccountDetail(String startDate, String endDate,
+			String uid, String mflag) {
+
+		String body = createAccountDetail(startDate, endDate, uid, mflag);
+		String xmlBody = makeXml(body, "11008_1.1");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		request.setBody(xmlBody);
+		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
+		request.setXmlParser(null);
+		return request;
+	}
+
+	private String createAccountDetail(String startDate, String endDate,
+			String uid, String mflag) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element>");
+		sb.append(makeTag("startDate", "2015-01-01"));
+		sb.append(makeTag("endDate", "2015-01-20"));
+		sb.append(makeTag("uid", "14244"));
+		sb.append("<mflag/>");
+		sb.append(makeTag("pageNum", "1"));
+		sb.append(makeTag("pageSize", "10"));
+
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * 用户详细信息查询
+	 */
+	public Request getUserInfo(String uid) {
+
+		String body = createUserInfo(uid);
+		String xmlBody = makeXml(body, "20001_1.1");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		request.setBody(xmlBody);
+		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
+		request.setXmlParser(null);
+		return request;
+	}
+
+	private String createUserInfo(String uid) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element>");
+		sb.append(makeTag("uid", "14244"));
+
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * 提取现金
+	 */
+	public Request getExtractCash(String uid, String password, String drawalmoney) {
+
+		String body = createExtractCash(uid, password, drawalmoney);
+		String xmlBody = makeXml(body, "20003_1.1");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		request.setBody(xmlBody);
+		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
+		request.setXmlParser(null);
+		return request;
+	}
+
+	private String createExtractCash(String uid, String password, String drawalmoney) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element drawaltype=\"0\">");
+		sb.append(makeTag("uid", "14244"));
+		sb.append(makeTag("password", "tq111111"));
+		sb.append(makeTag("drawalmoney", "10"));
+
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
 }
