@@ -11,6 +11,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.utils.LogUtil;
@@ -55,7 +56,7 @@ public class HttpRequestAsyncTask extends
 			httpResponse = HttpManager.execute(httpPost);
 
 			if (httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-				LogUtil.log("返回getStatusCode="
+				LogUtil.log("getStatusCode:"
 						+ httpResponse.getStatusLine().getStatusCode());
 				if (null != httpPost) {
 					httpPost.abort();
@@ -65,7 +66,8 @@ public class HttpRequestAsyncTask extends
 				resultString = EntityUtils.toString(httpResponse.getEntity(),
 						"UTF-8");
 
-				object = request.getXmlParser().parse(resultString);
+				// object = request.getXmlParser().parse(resultString);
+				LogUtil.log("resultString:" + resultString);
 			}
 		} catch (ClientProtocolException e) {
 			resultString = "timeover";
