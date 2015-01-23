@@ -8,8 +8,8 @@ import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.fragment.BetRecordFragment;
+import com.xmtq.lottery.fragment.LoginFragment;
 import com.xmtq.lottery.fragment.RecomendFragment;
-import com.xmtq.lottery.fragment.UserInfoFragment;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.view.slidingmenu.SlidingMenu;
@@ -57,7 +57,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		// left sliding menu
 		setBehindContentView(R.layout.menu_frame);
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.menu_frame, new UserInfoFragment()).commit();
+				.replace(R.id.menu_frame, new LoginFragment()).commit();
 
 		menu = getSlidingMenu();
 		menu.setMode(SlidingMenu.LEFT_RIGHT);
