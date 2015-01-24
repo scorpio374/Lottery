@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="推荐历史"
+            android:text="详细赛果"
             android:textColor="@color/white"
             android:textSize="@dimen/main_textsize2" />
 
@@ -49,15 +49,24 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:layout_width="0dip"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
             android:layout_marginLeft="5dip"
             android:layout_marginTop="5dip"
-            android:layout_weight="1"
             android:padding="5dip"
-            android:text="日期"
-            android:textColor="@color/green" />
+            android:text="2014-11-03"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:layout_marginRight="10dip"
+            android:layout_marginTop="5dip"
+            android:layout_weight="1"
+            android:text="周一"
+            android:textColor="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -65,12 +74,12 @@
             android:layout_marginBottom="5dip"
             android:layout_marginRight="10dip"
             android:layout_marginTop="5dip"
-            android:text="猜中结果"
-            android:textColor="@color/green" />
+            android:text="猜对3/6场比赛"
+            android:textColor="@color/white" />
     </LinearLayout>
 
     <ListView
-        android:id="@+id/recomend_history_list"
+        android:id="@+id/game_result_detail_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/gray"

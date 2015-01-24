@@ -42,5 +42,6 @@
     <color name="edit_color">#86878c</color>
     <color name="line_color">#333844</color>
     <color name="stroke_color">#454B5B</color>
+    <color name="list_item_gary">#313742</color>
 
 </resources>
