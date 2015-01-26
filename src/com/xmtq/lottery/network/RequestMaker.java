@@ -8,10 +8,19 @@ import android.text.TextUtils;
 
 import com.dvt.lottery.util.MD5;
 import com.xmtq.lottery.Consts;
+import com.xmtq.lottery.parser.AccountDetailParser;
 import com.xmtq.lottery.parser.BettingBusinessParser;
+import com.xmtq.lottery.parser.CheckUserParser;
+import com.xmtq.lottery.parser.ExtractCashParser;
 import com.xmtq.lottery.parser.GameCanBetParser;
+import com.xmtq.lottery.parser.ImproveUserInfoParser;
+import com.xmtq.lottery.parser.NewUserLoginParser;
 import com.xmtq.lottery.parser.PurchaseRecordsParser;
+import com.xmtq.lottery.parser.RepasswordParser;
+import com.xmtq.lottery.parser.UserInfoParser;
 import com.xmtq.lottery.parser.UserRegisterParser;
+import com.xmtq.lottery.parser.VerificationCodeParser;
+import com.xmtq.lottery.parser.VersionParser;
 import com.xmtq.lottery.utils.LogUtil;
 
 public class RequestMaker {
@@ -156,7 +165,7 @@ public class RequestMaker {
 	public Request getPerfectUserInfo(String uid, String realname,
 			String cardid, String phone, String bankname, String bankcardid,
 			String bankaddress, String actpassword) {
-
+		ImproveUserInfoParser paser = new ImproveUserInfoParser();
 		String body = createPerfectUserInfo(uid, realname, cardid, phone,
 				bankname, bankcardid, bankaddress, actpassword);
 		String xmlBody = makeXml(body, "20003_1.1");
@@ -164,7 +173,7 @@ public class RequestMaker {
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(paser);
 		return request;
 	}
 
@@ -196,27 +205,29 @@ public class RequestMaker {
 	 */
 	public Request getModifyPassword(String uid, String oldpassword,
 			String newpassword) {
-
+		RepasswordParser paser = new RepasswordParser();
 		String body = createModifyPassword(uid, oldpassword, newpassword);
 		String xmlBody = makeXml(body, "10003_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(paser);
 		return request;
 	}
 
 	private String createModifyPassword(String uid, String oldpassword,
 			String newpassword) {
 		StringBuilder sb = new StringBuilder();
+		oldpassword = MD5.hmacSign(oldpassword, Consts.passwordkey);
+		newpassword = MD5.hmacSign(newpassword, Consts.passwordkey);
 
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element>");
 		sb.append(makeTag("uid", "14244"));
-		sb.append(makeTag("oldpassword", "tq123456"));
-		sb.append(makeTag("newpassword", "tq111111"));
+		sb.append(makeTag("oldpassword", oldpassword));
+		sb.append(makeTag("newpassword", newpassword));
 		sb.append("</element>");
 		sb.append("</elements>");
 		sb.append("</body>");
@@ -228,25 +239,26 @@ public class RequestMaker {
 	 * 新用户登陆
 	 */
 	public Request getUserLogin(String username, String actpassword) {
-
+		NewUserLoginParser paser = new NewUserLoginParser();
 		String body = createUserLogin(username, actpassword);
 		String xmlBody = makeXml(body, "10008_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(paser);
 		return request;
 	}
 
 	private String createUserLogin(String username, String actpassword) {
 		StringBuilder sb = new StringBuilder();
+		actpassword = MD5.hmacSign(actpassword, Consts.passwordkey);
 
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element>");
-		sb.append(makeTag("username", "tangqi"));
-		sb.append(makeTag("actpassword", "tq111111"));
+		sb.append(makeTag("username", username));
+		sb.append(makeTag("actpassword", actpassword));
 		sb.append("</element>");
 		sb.append("</elements>");
 		sb.append("</body>");
@@ -258,14 +270,14 @@ public class RequestMaker {
 	 * 检测用户名/手机/邮箱是否存在
 	 */
 	public Request getCheckUser(String parameter) {
-
+		CheckUserParser paser = new CheckUserParser();
 		String body = createCheckUser(parameter);
 		String xmlBody = makeXml(body, "10010");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(paser);
 		return request;
 	}
 
@@ -275,7 +287,7 @@ public class RequestMaker {
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element>");
-		sb.append(makeTag("parameter", "13632809278"));
+		sb.append(makeTag("parameter", parameter));
 		sb.append("</element>");
 		sb.append("</elements>");
 		sb.append("</body>");
@@ -293,14 +305,14 @@ public class RequestMaker {
 	 * @return
 	 */
 	public Request getMessageVerification(String tel, String type) {
-
+		VerificationCodeParser paser = new VerificationCodeParser();
 		String body = createMessageVerification(tel, type);
 		String xmlBody = makeXml(body, "10011");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(paser);
 		return request;
 	}
 
@@ -310,8 +322,40 @@ public class RequestMaker {
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element>");
-		sb.append(makeTag("tel", "13632809278"));
-		sb.append(makeTag("type", "01"));
+		sb.append(makeTag("tel", tel));
+		sb.append(makeTag("type", type));
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * 3.1.7检测版本更新（10012）
+	 * 
+	 * @param version
+	 * @return
+	 */
+	public Request getVersion(String version) {
+		VersionParser paser = new VersionParser();
+		String body = createVersion(version);
+		String xmlBody = makeXml(body, "10012");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		request.setBody(xmlBody);
+		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
+		request.setXmlParser(paser);
+		return request;
+	}
+
+	private String createVersion(String version) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element>");
+		sb.append(makeTag("version", version));
 		sb.append("</element>");
 		sb.append("</elements>");
 		sb.append("</body>");
@@ -324,14 +368,14 @@ public class RequestMaker {
 	 */
 	public Request getAccountDetail(String startDate, String endDate,
 			String uid, String mflag) {
-
+		AccountDetailParser paser = new AccountDetailParser();
 		String body = createAccountDetail(startDate, endDate, uid, mflag);
 		String xmlBody = makeXml(body, "11008_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(paser);
 		return request;
 	}
 
@@ -360,14 +404,14 @@ public class RequestMaker {
 	 * 用户详细信息查询
 	 */
 	public Request getUserInfo(String uid) {
-
+		UserInfoParser paser = new UserInfoParser();
 		String body = createUserInfo(uid);
 		String xmlBody = makeXml(body, "20001_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(paser);
 		return request;
 	}
 
@@ -377,7 +421,7 @@ public class RequestMaker {
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element>");
-		sb.append(makeTag("uid", "14244"));
+		sb.append(makeTag("uid", uid));
 
 		sb.append("</element>");
 		sb.append("</elements>");
@@ -396,14 +440,14 @@ public class RequestMaker {
 	 */
 	public Request getExtractCash(String uid, String password,
 			String drawalmoney) {
-
+		ExtractCashParser paser = new ExtractCashParser();
 		String body = createExtractCash(uid, password, drawalmoney);
 		String xmlBody = makeXml(body, "20003_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(paser);
 		return request;
 	}
 
@@ -411,11 +455,12 @@ public class RequestMaker {
 			String drawalmoney) {
 		StringBuilder sb = new StringBuilder();
 
+		password = MD5.hmacSign(password, Consts.passwordkey);
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element drawaltype=\"0\">");
 		sb.append(makeTag("uid", "14244"));
-		sb.append(makeTag("password", "tq111111"));
+		sb.append(makeTag("password", password));
 		sb.append(makeTag("drawalmoney", "10"));
 
 		sb.append("</element>");
