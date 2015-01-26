@@ -8,6 +8,9 @@ import android.text.TextUtils;
 
 import com.dvt.lottery.util.MD5;
 import com.xmtq.lottery.Consts;
+import com.xmtq.lottery.parser.BettingBusinessParser;
+import com.xmtq.lottery.parser.GameCanBetParser;
+import com.xmtq.lottery.parser.PurchaseRecordsParser;
 import com.xmtq.lottery.parser.UserRegisterParser;
 import com.xmtq.lottery.utils.LogUtil;
 
@@ -44,6 +47,15 @@ public class RequestMaker {
 		}
 	}
 
+	public static Request test() {
+		Request request = null;
+		request = RequestMaker.getInstance("").getBettingBusiness("14244",
+				"136", "2", "352", "1", "", "704", "6", "2_1,3_1", "704", "1");
+		request = RequestMaker.getInstance("").getPurchaseRecords("14244",
+				"130", "2014-09-08", "2015-10-08", "1", "1", "5", "0");
+		return request;
+	}
+
 	/**
 	 * @param sb
 	 */
@@ -56,6 +68,8 @@ public class RequestMaker {
 	 * 生成XML请求参数
 	 * 
 	 * @param body
+	 * @param transactiontype
+	 *            请求操作类型代码
 	 * @return
 	 */
 	public String makeXml(String body, String transactiontype) {
@@ -432,6 +446,7 @@ public class RequestMaker {
 			String totalmoney, String playtype, String passtype,
 			String buymoney, String protype) {
 
+		BettingBusinessParser parser = new BettingBusinessParser();
 		String body = createBettingBusiness(uid, lotteryid, votetype, votenums,
 				multiple, voteinfo, totalmoney, playtype, passtype, buymoney,
 				protype);
@@ -440,7 +455,7 @@ public class RequestMaker {
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(parser);
 		return request;
 	}
 
@@ -492,6 +507,7 @@ public class RequestMaker {
 			String startdate, String enddate, String investtype,
 			String pageindex, String pagesize, String statue) {
 
+		PurchaseRecordsParser parse = new PurchaseRecordsParser();
 		String body = createPurchaseRecords(uid, lotteryid, startdate, enddate,
 				investtype, pageindex, pagesize, statue);
 		String xmlBody = makeXml(body, "12021_1.1");
@@ -499,7 +515,7 @@ public class RequestMaker {
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(parse);
 		return request;
 	}
 
@@ -717,6 +733,7 @@ public class RequestMaker {
 	 * @return
 	 */
 	public Request getGameCanBet(String pagenum, String pagesize) {
+		GameCanBetParser parse = new GameCanBetParser();
 
 		String body = createGameCanBet(pagenum, pagesize);
 		String xmlBody = makeXml(body, "12030");
@@ -724,7 +741,7 @@ public class RequestMaker {
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(parse);
 		return request;
 	}
 
