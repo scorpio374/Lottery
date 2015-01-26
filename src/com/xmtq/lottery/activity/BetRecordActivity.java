@@ -6,6 +6,9 @@ import java.util.List;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.BetRecordListAdapter;
@@ -18,7 +21,7 @@ import com.xmtq.lottery.adapter.BetRecordListAdapter;
  */
 public class BetRecordActivity extends BaseActivity {
 
-	private ListView bet_record;
+	private ListView bet_record_all, bet_record_win, bet_record_wait;
 	private ImageButton btn_back;
 
 	@Override
@@ -36,9 +39,42 @@ public class BetRecordActivity extends BaseActivity {
 	public void initView() {
 		// TODO Auto-generated method stub
 
-		bet_record = (ListView) findViewById(R.id.record_all_list);
+		bet_record_all = (ListView) findViewById(R.id.record_all_list);
+		bet_record_win = (ListView) findViewById(R.id.record_win_list);
+		bet_record_wait = (ListView) findViewById(R.id.record_wait_list);
+
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
+
+		RadioGroup bet_record_radiogroup = (RadioGroup) findViewById(R.id.bet_record_radiogroup);
+
+		bet_record_radiogroup
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(RadioGroup group, int checkedId) {
+						if (checkedId == R.id.bet_record_all) {
+							Toast.makeText(BetRecordActivity.this, "全部", 2000)
+									.show();
+							bet_record_all.setVisibility(View.VISIBLE);
+							bet_record_win.setVisibility(View.GONE);
+							bet_record_wait.setVisibility(View.GONE);
+
+						} else if (checkedId == R.id.bet_record_win) {
+							Toast.makeText(BetRecordActivity.this, "中奖", 2000)
+									.show();
+							bet_record_all.setVisibility(View.GONE);
+							bet_record_win.setVisibility(View.VISIBLE);
+							bet_record_wait.setVisibility(View.GONE);
+						} else if (checkedId == R.id.bet_record_wait) {
+							Toast.makeText(BetRecordActivity.this, "待开", 2000)
+									.show();
+							bet_record_all.setVisibility(View.GONE);
+							bet_record_win.setVisibility(View.GONE);
+							bet_record_wait.setVisibility(View.VISIBLE);
+						}
+					}
+				});
 	}
 
 	@Override
@@ -49,7 +85,9 @@ public class BetRecordActivity extends BaseActivity {
 		}
 		BetRecordListAdapter mAdapter = new BetRecordListAdapter(
 				BetRecordActivity.this, mList);
-		bet_record.setAdapter(mAdapter);
+		bet_record_all.setAdapter(mAdapter);
+		bet_record_wait.setAdapter(mAdapter);
+		bet_record_win.setAdapter(mAdapter);
 
 	}
 

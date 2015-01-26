@@ -260,6 +260,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dip"
+        android:padding="10dip"
         android:text="退出登录"
         android:textColor="@color/green"
         android:textSize="20sp" />

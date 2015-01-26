@@ -1,6 +1,8 @@
 package com.xmtq.lottery.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,8 @@ import com.xmtq.lottery.activity.ExtractMoneyActivity;
 import com.xmtq.lottery.activity.ModifiPasswordActivity;
 import com.xmtq.lottery.activity.PersonDataActivity;
 import com.xmtq.lottery.activity.RechargeMoneyActivity;
+import com.xmtq.lottery.activity.RecomendActivity;
+import com.xmtq.lottery.utils.SharedPrefHelper;
 
 /**
  * 个人中心
@@ -25,6 +29,7 @@ import com.xmtq.lottery.activity.RechargeMoneyActivity;
 public class UserInfoFragment extends BaseFragment {
 	private RelativeLayout rl_repassword, rl_bet_record, rl_userinfo;
 	private RelativeLayout account_information;
+	private TextView tv_esc_login;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,8 @@ public class UserInfoFragment extends BaseFragment {
 		rl_repassword = (RelativeLayout) v.findViewById(R.id.rl_repassword);
 		rl_bet_record = (RelativeLayout) v.findViewById(R.id.rl_bet_record);
 		rl_userinfo = (RelativeLayout) v.findViewById(R.id.rl_userinfo);
+		tv_esc_login = (TextView) v.findViewById(R.id.exit_loading);
+		tv_esc_login.setOnClickListener(this);
 		account_information = (RelativeLayout) v
 				.findViewById(R.id.account_information);
 		// 充值
@@ -98,6 +105,16 @@ public class UserInfoFragment extends BaseFragment {
 			startActivity(intent);
 
 			break;
+		case R.id.exit_loading:
+			intent = new Intent(getActivity(), RecomendActivity.class);
+			startActivity(intent);
+			// SharedPreferences spf = getActivity().getSharedPreferences(
+			// "isLogin", Context.MODE_PRIVATE);
+			// spf.edit().putBoolean("isLogin", false).commit();
+			SharedPrefHelper spf = SharedPrefHelper.getInstance(getActivity());
+			spf.setIsLogin(false);
+			break;
+
 		default:
 			break;
 		}

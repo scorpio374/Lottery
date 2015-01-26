@@ -1,11 +1,14 @@
 package com.xmtq.lottery.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.utils.SharedPrefHelper;
 
 /**
  * 登录
@@ -18,6 +21,7 @@ public class LoginActivity extends BaseActivity {
 	private TextView find_password;
 	private TextView register;
 	private ImageButton btn_back;
+	private SharedPrefHelper spfs;
 
 	@Override
 	public void setContentLayout() {
@@ -27,7 +31,7 @@ public class LoginActivity extends BaseActivity {
 
 	@Override
 	public void dealLogicBeforeInitView() {
-		// TODO Auto-generated method stub
+		spfs = SharedPrefHelper.getInstance(LoginActivity.this);
 
 	}
 
@@ -67,6 +71,12 @@ public class LoginActivity extends BaseActivity {
 			startActivity(intent);
 			break;
 		case R.id.login:
+
+			// SharedPreferences spf = getSharedPreferences("isLogin",
+			// Context.MODE_PRIVATE);
+			// spf.edit().putBoolean("isLogin", true).commit();
+
+			spfs.setIsLogin(true);
 			intent = new Intent(LoginActivity.this, UserInfoActivity.class);
 			startActivity(intent);
 			break;

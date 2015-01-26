@@ -127,14 +127,16 @@
             android:layout_marginLeft="10dip"
             android:text="找回密码"
             android:textColor="#747B90"
-            android:textSize="@dimen/main_textsize" />
+            android:textSize="@dimen/main_textsize"
+            android:visibility="gone" />
 
         <ImageView
             android:layout_width="1dip"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="5dip"
-            android:background="@drawable/divide" />
+            android:background="@drawable/divide"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/register"

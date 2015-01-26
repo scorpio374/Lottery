@@ -1,7 +1,9 @@
 package com.xmtq.lottery.activity;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.lottery.R;
 
@@ -14,6 +16,7 @@ import com.example.lottery.R;
 public class RegisterActivity extends BaseActivity {
 
 	private ImageButton btn_back;
+	private TextView register_commit;
 
 	@Override
 	public void setContentLayout() {
@@ -31,6 +34,8 @@ public class RegisterActivity extends BaseActivity {
 	public void initView() {
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
+		register_commit = (TextView) findViewById(R.id.register_commit);
+		register_commit.setOnClickListener(this);
 	}
 
 	@Override
@@ -45,7 +50,11 @@ public class RegisterActivity extends BaseActivity {
 		case R.id.back:
 			this.finish();
 			break;
-
+		case R.id.register_commit:
+			Intent intent = new Intent(RegisterActivity.this,
+					RecomendActivity.class);
+			startActivity(intent);
+			break;
 		default:
 			break;
 		}

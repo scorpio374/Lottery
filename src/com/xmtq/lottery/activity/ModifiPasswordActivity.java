@@ -2,11 +2,14 @@ package com.xmtq.lottery.activity;
 
 import com.example.lottery.R;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class ModifiPasswordActivity extends BaseActivity {
 	private ImageButton btn_back;
+	private TextView repassword_commit;
 
 	@Override
 	public void setContentLayout() {
@@ -25,6 +28,8 @@ public class ModifiPasswordActivity extends BaseActivity {
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
 
+		repassword_commit = (TextView) findViewById(R.id.repassword_commit);
+		repassword_commit.setOnClickListener(this);
 	}
 
 	@Override
@@ -39,7 +44,11 @@ public class ModifiPasswordActivity extends BaseActivity {
 		case R.id.back:
 			this.finish();
 			break;
-
+		case R.id.repassword_commit:
+			Intent intent = new Intent(ModifiPasswordActivity.this,
+					RecomendActivity.class);
+			startActivity(intent);
+			break;
 		default:
 			break;
 		}

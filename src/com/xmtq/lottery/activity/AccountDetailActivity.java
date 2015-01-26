@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.AccountDetailListAdapter;
@@ -44,6 +47,30 @@ public class AccountDetailActivity extends BaseActivity {
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
 		head_right.setOnClickListener(this);
+
+		RadioGroup account_detail_radiogroup = (RadioGroup) findViewById(R.id.account_detail_radiogroup);
+
+		account_detail_radiogroup
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+					@Override
+					public void onCheckedChanged(RadioGroup group, int checkedId) {
+						// TODO Auto-generated method stub
+						if (checkedId == R.id.account_my) {
+							Toast.makeText(AccountDetailActivity.this, "账户",
+									2000).show();
+						} else if (checkedId == R.id.account_recharge) {
+							Toast.makeText(AccountDetailActivity.this, "充值",
+									2000).show();
+						} else if (checkedId == R.id.account_deposit) {
+							Toast.makeText(AccountDetailActivity.this, "提现",
+									2000).show();
+						} else if (checkedId == R.id.account_red_package) {
+							Toast.makeText(AccountDetailActivity.this, "红包",
+									2000).show();
+						}
+					}
+				});
+
 	}
 
 	@Override

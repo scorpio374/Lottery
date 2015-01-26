@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,13 +97,11 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:layout_width="0dip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="20dip"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="用户名:"
+                android:text="用 户 名："
                 android:textColor="@color/white"
                 android:textSize="@dimen/main_textsize" />
 
@@ -112,11 +110,11 @@
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dip"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:background="@null"
                 android:cursorVisible="true"
                 android:hint="4到16个字符，不可更改"
+                android:padding="5dip"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/edit_color"
@@ -134,11 +132,10 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:layout_width="0dip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="20dip"
-                android:layout_weight="1"
                 android:text="身份证号："
                 android:textColor="@color/white"
                 android:textSize="@dimen/main_textsize" />
@@ -148,7 +145,7 @@
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:background="@null"
                 android:cursorVisible="true"
                 android:hint="领奖和提款凭证，不可更改"
@@ -169,11 +166,10 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:layout_width="0dip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="20dip"
-                android:layout_weight="1"
                 android:text="真实姓名："
                 android:textColor="@color/white"
                 android:textSize="@dimen/main_textsize" />
@@ -183,7 +179,7 @@
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:background="@null"
                 android:cursorVisible="true"
                 android:hint="领奖和提款凭证，不可更改"
@@ -231,7 +227,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
         android:orientation="vertical"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -327,7 +323,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:cursorVisible="true"
-                android:hint="请选择银行"
+                android:hint="请填写银行"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/edit_color"
@@ -341,7 +337,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="5dip"
                 android:padding="10dip"
-                android:src="@drawable/checkbank" />
+                android:src="@drawable/checkbank"
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
@@ -349,9 +346,9 @@
             android:layout_height="40dip"
             android:layout_marginLeft="20dip"
             android:layout_marginRight="20dip"
-            android:descendantFocusability="beforeDescendants"
             android:layout_marginTop="10dip"
             android:background="@drawable/edit_normal_bg"
+            android:descendantFocusability="beforeDescendants"
             android:orientation="horizontal" >
 
             <TextView
@@ -384,7 +381,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="5dip"
                 android:padding="10dip"
-                android:src="@drawable/esc" />
+                android:src="@drawable/esc"
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
@@ -413,7 +411,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:cursorVisible="true"
-                android:hint="请选择开户地"
+                android:hint="请填写开户地"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/edit_color"
@@ -426,7 +424,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="5dip"
                 android:padding="10dip"
-                android:src="@drawable/location" />
+                android:src="@drawable/location"
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout

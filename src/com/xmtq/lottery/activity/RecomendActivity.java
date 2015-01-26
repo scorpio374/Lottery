@@ -1,5 +1,7 @@
 package com.xmtq.lottery.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -8,10 +10,12 @@ import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.fragment.BetRecordFragment;
+import com.xmtq.lottery.fragment.LoginFragment;
 import com.xmtq.lottery.fragment.RecomendFragment;
 import com.xmtq.lottery.fragment.UserInfoFragment;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.RequestMaker;
+import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.view.slidingmenu.SlidingMenu;
 import com.xmtq.lottery.view.slidingmenu.app.SlidingFragmentActivity;
 
@@ -27,14 +31,16 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	private long exitTime;
 	private final static long TIME_DIFF = 2 * 1000;
 	private SlidingMenu menu;
+	private SharedPrefHelper spfs;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		spfs = SharedPrefHelper.getInstance(this);
 		initView();
 		test();
 	}
-	
-	private void test(){
+
+	private void test() {
 		RequestMaker mRequestMaker = RequestMaker.getInstance("");
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(mRequestMaker.getCheckUser(""));
@@ -54,10 +60,20 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	}
 
 	private void initMenuDrawer() {
-		// left sliding menu
-		setBehindContentView(R.layout.menu_frame);
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.menu_frame, new UserInfoFragment()).commit();
+
+		boolean isLogin = false;
+		isLogin = spfs.getIsLogin();
+		if (isLogin) {
+			// left sliding menu
+			setBehindContentView(R.layout.menu_frame);
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.menu_frame, new UserInfoFragment()).commit();
+
+		} else {
+			setBehindContentView(R.layout.menu_frame);
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.menu_frame, new LoginFragment()).commit();
+		}
 
 		menu = getSlidingMenu();
 		menu.setMode(SlidingMenu.LEFT_RIGHT);
@@ -66,7 +82,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
 		menu.setFadeDegree(0.35f);
 		menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-		
+
 		// middle view
 		setContentView(R.layout.content_frame);
 		getSupportFragmentManager().beginTransaction()

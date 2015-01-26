@@ -151,6 +151,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/register_commit"
         android:layout_width="match_parent"
         android:layout_height="40dip"
         android:layout_marginLeft="20dip"

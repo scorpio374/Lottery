@@ -280,4 +280,10 @@
             android:textSize="@dimen/main_textsize3" />
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginTop="10dip"
+        android:background="@color/line_color" />
+
 </LinearLayout>

@@ -1,6 +1,8 @@
 package com.xmtq.lottery.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -276,4 +278,14 @@ public abstract class BaseActivity extends SherlockFragmentActivity implements
 
 	public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
 	}
+
+	// public static boolean isLogin() {
+	// // 是否已经登录
+	// SharedPreferences spf = getSharedPreferences("isLogin",
+	// Context.MODE_PRIVATE);
+	//
+	// boolean isLogin = false;
+	// isLogin = spf.getBoolean("isLogin", true);
+	// return isLogin;
+	// }
 }

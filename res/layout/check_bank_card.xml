@@ -9,7 +9,7 @@
         android:id="@+id/order_head"
         style="@style/head_style" >
 
-        <ImageButton
+        <ImageView
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,6 +42,7 @@
     </RelativeLayout>
 
     <RadioGroup
+        android:id="@+id/check_card"
         android:layout_width="match_parent"
         android:layout_height="40dip"
         android:layout_marginLeft="15dip"
@@ -79,7 +80,7 @@
     </RadioGroup>
 
     <ListView
-        android:id="@+id/bank_savings_list"
+        android:id="@+id/bank_card_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dip"
@@ -87,5 +88,16 @@
         android:cacheColorHint="#00000000"
         android:fadingEdge="none"
         android:scrollbars="none" />
+
+    <ListView
+        android:id="@+id/bank_savings_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dip"
+        android:background="@color/gray"
+        android:cacheColorHint="#00000000"
+        android:fadingEdge="none"
+        android:scrollbars="none"
+        android:visibility="gone" />
 
 </LinearLayout>

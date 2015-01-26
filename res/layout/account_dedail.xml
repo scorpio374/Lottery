@@ -48,6 +48,7 @@
         android:background="#3f3e4d" >
 
         <RadioGroup
+            android:id="@+id/account_detail_radiogroup"
             android:layout_width="match_parent"
             android:layout_height="40dip"
             android:layout_marginLeft="15dip"
@@ -59,7 +60,7 @@
             android:padding="1dip" >
 
             <RadioButton
-                android:id="@+id/my_account"
+                android:id="@+id/account_my"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

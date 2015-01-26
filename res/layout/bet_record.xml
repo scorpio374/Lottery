@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:id="@+id/userdata_head"
-        style="@style/head_style">
+        style="@style/head_style" >
 
         <ImageButton
             android:id="@+id/back"
@@ -42,6 +42,7 @@
     </RelativeLayout>
 
     <RadioGroup
+        android:id="@+id/bet_record_radiogroup"
         android:layout_width="match_parent"
         android:layout_height="40dip"
         android:layout_marginLeft="15dip"
@@ -59,6 +60,7 @@
             android:layout_weight="1"
             android:background="@drawable/radio_btn_selector"
             android:button="@null"
+            android:checked="true"
             android:gravity="center"
             android:text="全部"
             android:textColor="@drawable/radiobtn_textcolor_selector"
@@ -116,5 +118,29 @@
         android:dividerHeight="0dip"
         android:fadingEdge="none"
         android:scrollbars="none" />
+
+    <ListView
+        android:id="@+id/record_win_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray"
+        android:cacheColorHint="#00000000"
+        android:divider="@color/deep_gray"
+        android:dividerHeight="0dip"
+        android:fadingEdge="none"
+        android:scrollbars="none"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/record_wait_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray"
+        android:cacheColorHint="#00000000"
+        android:divider="@color/deep_gray"
+        android:dividerHeight="0dip"
+        android:fadingEdge="none"
+        android:scrollbars="none"
+        android:visibility="gone" />
 
 </LinearLayout>

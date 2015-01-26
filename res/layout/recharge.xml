@@ -94,6 +94,7 @@
         android:orientation="horizontal" >
 
         <RadioGroup
+            android:id="@+id/check_money"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dip"
@@ -164,7 +165,6 @@
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
         android:layout_marginTop="20dip"
-        android:background="#474955"
         android:orientation="horizontal" >
 
         <ImageView
