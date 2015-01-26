@@ -373,7 +373,8 @@ public class RequestMaker {
 	/**
 	 * 提取现金
 	 */
-	public Request getExtractCash(String uid, String password, String drawalmoney) {
+	public Request getExtractCash(String uid, String password,
+			String drawalmoney) {
 
 		String body = createExtractCash(uid, password, drawalmoney);
 		String xmlBody = makeXml(body, "20003_1.1");
@@ -385,7 +386,8 @@ public class RequestMaker {
 		return request;
 	}
 
-	private String createExtractCash(String uid, String password, String drawalmoney) {
+	private String createExtractCash(String uid, String password,
+			String drawalmoney) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("<body>");
@@ -401,5 +403,40 @@ public class RequestMaker {
 
 		return sb.toString();
 	}
+
+	/**
+	 * 4.投注业务
+	 */
+
+	// public Request getExtractCash(String uid, String password,
+	// String drawalmoney) {
+	//
+	// String body = createExtractCash(uid, password, drawalmoney);
+	// String xmlBody = makeXml(body, "20003_1.1");
+	// LogUtil.log("xmlBody:" + xmlBody);
+	//
+	// request.setBody(xmlBody);
+	// request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
+	// request.setXmlParser(null);
+	// return request;
+	// }
+	//
+	// private String createExtractCash(String uid, String password,
+	// String drawalmoney) {
+	// StringBuilder sb = new StringBuilder();
+	//
+	// sb.append("<body>");
+	// sb.append("<elements>");
+	// sb.append("<element drawaltype=\"0\">");
+	// sb.append(makeTag("uid", "14244"));
+	// sb.append(makeTag("password", "tq111111"));
+	// sb.append(makeTag("drawalmoney", "10"));
+	//
+	// sb.append("</element>");
+	// sb.append("</elements>");
+	// sb.append("</body>");
+	//
+	// return sb.toString();
+	// }
 
 }
