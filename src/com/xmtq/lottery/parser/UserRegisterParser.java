@@ -1,71 +1,35 @@
 package com.xmtq.lottery.parser;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import android.text.TextUtils;
 
-import org.xmlpull.v1.XmlPullParser;
-
-import android.util.Xml;
-
-import com.xmtq.lottery.bean.UserRegisterBean;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.xmtq.lottery.bean.UserRegisterResponse;
-import com.xmtq.lottery.utils.LogUtil;
+import com.xmtq.lottery.utils.JsonUtil;
 
 public class UserRegisterParser extends BaseParser<UserRegisterResponse> {
 
 	@Override
-	public UserRegisterResponse parse(String inString) {
-		XmlPullParser parser = Xml.newPullParser();
-		UserRegisterResponse response = null;
-		UserRegisterBean bean = null;
+	public UserRegisterResponse parse(String xmlString) {
+		String jsonString = JsonUtil.xml2JSON(xmlString);
+		if (TextUtils.isEmpty(jsonString)) {
+			return null;
+		}
 
-		try {
-			InputStream inStream = new ByteArrayInputStream(inString.getBytes());
-			parser.setInput(inStream, "UTF-8");
-			int eventType = parser.getEventType();
+		UserRegisterResponse response = new UserRegisterResponse();
+		JSONObject rootObj = JSON.parseObject(jsonString);
+		JSONObject msgObj = rootObj.getJSONObject("message");
+		parseMsg(msgObj, response);
 
-			while (eventType != XmlPullParser.END_DOCUMENT) {
-				switch (eventType) {
-				case XmlPullParser.START_DOCUMENT:// 文档开始事件,可以进行数据初始化处理
-					response = new UserRegisterResponse();
-					break;
-
-				case XmlPullParser.START_TAG:// 开始元素事件
-					String name = parser.getName();
-					if (parseHeaser(name, parser, response)) {
-						// TODO
-						if(response.getErrorcode().equals("0")){
-							return response;
-						}
-					} else if (name.equalsIgnoreCase("uid")) {
-						response.userRegisterBean.setUid(parser.nextText());
-					} else if (name.equalsIgnoreCase("username")) {
-						response.userRegisterBean
-								.setUsername(parser.nextText());
-					} else if (name.equalsIgnoreCase("money")) {
-						response.userRegisterBean.setMoney(parser.nextText());
-					} else if (name.equalsIgnoreCase("prizeMoney")) {
-						response.userRegisterBean.setPrizeMoney(parser
-								.nextText());
-					} else if (name.equalsIgnoreCase("perfectFlag")) {
-						response.userRegisterBean.setPerfectFlag(parser
-								.nextText());
-					}
-
-					break;
-
-				case XmlPullParser.END_TAG:// 结束元素事件
-
-					break;
-				}
-
-				eventType = parser.next();
-			}
-
-			inStream.close();
-		} catch (Exception e) {
-			LogUtil.log("paseError");
-			e.printStackTrace();
+		if (response.errorcode.equals("0")) {
+			JSONObject bodyObj = msgObj.getJSONObject("body");
+			JSONObject j = bodyObj.getJSONObject("element");
+			response.userRegisterBean.setUid(j.getString("uid"));
+			response.userRegisterBean.setUsername(j.getString("username"));
+			response.userRegisterBean.setMoney(j.getString("money"));
+			response.userRegisterBean.setPrizeMoney(j.getString("prizeMoney"));
+			response.userRegisterBean
+					.setPerfectFlag(j.getString("perfectFlag"));
 		}
 
 		return response;

@@ -41,7 +41,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	private void test() {
 		RequestMaker mRequestMaker = RequestMaker.getInstance("");
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		mAsyncTask.execute(mRequestMaker.getCheckUser(""));
+		mAsyncTask.execute(mRequestMaker.getUserRegister("","","","","",""));
 	}
 
 	public void initView() {

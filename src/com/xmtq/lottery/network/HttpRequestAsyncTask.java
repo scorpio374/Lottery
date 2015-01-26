@@ -66,7 +66,7 @@ public class HttpRequestAsyncTask extends
 				resultString = EntityUtils.toString(httpResponse.getEntity(),
 						"UTF-8");
 
-				// object = request.getXmlParser().parse(resultString);
+				object = request.getXmlParser().parse(resultString);
 				LogUtil.log("resultString:" + resultString);
 			}
 		} catch (ClientProtocolException e) {

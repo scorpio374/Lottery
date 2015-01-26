@@ -1,10 +1,6 @@
 package com.xmtq.lottery.parser;
 
-import java.io.IOException;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
+import com.alibaba.fastjson.JSONObject;
 import com.xmtq.lottery.bean.BaseResponse;
 
 public abstract class BaseParser<T extends BaseResponse> {
@@ -15,46 +11,25 @@ public abstract class BaseParser<T extends BaseResponse> {
 
 	/**
 	 * 判断头部和错误信息
-	 * @param tagName
-	 * @param parser
+	 * 
+	 * @param msgObj
 	 * @param response
 	 * @return
 	 */
-	public boolean parseHeaser(String tagName, XmlPullParser parser,
-			BaseResponse response) {
-		try {
-			if (tagName.equalsIgnoreCase("header")) {
-				// TODO
-			} else if (tagName.equalsIgnoreCase("transactiontype")) {
-				response.setTransactiontype(parser.nextText());
-			} else if (tagName.equalsIgnoreCase("timestamp")) {
-				response.setTimestamp(parser.nextText());
-			} else if (tagName.equalsIgnoreCase("agenterid")) {
-				response.setAgenterid(parser.nextText());
-			} else if (tagName.equalsIgnoreCase("ipaddress")) {
-				response.setIpaddress(parser.nextText());
-			} else if (tagName.equalsIgnoreCase("source")) {
-				response.setSource(parser.nextText());
-			} else if (tagName.equalsIgnoreCase("digest")) {
-				response.setDigest(parser.nextText());
-			} else if (tagName.equalsIgnoreCase("body")) {
-				// TODO
-			} else if (tagName.equalsIgnoreCase("oelement")) {
-				// TODO
-			} else if (tagName.equalsIgnoreCase("errorcode")) {
-				response.setErrorcode(parser.nextText());
-			} else if (tagName.equalsIgnoreCase("errormsg")) {
-				response.setErrormsg(parser.nextText());
-			} else{
-				return false;
-			}
-		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return true;
+	public void parseMsg(JSONObject msgObj, BaseResponse response) {
+		// header
+		JSONObject headerObj = msgObj.getJSONObject("header");
+		response.transactiontype = headerObj.getString("transactiontype");
+		response.timestamp = headerObj.getString("timestamp");
+		response.agenterid = headerObj.getString("agenterid");
+		response.ipaddress = headerObj.getString("ipaddress");
+		response.source = headerObj.getString("source");
+		response.digest = headerObj.getString("digest");
+
+		// error code
+		JSONObject bodyObj = msgObj.getJSONObject("body");
+		JSONObject errorObj = bodyObj.getJSONObject("oelement");
+		response.errorcode = errorObj.getString("errorcode");
+		response.errormsg = errorObj.getString("errormsg");
 	}
 }

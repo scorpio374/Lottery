@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.dvt.lottery.util.MD5;
 import com.xmtq.lottery.Consts;
+import com.xmtq.lottery.parser.UserRegisterParser;
 import com.xmtq.lottery.utils.LogUtil;
 
 public class RequestMaker {
@@ -102,6 +103,7 @@ public class RequestMaker {
 	public Request getUserRegister(String username, String mail,
 			String actpassword, String mobile, String serialuid, String type) {
 
+		UserRegisterParser parser = new UserRegisterParser();
 		String body = createUserRegister(username, mail, actpassword, mobile,
 				serialuid, type);
 		String xmlBody = makeXml(body, "10001_1.1");
@@ -109,7 +111,7 @@ public class RequestMaker {
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(parser);
 		return request;
 	}
 
@@ -259,7 +261,7 @@ public class RequestMaker {
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element>");
-		sb.append(makeTag("parameter", "hntangqi374@163.com"));
+		sb.append(makeTag("parameter", "13632809278"));
 		sb.append("</element>");
 		sb.append("</elements>");
 		sb.append("</body>");
@@ -374,41 +376,6 @@ public class RequestMaker {
 	 * 提取现金
 	 */
 	public Request getExtractCash(String uid, String password,
-			String drawalmoney) {
-
-		String body = createExtractCash(uid, password, drawalmoney);
-		String xmlBody = makeXml(body, "20003_1.1");
-		LogUtil.log("xmlBody:" + xmlBody);
-
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
-		return request;
-	}
-
-	private String createExtractCash(String uid, String password,
-			String drawalmoney) {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("<body>");
-		sb.append("<elements>");
-		sb.append("<element drawaltype=\"0\">");
-		sb.append(makeTag("uid", "14244"));
-		sb.append(makeTag("password", "tq111111"));
-		sb.append(makeTag("drawalmoney", "10"));
-
-		sb.append("</element>");
-		sb.append("</elements>");
-		sb.append("</body>");
-
-		return sb.toString();
-	}
-
-	/**
-	 * 4.投注业务
-	 */
-
-	public Request getBettingBusiness(String uid, String password,
 			String drawalmoney) {
 
 		String body = createExtractCash(uid, password, drawalmoney);
