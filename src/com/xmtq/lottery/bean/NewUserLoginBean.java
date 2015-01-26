@@ -1,15 +1,16 @@
 package com.xmtq.lottery.bean;
 
 /**
- * 用户注册
+ * 新用户登录
+ * 
  */
-public class UserRegisterBean extends EntityBase {
+public class NewUserLoginBean extends EntityBase {
 
-//	<uid>14138</uid>
-//	<username>wangcaster</username>
-//	<money>9920749461.85</money>
-//	<prizeMoney>0.00</prizeMoney>
-//	<perfectFlag>1</perfectFlag>
+	// <uid>14138</uid>
+	// <username>wangcaster</username>
+	// <money>9920749461.85</money>
+	// <prizeMoney>0.00</prizeMoney>
+	// <perfectFlag>1</perfectFlag>
 	private static final long serialVersionUID = -8391624578292769336L;
 	private String uid;
 	private String username;
