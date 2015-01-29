@@ -1,8 +1,6 @@
 package com.xmtq.lottery.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +16,7 @@ import com.xmtq.lottery.activity.ModifiPasswordActivity;
 import com.xmtq.lottery.activity.PersonDataActivity;
 import com.xmtq.lottery.activity.RechargeMoneyActivity;
 import com.xmtq.lottery.activity.RecomendActivity;
+import com.xmtq.lottery.bean.NewUserLoginBean;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 
 /**
@@ -29,7 +28,7 @@ import com.xmtq.lottery.utils.SharedPrefHelper;
 public class UserInfoFragment extends BaseFragment {
 	private RelativeLayout rl_repassword, rl_bet_record, rl_userinfo;
 	private RelativeLayout account_information;
-	private TextView tv_esc_login;
+	private TextView tv_esc_login, user_name, account_balance;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,14 @@ public class UserInfoFragment extends BaseFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.userinfo, container, false);
 		initView(view);
+		initData();
 		return view;
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
 	}
 
 	public void initView(View v) {
@@ -56,12 +62,29 @@ public class UserInfoFragment extends BaseFragment {
 		TextView recharge_money = (TextView) v.findViewById(R.id.recharge);
 		// 提现
 		TextView extract_money = (TextView) v.findViewById(R.id.extract_money);
+		user_name = (TextView) v.findViewById(R.id.user_name);
+		account_balance = (TextView) v.findViewById(R.id.account_balance);
+
 		rl_bet_record.setOnClickListener(this);
 		rl_repassword.setOnClickListener(this);
 		rl_userinfo.setOnClickListener(this);
 		account_information.setOnClickListener(this);
 		recharge_money.setOnClickListener(this);
 		extract_money.setOnClickListener(this);
+	}
+
+	private void initData() {
+		try {
+			NewUserLoginBean newUserLoginBean = (NewUserLoginBean) getArguments()
+					.getSerializable("newUserLoginBean");
+			if (newUserLoginBean != null) {
+				user_name.setText(newUserLoginBean.getUsername());
+				account_balance.setText(newUserLoginBean.getMoney());
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 	}
 
 	@Override

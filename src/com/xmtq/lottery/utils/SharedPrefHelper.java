@@ -195,7 +195,50 @@ public class SharedPrefHelper {
 	}
 
 	public boolean getIsLogin() {
-		return sharedPreferences.getBoolean("isLogin", true);
+		return sharedPreferences.getBoolean("isLogin", false);
+	}
+	
+	/**
+	 * 是否记住密码
+	 * 
+	 */
+	public void setIsRememberPwd(boolean isLogin) {
+		sharedPreferences.edit().putBoolean("isRememberPwd", isLogin).commit();
 	}
 
+	public boolean getIsRememberPwd() {
+		return sharedPreferences.getBoolean("isRememberPwd", false);
+	}
+	
+	/**
+	 * 记住用户名
+	 * 
+	 */
+	public void setUserName(String userName) {
+		sharedPreferences.edit().putString("userName", userName).commit();
+	}
+	
+	public String getUserName() {
+		return sharedPreferences.getString("userName", "");
+	}
+	
+	public void cleanUserName(){
+		sharedPreferences.edit().putString("userName", "").commit();
+	}
+	
+	/**
+	 * 记住密码
+	 * 
+	 */
+	public void setUserPassward(String passward) {
+		sharedPreferences.edit().putString("passward", passward).commit();
+	}
+	
+	public String getUserPassward() {
+		return sharedPreferences.getString("passward", "");
+	}
+	
+	public void cleanUserPassward(){
+		sharedPreferences.edit().putString("passward", "").commit();
+	}
 }

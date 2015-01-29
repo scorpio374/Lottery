@@ -39,9 +39,9 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	}
 
 	private void test() {
-		RequestMaker mRequestMaker = RequestMaker.getInstance("");
-		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		mAsyncTask.execute(RequestMaker.test());
+		// RequestMaker mRequestMaker = RequestMaker.getInstance();
+		// HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		// mAsyncTask.execute(RequestMaker.test());
 	}
 
 	public void initView() {
@@ -59,19 +59,19 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 
 	private void initMenuDrawer() {
 
-		boolean isLogin = false;
-		isLogin = spfs.getIsLogin();
-		if (isLogin) {
-			// left sliding menu
-			setBehindContentView(R.layout.menu_frame);
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.menu_frame, new UserInfoFragment()).commit();
-
-		} else {
-			setBehindContentView(R.layout.menu_frame);
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.menu_frame, new LoginFragment()).commit();
-		}
+		// boolean isLogin = false;
+		// isLogin = spfs.getIsLogin();
+		// if (isLogin) {
+		// // left sliding menu
+		// setBehindContentView(R.layout.menu_frame);
+		// getSupportFragmentManager().beginTransaction()
+		// .replace(R.id.menu_frame, new UserInfoFragment()).commit();
+		//
+		// } else {
+		setBehindContentView(R.layout.menu_frame);
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.menu_frame, new LoginFragment()).commit();
+		// }
 
 		menu = getSlidingMenu();
 		menu.setMode(SlidingMenu.LEFT_RIGHT);

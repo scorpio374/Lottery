@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
-import android.text.TextUtils;
 
 import com.dvt.lottery.util.MD5;
 import com.xmtq.lottery.Consts;
@@ -31,12 +30,8 @@ public class RequestMaker {
 		return request;
 	}
 
-	private RequestMaker(String url) {
-		if (TextUtils.isEmpty(url)) {
-			url = Consts.host;
-		}
-		request = new Request(url);
-
+	private RequestMaker() {
+		request = new Request(Consts.host);
 	}
 
 	private static RequestMaker requestMaker = null;
@@ -47,9 +42,9 @@ public class RequestMaker {
 	 * @param context
 	 * @return
 	 */
-	public static RequestMaker getInstance(String url) {
+	public static RequestMaker getInstance() {
 		if (requestMaker == null) {
-			requestMaker = new RequestMaker(url);
+			requestMaker = new RequestMaker();
 			return requestMaker;
 		} else {
 			return requestMaker;
@@ -58,10 +53,10 @@ public class RequestMaker {
 
 	public static Request test() {
 		Request request = null;
-		request = RequestMaker.getInstance("").getBettingBusiness("14244",
-				"136", "2", "352", "1", "", "704", "6", "2_1,3_1", "704", "1");
-		request = RequestMaker.getInstance("").getPurchaseRecords("14244",
-				"130", "2014-09-08", "2015-10-08", "1", "1", "5", "0");
+		request = RequestMaker.getInstance().getBettingBusiness("14244", "136",
+				"2", "352", "1", "", "704", "6", "2_1,3_1", "704", "1");
+		request = RequestMaker.getInstance().getPurchaseRecords("14244", "130",
+				"2014-09-08", "2015-10-08", "1", "1", "5", "0");
 		return request;
 	}
 
@@ -124,11 +119,12 @@ public class RequestMaker {
 	 * 用户注册
 	 */
 	public Request getUserRegister(String username, String mail,
-			String actpassword, String mobile, String serialuid, String type) {
+			String actpassword, String mobile, String serialuid, String type,
+			String code) {
 
 		UserRegisterParser parser = new UserRegisterParser();
 		String body = createUserRegister(username, mail, actpassword, mobile,
-				serialuid, type);
+				serialuid, type, code);
 		String xmlBody = makeXml(body, "10001_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
@@ -139,19 +135,21 @@ public class RequestMaker {
 	}
 
 	private String createUserRegister(String username, String mail,
-			String actpassword, String mobile, String serialuid, String type) {
+			String actpassword, String mobile, String serialuid, String type,
+			String code) {
 
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element>");
-		sb.append(makeTag("username", "tangqi"));
-		sb.append(makeTag("mail", "hntangqi374@163.com"));
-		sb.append(makeTag("actpassword", "tq123456"));
-		sb.append(makeTag("mobile", "13632809278"));
-		sb.append(makeTag("serialuid", "12563245125"));
-		sb.append(makeTag("type", "1"));
+		sb.append(makeTag("username", username));
+		sb.append(makeTag("mail", mail));
+		sb.append(makeTag("actpassword", actpassword));
+		sb.append(makeTag("mobile", mobile));
+		sb.append(makeTag("serialuid", serialuid));
+		sb.append(makeTag("type", type));
+		sb.append(makeTag("code", code));
 		sb.append("</element>");
 		sb.append("</elements>");
 		sb.append("</body>");
@@ -181,18 +179,19 @@ public class RequestMaker {
 			String cardid, String phone, String bankname, String bankcardid,
 			String bankaddress, String actpassword) {
 		StringBuilder sb = new StringBuilder();
+		actpassword = MD5.hmacSign(actpassword, Consts.passwordkey);
 
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element drawaltype=\"0\">");
-		sb.append(makeTag("uid", "14244"));
-		sb.append(makeTag("realname", "唐麒"));
-		sb.append(makeTag("cardid", "431121199003080798"));
-		sb.append(makeTag("phone", "13632809278"));
-		sb.append(makeTag("bankname", "招商银行"));
-		sb.append(makeTag("bankcardid", "204943197136761361"));
-		sb.append(makeTag("bankaddress", "广东深圳"));
-		sb.append(makeTag("actpassword", "tq111111"));
+		sb.append(makeTag("uid", uid));
+		sb.append(makeTag("realname", realname));
+		sb.append(makeTag("cardid", cardid));
+		sb.append(makeTag("phone", phone));
+		sb.append(makeTag("bankname", bankname));
+		sb.append(makeTag("bankcardid", bankcardid));
+		sb.append(makeTag("bankaddress", bankaddress));
+		sb.append(makeTag("actpassword", actpassword));
 		sb.append("</element>");
 		sb.append("</elements>");
 		sb.append("</body>");
@@ -252,7 +251,7 @@ public class RequestMaker {
 
 	private String createUserLogin(String username, String actpassword) {
 		StringBuilder sb = new StringBuilder();
-		actpassword = MD5.hmacSign(actpassword, Consts.passwordkey);
+		// actpassword = MD5.hmacSign(actpassword, Consts.passwordkey);
 
 		sb.append("<body>");
 		sb.append("<elements>");
