@@ -82,6 +82,27 @@ public class RegisterActivity extends BaseActivity {
 		super.onDestroy();
 	}
 
+	@Override
+	public void onClickEvent(View view) {
+		switch (view.getId()) {
+		case R.id.back:
+			this.finish();
+			break;
+
+		// 注册提交
+		case R.id.register_commit:
+			commitRegister();
+			break;
+
+		// 发送验证码
+		case R.id.send_verification:
+			getVeriCode();
+			break;
+		default:
+			break;
+		}
+	}
+	
 	/**
 	 * 获取验证码
 	 */
@@ -135,7 +156,7 @@ public class RegisterActivity extends BaseActivity {
 
 		String userName = mUserNameView.getText().toString().trim();
 		String phoneNum = mPhoneView.getText().toString().trim();
-		String passward = mPasswordView.getText().toString().trim();
+		String password = mPasswordView.getText().toString().trim();
 		String veriCode = mVeriCodeView.getText().toString().trim();
 		// String userImei = VersionUtil.getIMEI(this);//手机唯一识别码
 
@@ -157,12 +178,12 @@ public class RegisterActivity extends BaseActivity {
 			return;
 		}
 
-		if (StringUtil.isNullOrEmpty(passward)) {
+		if (StringUtil.isNullOrEmpty(password)) {
 			toast.setText("请输入密码");
 			toast.show();
 			return;
 
-		} else if (!StringUtil.matchPwd(passward)) {
+		} else if (!StringUtil.matchPwd(password)) {
 			toast.setText("请输入6-16位密码,密码必须包含数字和字母");
 			toast.show();
 			return;
@@ -172,7 +193,7 @@ public class RegisterActivity extends BaseActivity {
 		toast.show();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(mRequestMaker.getUserRegister(userName, "",
-				passward, phoneNum, "1111111111", Consts.PHONE_REGISTER,
+				password, phoneNum, "1111111111", Consts.PHONE_REGISTER,
 				veriCode));
 		mAsyncTask.setOnCompleteListener(mOnRegisterCompleteListener);
 	}
@@ -232,28 +253,5 @@ public class RegisterActivity extends BaseActivity {
 			send_verification.setBackgroundResource(R.color.green);
 			isGetCoding = false;
 		}
-
 	}
-
-	@Override
-	public void onClickEvent(View view) {
-		switch (view.getId()) {
-		case R.id.back:
-			this.finish();
-			break;
-
-		// 注册提交
-		case R.id.register_commit:
-			commitRegister();
-			break;
-
-		// 发送验证码
-		case R.id.send_verification:
-			getVeriCode();
-			break;
-		default:
-			break;
-		}
-	}
-
 }

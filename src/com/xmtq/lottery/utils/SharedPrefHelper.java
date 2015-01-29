@@ -1,16 +1,8 @@
 package com.xmtq.lottery.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.util.Base64;
 
 public class SharedPrefHelper {
 	/**
@@ -197,7 +189,7 @@ public class SharedPrefHelper {
 	public boolean getIsLogin() {
 		return sharedPreferences.getBoolean("isLogin", false);
 	}
-	
+
 	/**
 	 * 是否记住密码
 	 * 
@@ -209,7 +201,7 @@ public class SharedPrefHelper {
 	public boolean getIsRememberPwd() {
 		return sharedPreferences.getBoolean("isRememberPwd", false);
 	}
-	
+
 	/**
 	 * 记住用户名
 	 * 
@@ -217,15 +209,15 @@ public class SharedPrefHelper {
 	public void setUserName(String userName) {
 		sharedPreferences.edit().putString("userName", userName).commit();
 	}
-	
+
 	public String getUserName() {
 		return sharedPreferences.getString("userName", "");
 	}
-	
-	public void cleanUserName(){
+
+	public void cleanUserName() {
 		sharedPreferences.edit().putString("userName", "").commit();
 	}
-	
+
 	/**
 	 * 记住密码
 	 * 
@@ -233,12 +225,133 @@ public class SharedPrefHelper {
 	public void setUserPassward(String passward) {
 		sharedPreferences.edit().putString("passward", passward).commit();
 	}
-	
+
 	public String getUserPassward() {
 		return sharedPreferences.getString("passward", "");
 	}
-	
-	public void cleanUserPassward(){
+
+	public void cleanUserPassward() {
 		sharedPreferences.edit().putString("passward", "").commit();
+	}
+
+	/**
+	 * 用户ID
+	 * 
+	 */
+	public void setUid(String uid) {
+		sharedPreferences.edit().putString("uid", uid).commit();
+	}
+
+	public String getUid() {
+		return sharedPreferences.getString("uid", "");
+	}
+	
+	public void cleanUid() {
+		sharedPreferences.edit().putString("uid", "").commit();
+	}
+	
+	/**
+	 * 清除用户信息
+	 */
+	public void cleanUserInfo(){
+		cleanRealName();
+		cleanCardId();
+	}
+	
+	
+	/**
+	 * 用户真实姓名
+	 * 
+	 */
+	public void setRealName(String realName) {
+		sharedPreferences.edit().putString("realName", realName).commit();
+	}
+
+	public String getRealName() {
+		return sharedPreferences.getString("realName", "");
+	}
+	
+	public void cleanRealName() {
+		sharedPreferences.edit().putString("realName", "").commit();
+	}
+	
+	/**
+	 * 用户身份证卡号
+	 * 
+	 */
+	public void setCardId(String cardId) {
+		sharedPreferences.edit().putString("cardId", cardId).commit();
+	}
+
+	public String getCardId() {
+		return sharedPreferences.getString("cardId", "");
+	}
+	
+	public void cleanCardId() {
+		sharedPreferences.edit().putString("cardId", "").commit();
+	}
+	
+	/**
+	 * 银行信息
+	 * 
+	 */
+	public void setBankName(String bankName) {
+		sharedPreferences.edit().putString("bankName", bankName).commit();
+	}
+
+	public String getBankName() {
+		return sharedPreferences.getString("bankName", "");
+	}
+	
+	public void cleanBankName() {
+		sharedPreferences.edit().putString("bankName", "").commit();
+	}
+	
+	/**
+	 * 银行卡号
+	 * 
+	 */
+	public void setBankCardId(String bankCardId) {
+		sharedPreferences.edit().putString("bankCardId", bankCardId).commit();
+	}
+
+	public String getBankCardId() {
+		return sharedPreferences.getString("bankCardId", "");
+	}
+	
+	public void cleanBankCardId() {
+		sharedPreferences.edit().putString("bankCardId", "").commit();
+	}
+	
+	/**
+	 * 银行开户地
+	 * 
+	 */
+	public void setBankAddress(String bankAddress) {
+		sharedPreferences.edit().putString("bankAddress", bankAddress).commit();
+	}
+
+	public String getBankAddress() {
+		return sharedPreferences.getString("bankAddress", "");
+	}
+	
+	public void cleanBankAddress() {
+		sharedPreferences.edit().putString("bankAddress", "").commit();
+	}
+	
+	/**
+	 * 绑定银行卡-用户密码（仅用于测试，正式版删除）
+	 * 
+	 */
+	public void setPassword(String password) {
+		sharedPreferences.edit().putString("password", password).commit();
+	}
+
+	public String getPassword() {
+		return sharedPreferences.getString("password", "");
+	}
+	
+	public void cleanPassword() {
+		sharedPreferences.edit().putString("password", "").commit();
 	}
 }

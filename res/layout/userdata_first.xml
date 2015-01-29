@@ -94,7 +94,8 @@
             android:layout_marginRight="20dip"
             android:layout_marginTop="16dip"
             android:background="@drawable/rect_corner_edit_bg"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -150,7 +151,7 @@
                 android:cursorVisible="true"
                 android:hint="领奖和提款凭证，不可更改"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -175,7 +176,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <EditText
-                android:id="@+id/true_name"
+                android:id="@+id/real_name"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -184,7 +185,7 @@
                 android:cursorVisible="true"
                 android:hint="领奖和提款凭证，不可更改"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -193,8 +194,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dip"
-            android:orientation="horizontal" >
+            android:layout_margin="20dip"
+            android:orientation="horizontal"
+            android:visibility="gone" >
 
             <TextView
                 android:layout_width="0dip"
@@ -248,7 +250,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <EditText
-                android:id="@+id/search_edit"
+                android:id="@+id/bankcard_person"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -257,7 +259,7 @@
                 android:cursorVisible="true"
                 android:hint="严**"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -282,7 +284,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <EditText
-                android:id="@+id/search_edit"
+                android:id="@+id/bankcard_person_id"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -291,7 +293,7 @@
                 android:cursorVisible="true"
                 android:hint="4221312****772176"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -316,7 +318,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <EditText
-                android:id="@+id/search_edit"
+                android:id="@+id/bank_name"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -325,7 +327,7 @@
                 android:cursorVisible="true"
                 android:hint="请填写银行"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -361,7 +363,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <EditText
-                android:id="@+id/search_edit"
+                android:id="@+id/bankcard_id"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -370,7 +372,7 @@
                 android:cursorVisible="true"
                 android:hint="请填写卡号"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -404,7 +406,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <EditText
-                android:id="@+id/search_edit"
+                android:id="@+id/bank_address"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -413,7 +415,7 @@
                 android:cursorVisible="true"
                 android:hint="请填写开户地"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -447,7 +449,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <EditText
-                android:id="@+id/search_edit"
+                android:id="@+id/password"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -455,8 +457,9 @@
                 android:background="@null"
                 android:cursorVisible="true"
                 android:hint="请输入登录密码"
+                android:inputType="textPassword"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -464,11 +467,12 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/userinfo_commit"
         android:layout_width="match_parent"
         android:layout_height="40dip"
         android:layout_marginLeft="20dip"
         android:layout_marginRight="20dip"
-        android:layout_marginTop="10dip"
+        android:layout_marginTop="20dip"
         android:background="@drawable/button_bg_selector"
         android:gravity="center"
         android:text="提交"

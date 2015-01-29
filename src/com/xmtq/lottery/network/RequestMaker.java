@@ -1,5 +1,8 @@
 package com.xmtq.lottery.network;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -86,13 +89,14 @@ public class RequestMaker {
 		String digest = MD5.md5(source);
 
 		StringBuilder sb = new StringBuilder();
-		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		sb.append("<message version=\"1.0\">");
 		sb.append(makeHeader(digest, transactiontype));
 		if (body != null) {
 			sb.append(body);
 		}
 		sb.append("</message>");
+
 		return sb.toString();
 	}
 
@@ -110,7 +114,7 @@ public class RequestMaker {
 		sb.append(makeTag("timestamp", timestamp));
 		sb.append(makeTag("digest", digest));
 		sb.append(makeTag("agenterid", Consts.agenterid));
-		sb.append(makeTag("ipaddress", "223131123122"));
+		sb.append(makeTag("ipaddress", ""));
 		sb.append(makeTag("source", "WEB"));
 		sb.append("</header>");
 
@@ -160,7 +164,39 @@ public class RequestMaker {
 	}
 
 	/**
-	 * 完善用户信息(no pass)
+	 * 完善用户信息(身份信息)
+	 */
+	public Request getPerfectUserInfo(String uid, String realname, String cardid) {
+		ImproveUserInfoParser paser = new ImproveUserInfoParser();
+		String body = createPerfectUserInfo(uid, realname, cardid);
+		String xmlBody = makeXml(body, "10002_1.1");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		request.setBody(xmlBody);
+		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
+		request.setXmlParser(paser);
+		return request;
+	}
+
+	private String createPerfectUserInfo(String uid, String realname,
+			String cardid) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element drawaltype=\"0\">");
+		sb.append(makeTag("uid", uid));
+		sb.append(makeTag("realname", realname));
+		sb.append(makeTag("cardid", cardid));
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * 完善用户信息(银行卡信息)
 	 */
 	public Request getPerfectUserInfo(String uid, String realname,
 			String cardid, String phone, String bankname, String bankcardid,
@@ -168,7 +204,7 @@ public class RequestMaker {
 		ImproveUserInfoParser paser = new ImproveUserInfoParser();
 		String body = createPerfectUserInfo(uid, realname, cardid, phone,
 				bankname, bankcardid, bankaddress, actpassword);
-		String xmlBody = makeXml(body, "20003_1.1");
+		String xmlBody = makeXml(body, "10002_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		request.setBody(xmlBody);
@@ -185,10 +221,10 @@ public class RequestMaker {
 
 		sb.append("<body>");
 		sb.append("<elements>");
-		sb.append("<element drawaltype=\"0\">");
+		sb.append("<element>");
 		sb.append(makeTag("uid", uid));
-		sb.append(makeTag("realname", realname));
-		sb.append(makeTag("cardid", cardid));
+		// sb.append(makeTag("realname", realname));
+		// sb.append(makeTag("cardid", cardid));
 		sb.append(makeTag("phone", phone));
 		sb.append(makeTag("bankname", bankname));
 		sb.append(makeTag("bankcardid", bankcardid));
@@ -226,7 +262,7 @@ public class RequestMaker {
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element>");
-		sb.append(makeTag("uid", "14244"));
+		sb.append(makeTag("uid", uid));
 		sb.append(makeTag("oldpassword", oldpassword));
 		sb.append(makeTag("newpassword", newpassword));
 		sb.append("</element>");
@@ -368,9 +404,10 @@ public class RequestMaker {
 	 * 用户账户明细查询(no pass)
 	 */
 	public Request getAccountDetail(String startDate, String endDate,
-			String uid, String mflag) {
+			String uid, String mflag, String pageNum, String pageSize) {
 		AccountDetailParser paser = new AccountDetailParser();
-		String body = createAccountDetail(startDate, endDate, uid, mflag);
+		String body = createAccountDetail(startDate, endDate, uid, mflag,
+				pageNum, pageSize);
 		String xmlBody = makeXml(body, "11008_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
@@ -381,18 +418,18 @@ public class RequestMaker {
 	}
 
 	private String createAccountDetail(String startDate, String endDate,
-			String uid, String mflag) {
+			String uid, String mflag, String pageNum, String pageSize) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element>");
-		sb.append(makeTag("startDate", "2015-01-01"));
-		sb.append(makeTag("endDate", "2015-01-20"));
-		sb.append(makeTag("uid", "14244"));
+		sb.append(makeTag("startDate", startDate));
+		sb.append(makeTag("endDate", endDate));
+		sb.append(makeTag("uid", uid));
 		sb.append("<mflag/>");
-		sb.append(makeTag("pageNum", "1"));
-		sb.append(makeTag("pageSize", "10"));
+		sb.append(makeTag("pageNum", pageNum));
+		sb.append(makeTag("pageSize", pageSize));
 
 		sb.append("</element>");
 		sb.append("</elements>");

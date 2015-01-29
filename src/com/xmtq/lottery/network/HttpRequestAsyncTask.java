@@ -51,7 +51,7 @@ public class HttpRequestAsyncTask extends
 			 */
 
 			httpPost = new HttpPost(urlString);
-			httpPost.setEntity(new StringEntity(request.getBody()));
+			httpPost.setEntity(new StringEntity(request.getBody(),"UTF-8"));
 			HttpManager.shortTimeOut();
 			httpResponse = HttpManager.execute(httpPost);
 

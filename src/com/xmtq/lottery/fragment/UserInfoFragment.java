@@ -2,11 +2,13 @@ package com.xmtq.lottery.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.activity.AccountDetailActivity;
@@ -16,7 +18,13 @@ import com.xmtq.lottery.activity.PersonDataActivity;
 import com.xmtq.lottery.activity.RechargeMoneyActivity;
 import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.activity.RecomendHistoryActivity;
+import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.NewUserLoginBean;
+import com.xmtq.lottery.bean.UserInfoBean;
+import com.xmtq.lottery.bean.UserInfoResponse;
+import com.xmtq.lottery.network.HttpRequestAsyncTask;
+import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 
 /**
@@ -29,6 +37,7 @@ public class UserInfoFragment extends BaseFragment {
 	private RelativeLayout rl_repassword, rl_bet_record, rl_userinfo;
 	private RelativeLayout account_information;
 	private TextView tv_esc_login, user_name, account_balance;
+	private Toast toast;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +50,7 @@ public class UserInfoFragment extends BaseFragment {
 		View view = inflater.inflate(R.layout.userinfo, container, false);
 		initView(view);
 		initData();
+		requestUserData();
 		return view;
 	}
 
@@ -73,6 +83,9 @@ public class UserInfoFragment extends BaseFragment {
 		extract_money.setOnClickListener(this);
 	}
 
+	/**
+	 * 从其他Fragment传送过来的用户数据
+	 */
 	private void initData() {
 		try {
 			NewUserLoginBean newUserLoginBean = (NewUserLoginBean) getArguments()
@@ -83,8 +96,53 @@ public class UserInfoFragment extends BaseFragment {
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 获取用户信息
+	 */
+	private void requestUserData(){
+		toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		
+		String uid = SharedPrefHelper.getInstance(getActivity()).getUid();
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(RequestMaker.getInstance().getUserInfo(uid));
+		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
+	}
+	
+	/**
+	 * 获取用户信息
+	 */
+	private OnCompleteListener<BaseResponse> mOnCompleteListener = new OnCompleteListener<BaseResponse>() {
+		@Override
+		public void onComplete(BaseResponse result, String resultString) {
+			// TODO Auto-generated method stub
+			if (result != null) {
+				if (result.errorcode.equals("0")) {
+					onSuccess(result);
+				} else {
+					toast.setText(result.errormsg);
+					toast.show();
+				}
+			} else {
+				toast.setText("请求错误");
+				toast.show();
+			}
+		}
+	};
+	
+	private void onSuccess(BaseResponse result){
+		UserInfoResponse response = (UserInfoResponse)result;
+		UserInfoBean userInfoBean = response.userInfoBean;
+		toast.setText("获取个人信息成功");
+		toast.show();
+		
 
+		// SharedPrefHelper.getInstance(getActivity()).setRealName(userInfoBean.getRealname());
+		// SharedPrefHelper.getInstance(getActivity()).setCardId(userInfoBean.getCardid());
 	}
 
 	@Override

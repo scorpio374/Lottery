@@ -13,7 +13,7 @@ public class Consts {
 	public static final String passwordkey = "97d2dcb2ea177246d44f1114e2d5e9c5";
 
 	/**
-	 * Agenter密钥（加密请求的数据）
+	 * Agent密钥（加密请求数据）
 	 */
 	public static final String agenterkey = "c5d1eb92ced441225554a64e07694fa0";
 

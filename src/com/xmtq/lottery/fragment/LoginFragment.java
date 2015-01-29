@@ -39,7 +39,7 @@ public class LoginFragment extends BaseFragment {
 	private SharedPrefHelper spfs;
 	private CheckBox remember_passwod;
 	private EditText user_name;
-	private EditText password;
+	private EditText user_password;
 	private Toast toast;
 
 	@Override
@@ -68,7 +68,7 @@ public class LoginFragment extends BaseFragment {
 		login = (TextView) v.findViewById(R.id.login);
 		remember_passwod = (CheckBox) v.findViewById(R.id.remember_passwod);
 		user_name = (EditText) v.findViewById(R.id.user_name);
-		password = (EditText) v.findViewById(R.id.password);
+		user_password = (EditText) v.findViewById(R.id.password);
 
 		find_password.setOnClickListener(this);
 		register.setOnClickListener(this);
@@ -76,8 +76,28 @@ public class LoginFragment extends BaseFragment {
 		remember_passwod.setOnCheckedChangeListener(mOnCheckedChangeListener);
 		if (spfs.getIsRememberPwd()) {
 			user_name.setText(spfs.getUserName());
-			password.setText(spfs.getUserPassward());
+			user_password.setText(spfs.getUserPassward());
 			remember_passwod.setChecked(true);
+		}
+	}
+
+	@Override
+	public void onClickEvent(View view) {
+		Intent intent;
+		switch (view.getId()) {
+		case R.id.find_password:
+			intent = new Intent(getActivity(), FindPasswordActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.register:
+			intent = new Intent(getActivity(), RegisterActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.login:
+			login();
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -86,7 +106,7 @@ public class LoginFragment extends BaseFragment {
 	 */
 	private void login() {
 		String userName = user_name.getText().toString().trim();
-		String passward = password.getText().toString().trim();
+		String password = user_password.getText().toString().trim();
 
 		if (StringUtil.isNullOrEmpty(userName)) {
 			toast.setText("请输入用户名");
@@ -94,27 +114,27 @@ public class LoginFragment extends BaseFragment {
 			return;
 		}
 
-		if (StringUtil.isNullOrEmpty(passward)) {
+		if (StringUtil.isNullOrEmpty(password)) {
 			toast.setText("请输入密码");
 			toast.show();
 			return;
 
-		} else if (!StringUtil.matchPwd(passward)) {
-			toast.setText("请输入6-16位密码,密码必须包含数字和字母");
-			toast.show();
-			return;
+		} else if (!StringUtil.matchPwd(password)) {
+			// toast.setText("请输入6-16位密码,密码必须包含数字和字母");
+			// toast.show();
+			// return;
 		}
 
 		toast.setText("登陆中，请稍候...");
 		toast.show();
 		if (spfs.getIsRememberPwd()) {
-			spfs.setUserPassward(passward);
+			spfs.setUserPassward(password);
 			spfs.setUserName(userName);
 		}
 
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getUserLogin(userName,
-				passward));
+				password));
 		mAsyncTask.setOnCompleteListener(mOnLoginCompleteListener);
 	}
 
@@ -126,32 +146,49 @@ public class LoginFragment extends BaseFragment {
 		public void onComplete(BaseResponse result, String resultString) {
 			// TODO Auto-generated method stub
 			if (result != null) {
-				NewUserLoginResponse response = (NewUserLoginResponse) result;
-				NewUserLoginBean newUserLoginBean = response.newUserLoginBean;
 				if (result.errorcode.equals("0")) {
-					toast.setText("登陆成功");
-					toast.show();
-
-					// 登陆成功，跳转另一个页面
-					spfs.setIsLogin(true);
-
-					UserInfoFragment fragment = new UserInfoFragment();
-					Bundle b = new Bundle();
-					b.putSerializable("newUserLoginBean", newUserLoginBean);
-					fragment.setArguments(b);
-					getActivity().getSupportFragmentManager()
-							.beginTransaction()
-							.replace(R.id.menu_frame, fragment).commit();
+					onSuccess(result);
 				} else {
-					toast.setText(result.errormsg);
-					toast.show();
+					onFailure(result.errormsg);
 				}
 			} else {
-				toast.setText("请求错误");
-				toast.show();
+				onFailure("请求错误");
 			}
 		}
 	};
+
+	/**
+	 * 登陆成功
+	 */
+	private void onSuccess(BaseResponse result) {
+		NewUserLoginResponse response = (NewUserLoginResponse) result;
+		NewUserLoginBean newUserLoginBean = response.newUserLoginBean;
+
+		toast.setText("登陆成功");
+		toast.show();
+
+		// 保存用户登陆状态及信息
+		spfs.setIsLogin(true);
+		spfs.setUid(newUserLoginBean.getUid());
+
+		// 登陆成功，跳转另一个页面
+		UserInfoFragment fragment = new UserInfoFragment();
+		Bundle b = new Bundle();
+		b.putSerializable("newUserLoginBean", newUserLoginBean);
+		fragment.setArguments(b);
+		getActivity().getSupportFragmentManager().beginTransaction()
+				.replace(R.id.menu_frame, fragment).commit();
+	}
+
+	/**
+	 * 登陆失败
+	 * 
+	 * @param msg
+	 */
+	private void onFailure(String msg) {
+		toast.setText(msg);
+		toast.show();
+	}
 
 	/**
 	 * 是否记住密码
@@ -170,31 +207,5 @@ public class LoginFragment extends BaseFragment {
 			}
 		}
 	};
-
-	@Override
-	public void onClickEvent(View view) {
-		Intent intent;
-		switch (view.getId()) {
-		case R.id.find_password:
-			intent = new Intent(getActivity(), FindPasswordActivity.class);
-			startActivity(intent);
-			break;
-		case R.id.register:
-			intent = new Intent(getActivity(), RegisterActivity.class);
-			startActivity(intent);
-			break;
-		case R.id.login:
-			login();
-
-			// SharedPrefHelper spf =
-			// SharedPrefHelper.getInstance(getActivity());
-			// spf.setIsLogin(true);
-			// intent = new Intent(getActivity(), RecomendActivity.class);
-			// startActivity(intent);
-			break;
-		default:
-			break;
-		}
-	}
 
 }

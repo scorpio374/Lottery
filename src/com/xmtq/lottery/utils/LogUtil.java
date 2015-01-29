@@ -62,7 +62,7 @@ public class LogUtil {
 			return;
 		}
 		if (isLog) {
-			log(DEFAULT_TAG, Log.INFO, msg, null);
+			log(DEFAULT_TAG, Log.DEBUG, msg, null);
 		}
 	}
 
