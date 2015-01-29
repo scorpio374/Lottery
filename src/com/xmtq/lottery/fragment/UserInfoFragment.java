@@ -10,12 +10,12 @@ import android.widget.TextView;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.activity.AccountDetailActivity;
-import com.xmtq.lottery.activity.BetRecordActivity;
 import com.xmtq.lottery.activity.ExtractMoneyActivity;
 import com.xmtq.lottery.activity.ModifiPasswordActivity;
 import com.xmtq.lottery.activity.PersonDataActivity;
 import com.xmtq.lottery.activity.RechargeMoneyActivity;
 import com.xmtq.lottery.activity.RecomendActivity;
+import com.xmtq.lottery.activity.RecomendHistoryActivity;
 import com.xmtq.lottery.bean.NewUserLoginBean;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 
@@ -93,7 +93,9 @@ public class UserInfoFragment extends BaseFragment {
 		switch (v.getId()) {
 		// 投注记录
 		case R.id.rl_bet_record:
-			intent = new Intent(getActivity(), BetRecordActivity.class);
+			// intent = new Intent(getActivity(), BetRecordActivity.class);
+			// 测试推荐历史
+			intent = new Intent(getActivity(), RecomendHistoryActivity.class);
 			startActivity(intent);
 
 			break;

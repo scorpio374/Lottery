@@ -4,8 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 public final class DateUtil {
 	public static SimpleDateFormat HHmmss = new SimpleDateFormat("HH:mm:ss");
@@ -56,6 +58,49 @@ public final class DateUtil {
 		} catch (ParseException e) {
 			return 0;
 		}
+	}
+
+	/**
+	 * 将date转换成string
+	 */
+	public static String dateToStringFormat(Date date, String params) {
+		SimpleDateFormat format = new SimpleDateFormat(params);
+		return format.format(date);
+	}
+
+	/**
+	 * 字符串获取对应的date
+	 * 
+	 * @param paramString
+	 * @return
+	 */
+	public static Date stringToDateFormat(String paramString, String params) {
+		try {
+			// SimpleDateFormat localDate = new SimpleDateFormat(YYYYMMDD);
+			SimpleDateFormat localDate = new SimpleDateFormat(params);
+			return localDate.parse(paramString);
+		} catch (Exception localException) {
+			Log.e("localException", localException.getMessage());
+		}
+		return null;
+	}
+
+	/**
+	 * date获取相应的星期
+	 * 
+	 * @param paramString
+	 * @return
+	 */
+	public static String dateToWeekFormat(Date date) {
+		try {
+			Calendar c = Calendar.getInstance(Locale.CHINA);
+			c.setTime(date);
+			String dayOfWeek = (c.get(Calendar.DAY_OF_WEEK) - 1) + "";
+			return dayOfWeek;
+		} catch (Exception localException) {
+			Log.e("localException", localException.getMessage());
+		}
+		return null;
 	}
 
 	/**

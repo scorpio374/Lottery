@@ -428,7 +428,7 @@
                     android:background="@drawable/button_bg_selector"
                     android:gravity="center"
                     android:text="提交"
-                    android:textColor="@color/green"
+                    android:textColor="@drawable/button_textcolor_selector"
                     android:textSize="@dimen/main_textsize2" />
             </LinearLayout>
         </LinearLayout>

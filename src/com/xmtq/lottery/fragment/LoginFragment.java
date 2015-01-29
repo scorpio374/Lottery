@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.activity.FindPasswordActivity;
-import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.activity.RegisterActivity;
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.NewUserLoginBean;
@@ -138,7 +137,7 @@ public class LoginFragment extends BaseFragment {
 
 					UserInfoFragment fragment = new UserInfoFragment();
 					Bundle b = new Bundle();
-					b.putParcelable("newUserLoginBean", newUserLoginBean);
+					b.putSerializable("newUserLoginBean", newUserLoginBean);
 					fragment.setArguments(b);
 					getActivity().getSupportFragmentManager()
 							.beginTransaction()
