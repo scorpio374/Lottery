@@ -7,14 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.bean.GameHistoryDateBean;
 
 public class RecomendHistoryListAdapter extends BaseAdapter {
 	private Context mContext;
-	private List<String> mList;
+	private List<GameHistoryDateBean> mList;
 
-	public RecomendHistoryListAdapter(Context c, List<String> mList) {
+	public RecomendHistoryListAdapter(Context c, List<GameHistoryDateBean> mList) {
 		this.mContext = c;
 		this.mList = mList;
 	}
@@ -44,11 +46,17 @@ public class RecomendHistoryListAdapter extends BaseAdapter {
 			holder = new Holder();
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.recomend_history_list_item, null);
+			holder.hitcount_count = (TextView) convertView
+					.findViewById(R.id.hitcount_count);
+			holder.game_date = (TextView) convertView
+					.findViewById(R.id.game_date);
 			convertView.setTag(holder);
 		} else {
 			holder = (Holder) convertView.getTag();
 		}
-
+		holder.game_date.setText(mList.get(arg0).getDate());
+		holder.hitcount_count.setText(mList.get(arg0).getHitcount() + "/"
+				+ mList.get(arg0).getCount());
 		// holder.tv_program_name.setText(childList.get(position).getTitle());
 
 		return convertView;
@@ -56,6 +64,8 @@ public class RecomendHistoryListAdapter extends BaseAdapter {
 
 	public class Holder {
 
+		TextView game_date;
+		TextView hitcount_count;
 	}
 
 }

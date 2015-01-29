@@ -11,8 +11,10 @@ import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.parser.AccountDetailParser;
 import com.xmtq.lottery.parser.CheckUserParser;
 import com.xmtq.lottery.parser.ExtractCashParser;
+import com.xmtq.lottery.parser.GameHistoryDateParser;
 import com.xmtq.lottery.parser.ImproveUserInfoParser;
 import com.xmtq.lottery.parser.NewUserLoginParser;
+import com.xmtq.lottery.parser.RecomendHistoryParser;
 import com.xmtq.lottery.parser.RepasswordParser;
 import com.xmtq.lottery.parser.UserInfoParser;
 import com.xmtq.lottery.parser.UserRegisterParser;
@@ -611,14 +613,14 @@ public class RequestMaker {
 	 * @return
 	 */
 	public Request getGameHistorySearch(String date) {
-
+		RecomendHistoryParser parser = new RecomendHistoryParser();
 		String body = createGameHistorySearch(date);
 		String xmlBody = makeXml(body, "12025");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(parser);
 		return request;
 	}
 
@@ -648,7 +650,7 @@ public class RequestMaker {
 	 */
 	public Request getGameHistoryDateList(String startdate, String enddate,
 			String pageNum, String pageSize) {
-
+		GameHistoryDateParser paser = new GameHistoryDateParser();
 		String body = createGameHistoryDateList(startdate, enddate, pageNum,
 				pageSize);
 		String xmlBody = makeXml(body, "12026");
@@ -656,7 +658,7 @@ public class RequestMaker {
 
 		request.setBody(xmlBody);
 		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		request.setXmlParser(paser);
 		return request;
 	}
 

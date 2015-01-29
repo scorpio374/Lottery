@@ -35,19 +35,21 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		super.onCreate(savedInstanceState);
 		spfs = SharedPrefHelper.getInstance(this);
 		initView();
-		test();
+//		test();
 	}
 
 	private void test() {
 		RequestMaker mRequestMaker = RequestMaker.getInstance("");
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		mAsyncTask.execute(mRequestMaker.getExtractCash("14244","tq222222","100"));
+		mAsyncTask.execute(mRequestMaker.getExtractCash("14244", "tq222222",
+				"100"));
 	}
 
 	public void initView() {
 		initMenuDrawer();
 	}
 
+	// 钟伟文 数据分析 探针
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {

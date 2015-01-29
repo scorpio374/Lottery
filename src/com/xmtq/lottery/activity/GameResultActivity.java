@@ -1,17 +1,26 @@
 package com.xmtq.lottery.activity;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.adapter.BetRecordListAdapter;
 import com.xmtq.lottery.adapter.GameResuleDetailListAdapter;
-import com.xmtq.lottery.adapter.RecomendHistoryListAdapter;
-import com.xmtq.lottery.adapter.RecomendListAdapter;
+import com.xmtq.lottery.bean.GameHistoryDateBean;
+import com.xmtq.lottery.bean.RecomendHistoryBean;
+import com.xmtq.lottery.bean.RecomendHistoryResponse;
+import com.xmtq.lottery.network.HttpRequestAsyncTask;
+import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.network.RequestMaker;
+import com.xmtq.lottery.utils.DateUtil;
 
 /**
  * 赛果详情
@@ -23,6 +32,13 @@ public class GameResultActivity extends BaseActivity {
 
 	private ListView game_result_detail_list;
 	private ImageButton btn_back;
+	private TextView tv_gametime;
+	private TextView tv_game_week;
+	private TextView tv_game_result;
+	private GameHistoryDateBean mDateBean;
+
+	// private List<GameHistoryDateBean> mHistoryDateBeansList = new
+	// ArrayList<GameHistoryDateBean>();
 
 	@Override
 	public void setContentLayout() {
@@ -33,11 +49,34 @@ public class GameResultActivity extends BaseActivity {
 	@Override
 	public void dealLogicBeforeInitView() {
 
+		mDateBean = (GameHistoryDateBean) getIntent().getSerializableExtra(
+				"mHistoryBean");
+		if (mDateBean != null) {
+
+			request(mDateBean);
+		}
 	}
 
 	@Override
 	public void initView() {
-		// TODO Auto-generated method stub
+		tv_gametime = (TextView) findViewById(R.id.game_time);
+		tv_game_week = (TextView) findViewById(R.id.game_week);
+		tv_game_result = (TextView) findViewById(R.id.game_result);
+
+		// Date date = new Date();
+		// dateFm.format(date);
+		// Date date = new SimpleDateFormat("yyyy-MM-dd").parse(mDateBean
+		// .getDate());
+
+		// int dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
+		Date date = DateUtil.stringToDateFormat(mDateBean.getDate(),
+				"yyyy-MM-dd");
+		String dayOfWeek = DateUtil.dateToWeekFormat(date);
+
+		tv_game_week.setText("周 " + dayOfWeek);
+		tv_gametime.setText(mDateBean.getDate());
+		tv_game_result.setText("猜对" + mDateBean.getHitcount() + "/"
+				+ mDateBean.getCount() + "场比赛");
 
 		game_result_detail_list = (ListView) findViewById(R.id.game_result_detail_list);
 		btn_back = (ImageButton) findViewById(R.id.back);
@@ -46,13 +85,6 @@ public class GameResultActivity extends BaseActivity {
 
 	@Override
 	public void dealLogicAfterInitView() {
-		List<String> mList = new ArrayList<String>();
-		for (int i = 0; i < 10; i++) {
-			mList.add(i + "");
-		}
-		GameResuleDetailListAdapter mAdapter = new GameResuleDetailListAdapter(
-				GameResultActivity.this, mList);
-		game_result_detail_list.setAdapter(mAdapter);
 
 	}
 
@@ -68,5 +100,33 @@ public class GameResultActivity extends BaseActivity {
 		}
 
 	}
+
+	private void request(GameHistoryDateBean mDateBean) {
+
+		RequestMaker mRequestMaker = RequestMaker.getInstance("");
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(mRequestMaker.getGameHistorySearch(mDateBean
+				.getDate()));
+		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
+	}
+
+	private OnCompleteListener<RecomendHistoryResponse> mOnCompleteListener = new OnCompleteListener<RecomendHistoryResponse>() {
+
+		@Override
+		public void onComplete(RecomendHistoryResponse result,
+				String resultString) {
+			if (result != null) {
+				RecomendHistoryResponse mResponse = result;
+				List<RecomendHistoryBean> mHistoryBeansList = mResponse.mRecomendHistoryList;
+				if (mHistoryBeansList != null) {
+					GameResuleDetailListAdapter mAdapter = new GameResuleDetailListAdapter(
+							GameResultActivity.this, mHistoryBeansList);
+					game_result_detail_list.setAdapter(mAdapter);
+
+				}
+			}
+
+		}
+	};
 
 }
