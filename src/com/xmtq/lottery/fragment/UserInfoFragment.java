@@ -39,6 +39,8 @@ public class UserInfoFragment extends BaseFragment {
 	private TextView tv_esc_login, user_name, account_balance;
 	private Toast toast;
 
+	private UserInfoBean userInfoBean;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -93,26 +95,29 @@ public class UserInfoFragment extends BaseFragment {
 			if (newUserLoginBean != null) {
 				user_name.setText(newUserLoginBean.getUsername());
 				account_balance.setText(newUserLoginBean.getMoney());
+
+				SharedPrefHelper.getInstance(getActivity()).setUserName(
+						newUserLoginBean.getUsername());
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 获取用户信息
 	 */
-	private void requestUserData(){
+	private void requestUserData() {
 		toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);
-		
+
 		String uid = SharedPrefHelper.getInstance(getActivity()).getUid();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getUserInfo(uid));
 		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
 	}
-	
+
 	/**
 	 * 获取用户信息
 	 */
@@ -133,13 +138,10 @@ public class UserInfoFragment extends BaseFragment {
 			}
 		}
 	};
-	
-	private void onSuccess(BaseResponse result){
-		UserInfoResponse response = (UserInfoResponse)result;
-		UserInfoBean userInfoBean = response.userInfoBean;
-		toast.setText("获取个人信息成功");
-		toast.show();
-		
+
+	private void onSuccess(BaseResponse result) {
+		UserInfoResponse response = (UserInfoResponse) result;
+		userInfoBean = response.userInfoBean;
 
 		// SharedPrefHelper.getInstance(getActivity()).setRealName(userInfoBean.getRealname());
 		// SharedPrefHelper.getInstance(getActivity()).setCardId(userInfoBean.getCardid());
@@ -160,6 +162,7 @@ public class UserInfoFragment extends BaseFragment {
 		// 个人资料
 		case R.id.rl_userinfo:
 			intent = new Intent(getActivity(), PersonDataActivity.class);
+			intent.putExtra("userInfoBean", userInfoBean);
 			startActivity(intent);
 
 			break;
