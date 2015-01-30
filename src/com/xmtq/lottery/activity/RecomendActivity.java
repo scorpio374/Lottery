@@ -1,18 +1,16 @@
 package com.xmtq.lottery.activity;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.fragment.BetRecordFragment;
+import com.xmtq.lottery.adapter.FragmentPagerAdater;
 import com.xmtq.lottery.fragment.LoginFragment;
-import com.xmtq.lottery.fragment.RecomendFragment;
-import com.xmtq.lottery.fragment.UserInfoFragment;
-import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.view.slidingmenu.SlidingMenu;
 import com.xmtq.lottery.view.slidingmenu.app.SlidingFragmentActivity;
@@ -30,6 +28,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	private final static long TIME_DIFF = 2 * 1000;
 	private SlidingMenu menu;
 	private SharedPrefHelper spfs;
+	private ViewPager vp;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,7 +74,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		// }
 
 		menu = getSlidingMenu();
-		menu.setMode(SlidingMenu.LEFT_RIGHT);
+		menu.setMode(SlidingMenu.LEFT);
 		menu.setShadowWidthRes(R.dimen.shadow_width);
 		menu.setShadowDrawable(R.drawable.shadow);
 		menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
@@ -83,15 +82,48 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 
 		// middle view
-		setContentView(R.layout.content_frame);
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.content_frame, new RecomendFragment()).commit();
+		// setContentView(R.layout.content_frame);
+		// getSupportFragmentManager().beginTransaction()
+		// .replace(R.id.content_frame, new RecomendFragment()).commit();
+		//
+		// // right sliding menu
+		// menu.setSecondaryMenu(R.layout.menu_frame_two);
+		// menu.setSecondaryShadowDrawable(R.drawable.shadowright);
+		//
+		// getSupportFragmentManager().beginTransaction()
+		// .replace(R.id.menu_frame_two, new BetRecordFragment()).commit();
 
-		// right sliding menu
-		menu.setSecondaryMenu(R.layout.menu_frame_two);
-		menu.setSecondaryShadowDrawable(R.drawable.shadowright);
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.menu_frame_two, new BetRecordFragment()).commit();
+		vp = new ViewPager(this);
+		vp.setId("VP".hashCode());
+		vp.setAdapter(new FragmentPagerAdater(getSupportFragmentManager()));
+		setContentView(vp);
+
+		vp.setOnPageChangeListener(new OnPageChangeListener() {
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+			}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+			}
+
+			@Override
+			public void onPageSelected(int position) {
+				switch (position) {
+				case 0:
+					getSlidingMenu().setTouchModeAbove(
+							SlidingMenu.TOUCHMODE_FULLSCREEN);
+					break;
+				default:
+					getSlidingMenu().setTouchModeAbove(
+							SlidingMenu.TOUCHMODE_MARGIN);
+					break;
+				}
+			}
+
+		});
+
+		vp.setCurrentItem(0);
 	}
 
 	public void openLeftDrawer() {
@@ -99,7 +131,8 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	}
 
 	public void openRightDrawer() {
-		menu.showSecondaryMenu();
+		// menu.showSecondaryMenu();
+		vp.setCurrentItem(1);
 	}
 
 	@Override
