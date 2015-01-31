@@ -57,14 +57,14 @@
             android:background="@drawable/rect_corner_bg"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="1dip" >
+            android:padding="1dp" >
 
             <RadioButton
                 android:id="@+id/account_my"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/radio_btn_selector"
+                android:background="@drawable/ym_constact_left"
                 android:button="@null"
                 android:checked="true"
                 android:gravity="center"
@@ -82,7 +82,7 @@
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/radio_btn_selector"
+                android:background="@drawable/ym_constact_center"
                 android:button="@null"
                 android:gravity="center"
                 android:text="充值"
@@ -99,29 +99,31 @@
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/radio_btn_selector"
+                android:background="@drawable/ym_constact_right"
                 android:button="@null"
                 android:gravity="center"
                 android:text="提现"
                 android:textColor="@drawable/radiobtn_textcolor_selector"
                 android:textSize="@dimen/main_textsize" />
 
-            <ImageView
-                android:layout_width="1dip"
-                android:layout_height="match_parent"
-                android:background="@color/green" />
+            <!-- <ImageView -->
+            <!-- android:layout_width="1dip" -->
+            <!-- android:layout_height="match_parent" -->
+            <!-- android:background="@color/green" /> -->
 
-            <RadioButton
-                android:id="@+id/account_red_package"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/radio_btn_selector"
-                android:button="@null"
-                android:gravity="center"
-                android:text="红包"
-                android:textColor="@drawable/radiobtn_textcolor_selector"
-                android:textSize="@dimen/main_textsize" />
+
+            <!-- <RadioButton -->
+            <!-- android:id="@+id/account_red_package" -->
+            <!-- android:layout_width="0dip" -->
+            <!-- android:layout_height="match_parent" -->
+            <!-- android:layout_weight="1" -->
+            <!-- android:background="@drawable/radio_btn_selector" -->
+            <!-- android:button="@null" -->
+            <!-- android:gravity="center" -->
+            <!-- android:text="红包" -->
+            <!-- android:textColor="@drawable/radiobtn_textcolor_selector" -->
+            <!-- android:textSize="@dimen/main_textsize" /> -->
+            <!-- </RadioGroup> -->
         </RadioGroup>
     </LinearLayout>
 
