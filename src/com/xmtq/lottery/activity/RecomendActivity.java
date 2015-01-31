@@ -1,16 +1,23 @@
 package com.xmtq.lottery.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
 import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.FragmentPagerAdater;
+import com.xmtq.lottery.fragment.BetRecordFragment;
 import com.xmtq.lottery.fragment.LoginFragment;
+import com.xmtq.lottery.fragment.RecomendFragment;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.view.slidingmenu.SlidingMenu;
 import com.xmtq.lottery.view.slidingmenu.app.SlidingFragmentActivity;
@@ -29,6 +36,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	private SlidingMenu menu;
 	private SharedPrefHelper spfs;
 	private ViewPager vp;
+	private FragmentPagerAdater fragmentPagerAdater;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,7 +103,13 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 
 		vp = new ViewPager(this);
 		vp.setId("VP".hashCode());
-		vp.setAdapter(new FragmentPagerAdater(getSupportFragmentManager()));
+		RecomendFragment recomendFragment =  new RecomendFragment();
+		BetRecordFragment betRecordFragment = new BetRecordFragment();
+		List<Fragment> fragments = new ArrayList<Fragment>();
+		fragments.add(recomendFragment);
+		fragments.add(betRecordFragment);
+		fragmentPagerAdater = new FragmentPagerAdater(getSupportFragmentManager(),fragments);
+		vp.setAdapter(fragmentPagerAdater);
 		setContentView(vp);
 
 		vp.setOnPageChangeListener(new OnPageChangeListener() {
@@ -116,7 +130,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 					break;
 				default:
 					getSlidingMenu().setTouchModeAbove(
-							SlidingMenu.TOUCHMODE_MARGIN);
+							SlidingMenu.TOUCHMODE_NONE);
 					break;
 				}
 			}
@@ -133,6 +147,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	public void openRightDrawer() {
 		// menu.showSecondaryMenu();
 		vp.setCurrentItem(1);
+		fragmentPagerAdater.notifyDataSetChanged();
 	}
 
 	@Override
