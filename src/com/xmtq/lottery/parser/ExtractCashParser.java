@@ -24,19 +24,6 @@ public class ExtractCashParser extends BaseParser<ExtractCashResponse> {
 		JSONObject msgObj = rootObj.getJSONObject("message");
 		parseMsg(msgObj, response);
 
-		// if (response.errorcode.equals("0")) {
-		// JSONObject bodyObj = msgObj.getJSONObject("body");
-		// JSONObject j = bodyObj.getJSONObject("element");
-		// response.improveUserInfoBean.setBankAddress(j
-		// .getString("bankaddress"));
-		// response.improveUserInfoBean.setBankCardId(j
-		// .getString("bankcardid"));
-		// response.improveUserInfoBean.setBankName(j.getString("bankname"));
-		// response.improveUserInfoBean.setCardId(j.getString("cardid"));
-		// response.improveUserInfoBean.setPhone(j.getString("phone"));
-		// response.improveUserInfoBean.setRealName(j.getString("realname"));
-		// }
-
 		return response;
 	}
 }

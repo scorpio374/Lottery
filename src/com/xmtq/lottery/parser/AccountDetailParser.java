@@ -28,26 +28,31 @@ public class AccountDetailParser extends BaseParser<AccountDetailResponse> {
 		if (response.errorcode.equals("0")) {
 			JSONObject bodyObj = msgObj.getJSONObject("body");
 			JSONObject elementsObj = bodyObj.getJSONObject("elements");
-			JSONArray ja = elementsObj.getJSONArray("element");
-			if (ja != null) {
-				for (int i = 0; i < ja.size(); i++) {
-					AccountDetailBean accountBean = new AccountDetailBean();
-					JSONObject j = ja.getJSONObject(i);
-					accountBean.setEntertime(j.getString("entertime"));
-					accountBean.setMflag(j.getString("mflag"));
-					accountBean.setMoney(j.getString("money"));
-					accountBean.setRemark(j.getString("remark"));
-					response.accountDetailList.add(accountBean);
+			try {
+				JSONArray ja = elementsObj.getJSONArray("element");
+				if (ja != null) {
+					for (int i = 0; i < ja.size(); i++) {
+						JSONObject j = ja.getJSONObject(i);
+						getParser(response, j);
+					}
 				}
-
+			} catch (Exception e) {
+				JSONObject j = elementsObj.getJSONObject("element");
+				if (j != null) {
+					getParser(response, j);
+				}
 			}
-			// JSONObject bodyObj = msgObj.getJSONObject("body");
-			// JSONObject j = bodyObj.getJSONObject("element");
-			// response.versionBean.setDowload(j.getString("dowload"));
-			// response.versionBean.setUpdate(j.getString("update"));
-			// response.versionBean.setVersion(j.getString("version"));
 		}
 
 		return response;
+	}
+
+	private void getParser(AccountDetailResponse response, JSONObject j) {
+		AccountDetailBean accountBean = new AccountDetailBean();
+		accountBean.setEntertime(j.getString("entertime"));
+		accountBean.setMflag(j.getString("mflag"));
+		accountBean.setMoney(j.getString("money"));
+		accountBean.setRemark(j.getString("remark"));
+		response.accountDetailList.add(accountBean);
 	}
 }

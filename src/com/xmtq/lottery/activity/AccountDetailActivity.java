@@ -1,6 +1,8 @@
 package com.xmtq.lottery.activity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Intent;
@@ -16,6 +18,13 @@ import com.example.lottery.R;
 import com.xmtq.lottery.adapter.AccountDetailListAdapter;
 import com.xmtq.lottery.adapter.BetOrderDetailListAdapter;
 import com.xmtq.lottery.adapter.BetRecordListAdapter;
+import com.xmtq.lottery.adapter.RecomendHistoryListAdapter;
+import com.xmtq.lottery.bean.AccountDetailBean;
+import com.xmtq.lottery.bean.AccountDetailResponse;
+import com.xmtq.lottery.bean.GameHistoryDateResponse;
+import com.xmtq.lottery.network.HttpRequestAsyncTask;
+import com.xmtq.lottery.network.RequestMaker;
+import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 
 /**
  * 账户明细
@@ -37,7 +46,8 @@ public class AccountDetailActivity extends BaseActivity {
 
 	@Override
 	public void dealLogicBeforeInitView() {
-
+		// 默认请求
+		request("0");
 	}
 
 	@Override
@@ -58,30 +68,65 @@ public class AccountDetailActivity extends BaseActivity {
 						if (checkedId == R.id.account_my) {
 							Toast.makeText(AccountDetailActivity.this, "账户",
 									2000).show();
+							request("0");
 						} else if (checkedId == R.id.account_recharge) {
 							Toast.makeText(AccountDetailActivity.this, "充值",
 									2000).show();
+							request("0");
 						} else if (checkedId == R.id.account_deposit) {
 							Toast.makeText(AccountDetailActivity.this, "提现",
 									2000).show();
-						} else if (checkedId == R.id.account_red_package) {
-							Toast.makeText(AccountDetailActivity.this, "红包",
-									2000).show();
+							request("0");
 						}
 					}
 				});
 
 	}
 
+	private void request(String mFlag) {
+
+		RequestMaker mRequestMaker = RequestMaker.getInstance();
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(mRequestMaker.getAccountDetail("", "", userid,
+				mFlag, "1", "10"));
+		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
+	}
+
+	private OnCompleteListener<AccountDetailResponse> mOnCompleteListener = new OnCompleteListener<AccountDetailResponse>() {
+
+		@Override
+		public void onComplete(AccountDetailResponse result, String resultString) {
+			if (result != null) {
+				AccountDetailResponse mResponse = result;
+				List<AccountDetailBean> mHistoryBeansList = mResponse.accountDetailList;
+				if (mHistoryBeansList != null) {
+					Toast.makeText(
+							AccountDetailActivity.this,
+							"AccountDetailBean获取到了数据"
+									+ mHistoryBeansList.size(), 2000).show();
+
+					// for (int i = 0; i < mHistoryBeansList.size(); i++) {
+					//
+					// }
+					AccountDetailListAdapter mAdapter = new AccountDetailListAdapter(
+							AccountDetailActivity.this, mHistoryBeansList);
+					account_detail_list.setAdapter(mAdapter);
+
+				}
+			}
+
+		}
+	};
+
 	@Override
 	public void dealLogicAfterInitView() {
-		List<String> mList = new ArrayList<String>();
-		for (int i = 0; i < 10; i++) {
-			mList.add(i + "");
-		}
-		AccountDetailListAdapter mAdapter = new AccountDetailListAdapter(
-				AccountDetailActivity.this, mList);
-		account_detail_list.setAdapter(mAdapter);
+		// List<String> mList = new ArrayList<String>();
+		// for (int i = 0; i < 10; i++) {
+		// mList.add(i + "");
+		// }
+		// AccountDetailListAdapter mAdapter = new AccountDetailListAdapter(
+		// AccountDetailActivity.this, mList);
+		// account_detail_list.setAdapter(mAdapter);
 
 	}
 
