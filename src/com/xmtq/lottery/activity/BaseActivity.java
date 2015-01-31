@@ -1,12 +1,11 @@
 package com.xmtq.lottery.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
@@ -16,10 +15,9 @@ import android.view.Window;
 import android.view.WindowManager.BadTokenException;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 
-public abstract class BaseActivity extends SherlockFragmentActivity implements
+public abstract class BaseActivity extends FragmentActivity implements
 		OnClickListener {
 	// protected MainApp softApplication;
 	// protected boolean isAllowFullScreen;// 是否允许全屏
