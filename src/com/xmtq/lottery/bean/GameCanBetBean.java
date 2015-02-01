@@ -14,10 +14,25 @@ public class GameCanBetBean extends EntityBase {
 	private String hostTeam;
 	private String buyEndTime;
 	private String gameTime;
+	/**
+	 * 让球胜负平
+	 */
 	private String rqOdds;
+	/**
+	 * 胜负平
+	 */
 	private String spOdds;
+	/**
+	 * 总比分
+	 */
 	private String bfOdds;
+	/**
+	 * 半场全场胜负平
+	 */
 	private String bqOdds;
+	/**
+	 * 总进球
+	 */
 	private String jqOdds;
 	private String commendUser;
 	private String commendId;
