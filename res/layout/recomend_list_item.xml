@@ -14,7 +14,7 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/recomend_item_time"
+            android:id="@+id/game_time"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -31,6 +31,7 @@
             android:gravity="center" >
 
             <TextView
+                android:id="@+id/match_team"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -39,6 +40,7 @@
                 android:textColor="@color/white_shallow" />
 
             <TextView
+                android:id="@+id/league"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dip"
@@ -48,6 +50,7 @@
                 android:textColor="@color/white_light" />
 
             <TextView
+                android:id="@+id/host_team"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dip"
@@ -79,7 +82,7 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/recomend_item_check"
+                android:id="@+id/play_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
