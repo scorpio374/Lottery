@@ -9,8 +9,7 @@ public class Request {
 	private String mBody;
 	private String mUrl;
 
-	public Request(String url) {
-		mUrl = url;
+	public Request() {
 	}
 
 	public Request(ServerInterfaceDefinition serverInterfaceDefinition,

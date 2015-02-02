@@ -1,26 +1,11 @@
 package com.xmtq.lottery.network;
 
 public enum ServerInterfaceDefinition {
-
+	
 	/**
-	 * 获取内容详情
+	 * 彩票相关接口
 	 */
-	OPT_GETCONTENTDETAIL("GetContentDetail"),
-
-	/**
-	 * 获取节目单列�?
-	 */
-	OPT_GETSCHEDULELIST("GetScheduleList"),
-
-	/**
-	 * 用户播放日志上报接口
-	 */
-	OPT_PLAYLOGREPORT("PlayLogReport"),
-
-	/**
-	 * 获取频道列表
-	 */
-	OPT_GETCHANNELLIST("GetChannelList");
+	OPT_GETLOTTERYINFO("GetLotteryInfo");
 
 	private String opt;
 	private RequestMethod requestMethod = RequestMethod.POST;

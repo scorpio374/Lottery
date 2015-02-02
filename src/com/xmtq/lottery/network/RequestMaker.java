@@ -26,14 +26,8 @@ import com.xmtq.lottery.utils.LogUtil;
 
 public class RequestMaker {
 
-	private Request request;
-
-	public Request getRequest() {
-		return request;
-	}
-
 	private RequestMaker() {
-		request = new Request(Consts.host);
+
 	}
 
 	private static RequestMaker requestMaker = null;
@@ -131,9 +125,8 @@ public class RequestMaker {
 		String xmlBody = makeXml(body, "10001_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(parser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -164,14 +157,13 @@ public class RequestMaker {
 	 * 完善用户信息(身份信息)
 	 */
 	public Request getPerfectUserInfo(String uid, String realname, String cardid) {
-		ImproveUserInfoParser paser = new ImproveUserInfoParser();
+		ImproveUserInfoParser parser = new ImproveUserInfoParser();
 		String body = createPerfectUserInfo(uid, realname, cardid);
 		String xmlBody = makeXml(body, "10002_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(paser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -198,15 +190,14 @@ public class RequestMaker {
 	public Request getPerfectUserInfo(String uid, String realname,
 			String cardid, String phone, String bankname, String bankcardid,
 			String bankaddress, String actpassword) {
-		ImproveUserInfoParser paser = new ImproveUserInfoParser();
+		ImproveUserInfoParser parser = new ImproveUserInfoParser();
 		String body = createPerfectUserInfo(uid, realname, cardid, phone,
 				bankname, bankcardid, bankaddress, actpassword);
 		String xmlBody = makeXml(body, "10002_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(paser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -239,14 +230,13 @@ public class RequestMaker {
 	 */
 	public Request getModifyPassword(String uid, String oldpassword,
 			String newpassword) {
-		RepasswordParser paser = new RepasswordParser();
+		RepasswordParser parser = new RepasswordParser();
 		String body = createModifyPassword(uid, oldpassword, newpassword);
 		String xmlBody = makeXml(body, "10003_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(paser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -273,14 +263,13 @@ public class RequestMaker {
 	 * 新用户登陆
 	 */
 	public Request getUserLogin(String username, String actpassword) {
-		NewUserLoginParser paser = new NewUserLoginParser();
+		NewUserLoginParser parser = new NewUserLoginParser();
 		String body = createUserLogin(username, actpassword);
 		String xmlBody = makeXml(body, "10008_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(paser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -304,14 +293,13 @@ public class RequestMaker {
 	 * 检测用户名/手机/邮箱是否存在
 	 */
 	public Request getCheckUser(String parameter) {
-		CheckUserParser paser = new CheckUserParser();
+		CheckUserParser parser = new CheckUserParser();
 		String body = createCheckUser(parameter);
 		String xmlBody = makeXml(body, "10010");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(paser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -339,14 +327,13 @@ public class RequestMaker {
 	 * @return
 	 */
 	public Request getMessageVerification(String tel, String type) {
-		VerificationCodeParser paser = new VerificationCodeParser();
+		VerificationCodeParser parser = new VerificationCodeParser();
 		String body = createMessageVerification(tel, type);
 		String xmlBody = makeXml(body, "10011");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(paser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -372,14 +359,13 @@ public class RequestMaker {
 	 * @return
 	 */
 	public Request getVersion(String version) {
-		VersionParser paser = new VersionParser();
+		VersionParser parser = new VersionParser();
 		String body = createVersion(version);
 		String xmlBody = makeXml(body, "10012");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(paser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -402,15 +388,14 @@ public class RequestMaker {
 	 */
 	public Request getAccountDetail(String startDate, String endDate,
 			String uid, String mflag, String pageNum, String pageSize) {
-		AccountDetailParser paser = new AccountDetailParser();
+		AccountDetailParser parser = new AccountDetailParser();
 		String body = createAccountDetail(startDate, endDate, uid, mflag,
 				pageNum, pageSize);
 		String xmlBody = makeXml(body, "11008_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(paser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -439,14 +424,13 @@ public class RequestMaker {
 	 * 用户详细信息查询
 	 */
 	public Request getUserInfo(String uid) {
-		UserInfoParser paser = new UserInfoParser();
+		UserInfoParser parser = new UserInfoParser();
 		String body = createUserInfo(uid);
 		String xmlBody = makeXml(body, "20001_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(paser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -475,14 +459,13 @@ public class RequestMaker {
 	 */
 	public Request getExtractCash(String uid, String password,
 			String drawalmoney) {
-		ExtractCashParser paser = new ExtractCashParser();
+		ExtractCashParser parser = new ExtractCashParser();
 		String body = createExtractCash(uid, password, drawalmoney);
 		String xmlBody = makeXml(body, "20003_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(paser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -533,9 +516,8 @@ public class RequestMaker {
 		String xmlBody = makeXml(body, "12006_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(parser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -587,15 +569,14 @@ public class RequestMaker {
 			String startdate, String enddate, String investtype,
 			String pageindex, String pagesize, String statue) {
 
-		PurchaseRecordsParser parse = new PurchaseRecordsParser();
+		PurchaseRecordsParser parser = new PurchaseRecordsParser();
 		String body = createPurchaseRecords(uid, lotteryid, startdate, enddate,
 				investtype, pageindex, pagesize, statue);
 		String xmlBody = makeXml(body, "12021_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(parse);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -634,9 +615,8 @@ public class RequestMaker {
 		String xmlBody = makeXml(body, "12022_1.1");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
 		return request;
 	}
 
@@ -667,9 +647,8 @@ public class RequestMaker {
 		String xmlBody = makeXml(body, "12025");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(parser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -699,15 +678,14 @@ public class RequestMaker {
 	 */
 	public Request getGameHistoryDateList(String startdate, String enddate,
 			String pageNum, String pageSize) {
-		GameHistoryDateParser paser = new GameHistoryDateParser();
+		GameHistoryDateParser parser = new GameHistoryDateParser();
 		String body = createGameHistoryDateList(startdate, enddate, pageNum,
 				pageSize);
 		String xmlBody = makeXml(body, "12026");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(paser);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -745,9 +723,8 @@ public class RequestMaker {
 		String xmlBody = makeXml(body, "12028");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
 		return request;
 	}
 
@@ -784,9 +761,8 @@ public class RequestMaker {
 		String xmlBody = makeXml(body, "12029");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
 		return request;
 	}
 
@@ -819,9 +795,8 @@ public class RequestMaker {
 		String xmlBody = makeXml(body, "12030");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(parse);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parse);
 		return request;
 	}
 
@@ -853,9 +828,8 @@ public class RequestMaker {
 		String xmlBody = makeXml(body, "15006");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
 		return request;
 	}
 
@@ -907,9 +881,8 @@ public class RequestMaker {
 		String xmlBody = makeXml(body, "15007");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
 		return request;
 	}
 
@@ -957,9 +930,8 @@ public class RequestMaker {
 		String xmlBody = makeXml(body, "15008");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
 		return request;
 	}
 
@@ -1014,9 +986,8 @@ public class RequestMaker {
 		String xmlBody = makeXml(body, "15008");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
 		return request;
 	}
 
@@ -1067,9 +1038,8 @@ public class RequestMaker {
 		String xmlBody = makeXml(body, "15008");
 		LogUtil.log("xmlBody:" + xmlBody);
 
-		request.setBody(xmlBody);
-		request.setServerInterfaceDefinition(ServerInterfaceDefinition.OPT_GETCHANNELLIST);
-		request.setXmlParser(null);
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
 		return request;
 	}
 
