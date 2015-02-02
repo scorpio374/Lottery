@@ -3,7 +3,9 @@ package com.xmtq.lottery.activity;
 import java.util.List;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,9 +16,13 @@ import com.xmtq.lottery.adapter.AccountDetailListAdapter;
 import com.xmtq.lottery.bean.AccountDetailBean;
 import com.xmtq.lottery.bean.AccountDetailResponse;
 import com.xmtq.lottery.bean.ExtractCashResponse;
+import com.xmtq.lottery.bean.UserInfoBean;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.utils.SharedPrefHelper;
+import com.xmtq.lottery.utils.StringUtil;
+import com.xmtq.lottery.utils.ToastUtil;
 
 /**
  * 提现
@@ -27,8 +33,13 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 public class ExtractMoneyActivity extends BaseActivity {
 
 	private ImageButton btn_back;
-	private ImageView img_checkbank;
+	// private ImageView img_checkbank;
 	private TextView ectract_money_commit;
+	private TextView tv_bank_name;
+	private TextView bank_card_tail_num;
+	private UserInfoBean userInfoBean;
+	private TextView tv_balance;
+	private EditText edit_extract_money;
 
 	@Override
 	public void setContentLayout() {
@@ -38,16 +49,28 @@ public class ExtractMoneyActivity extends BaseActivity {
 
 	@Override
 	public void dealLogicBeforeInitView() {
-
+		userInfoBean = (UserInfoBean) getIntent().getSerializableExtra(
+				"userInfoBean");
 	}
 
 	@Override
 	public void initView() {
-		img_checkbank = (ImageView) findViewById(R.id.img_checkbank);
+		edit_extract_money = (EditText) findViewById(R.id.edit_extract_money);
+		tv_bank_name = (TextView) findViewById(R.id.bank_name);
+		bank_card_tail_num = (TextView) findViewById(R.id.bank_card_tail_num);
+		tv_balance = (TextView) findViewById(R.id.balance);
+		String str = userInfoBean.getBankaccount();
+		str = str.substring(str.length() - 4, str.length());
+
+		tv_bank_name.setText(userInfoBean.getBankname());
+		bank_card_tail_num.setText("尾号：" + str);
+		tv_balance.setText(userInfoBean.getAccount());
+
+		// img_checkbank = (ImageView) findViewById(R.id.img_checkbank);
 		ectract_money_commit = (TextView) findViewById(R.id.ectract_money_commit);
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
-		img_checkbank.setOnClickListener(this);
+		// img_checkbank.setOnClickListener(this);
 		ectract_money_commit.setOnClickListener(this);
 	}
 
@@ -63,15 +86,15 @@ public class ExtractMoneyActivity extends BaseActivity {
 		case R.id.back:
 			this.finish();
 			break;
-		case R.id.img_checkbank:
-			intent = new Intent(ExtractMoneyActivity.this,
-					CheckBankActivity.class);
-			startActivity(intent);
-			break;
+		// case R.id.img_checkbank:
+		// intent = new Intent(ExtractMoneyActivity.this,
+		// CheckBankActivity.class);
+		// startActivity(intent);
+		// break;
 		case R.id.ectract_money_commit:
 			intent = new Intent(ExtractMoneyActivity.this,
 					ExtractMoneySuccessActivity.class);
-			request("1000", "tq222222");
+			request();
 			startActivity(intent);
 			break;
 		default:
@@ -80,8 +103,21 @@ public class ExtractMoneyActivity extends BaseActivity {
 
 	}
 
-	private void request(String drawalmoney, String password) {
+	private void request() {
+		String drawalmoney = edit_extract_money.getText().toString().trim();
+		if (TextUtils.isEmpty(drawalmoney)) {
+			ToastUtil.showCenterToast(ExtractMoneyActivity.this, "请输入金额");
+			return;
+		}
 
+		if (Integer.parseInt(drawalmoney) < Integer.parseInt(userInfoBean
+				.getAccount())) {
+			ToastUtil.showCenterToast(ExtractMoneyActivity.this, "余额不足");
+			return;
+		}
+		
+		String password = SharedPrefHelper.getInstance(getApplicationContext())
+				.getUserPassward();
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(mRequestMaker.getExtractCash(userid, password,
@@ -108,4 +144,5 @@ public class ExtractMoneyActivity extends BaseActivity {
 			}
 		}
 	};
+
 }

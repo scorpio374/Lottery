@@ -2,6 +2,7 @@ package com.xmtq.lottery.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
+import com.xmtq.lottery.utils.ToastUtil;
 
 /**
  * 个人中心
@@ -40,6 +42,8 @@ public class UserInfoFragment extends BaseFragment {
 	private Toast toast;
 
 	private UserInfoBean userInfoBean;
+	private boolean isAddUserInfo = false;
+	private boolean isAddBankInfo = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -127,6 +131,7 @@ public class UserInfoFragment extends BaseFragment {
 			// TODO Auto-generated method stub
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
+
 					onSuccess(result);
 				} else {
 					toast.setText(result.errormsg);
@@ -142,7 +147,8 @@ public class UserInfoFragment extends BaseFragment {
 	private void onSuccess(BaseResponse result) {
 		UserInfoResponse response = (UserInfoResponse) result;
 		userInfoBean = response.userInfoBean;
-
+		checkUserInfo(userInfoBean);
+		checkBankInfo(userInfoBean);
 		// SharedPrefHelper.getInstance(getActivity()).setRealName(userInfoBean.getRealname());
 		// SharedPrefHelper.getInstance(getActivity()).setCardId(userInfoBean.getCardid());
 	}
@@ -187,8 +193,15 @@ public class UserInfoFragment extends BaseFragment {
 			break;
 		// 提现
 		case R.id.extract_money:
-			intent = new Intent(getActivity(), ExtractMoneyActivity.class);
-			startActivity(intent);
+			if (isAddBankInfo && isAddUserInfo) {
+				intent = new Intent(getActivity(), ExtractMoneyActivity.class);
+				intent.putExtra("userInfoBean", userInfoBean);
+				startActivity(intent);
+			} else {
+				ToastUtil.showCenterToast(getActivity(), "请完善个人信息");
+				intent = new Intent(getActivity(), PersonDataActivity.class);
+				startActivity(intent);
+			}
 
 			break;
 		case R.id.exit_loading:
@@ -204,5 +217,39 @@ public class UserInfoFragment extends BaseFragment {
 		default:
 			break;
 		}
+	}
+
+	/**
+	 * 判断是否添加用户信息
+	 */
+	private void checkUserInfo(UserInfoBean userInfoBean) {
+		String realName = userInfoBean.getRealname();
+		String cardId = userInfoBean.getCardid();
+
+		if (isValidValue(realName) && isValidValue(cardId)) {
+			isAddUserInfo = true;
+		}
+	}
+
+	/**
+	 * 判断是否添加银行卡信息
+	 */
+	private void checkBankInfo(UserInfoBean userInfoBean) {
+		String bankName = userInfoBean.getBankname();
+		String bankAcount = userInfoBean.getBankaccount();
+		String bankAddress = userInfoBean.getBankaddress();
+		String acount = userInfoBean.getAccount(); // 帐户余额
+
+		if (isValidValue(bankName) && isValidValue(bankAcount)
+				&& isValidValue(bankAddress)) {
+			isAddBankInfo = true;
+		}
+	}
+
+	public boolean isValidValue(String vaule) {
+		if (TextUtils.isEmpty(vaule) || vaule.equals("*")) {
+			return false;
+		}
+		return true;
 	}
 }
