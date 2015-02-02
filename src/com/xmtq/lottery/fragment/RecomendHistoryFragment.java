@@ -121,4 +121,6 @@ public class RecomendHistoryFragment extends BaseFragment {
 			break;
 		}
 	}
+	
+	
 }

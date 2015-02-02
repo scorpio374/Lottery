@@ -14,10 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lottery.R;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.adapter.RecomendListAdapter;
 import com.xmtq.lottery.bean.BaseResponse;
@@ -27,7 +23,6 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
-import com.xmtq.lottery.utils.LogUtil;
 
 /**
  * 首页推荐
@@ -38,7 +33,7 @@ import com.xmtq.lottery.utils.LogUtil;
 public class RecomendFragment extends BaseFragment {
 
 	private ImageButton imgBtnLeft, imgBtnRight;
-	private PullToRefreshListView mPullToRefreshListView;
+//	private PullToRefreshListView mPullToRefreshListView;
 	private ListView recomend_list;
 	private TextView recomend_lottery_times;
 	private TextView recomend_date;
