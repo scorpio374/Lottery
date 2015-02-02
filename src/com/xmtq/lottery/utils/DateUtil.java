@@ -338,5 +338,39 @@ public final class DateUtil {
 		int day = c.get(Calendar.DAY_OF_MONTH);
 		return day;
 	}
+	
+	/**
+	 * date获取相应的星期
+	 * 
+	 * @param paramString
+	 * @return
+	 */
+	public static String getWeek(Date date) {
+		try {
+			Calendar c = Calendar.getInstance(Locale.CHINA);
+			c.setTime(date);
+			String dayOfWeek = (c.get(Calendar.DAY_OF_WEEK) - 1) + "";
+			String week = "";
+			if(dayOfWeek.equals("1")){
+				week = "星期一";
+			}else if(dayOfWeek.equals("2")){
+				week = "星期二";
+			}else if(dayOfWeek.equals("3")){
+				week = "星期三";
+			}else if(dayOfWeek.equals("4")){
+				week = "星期四";
+			}else if(dayOfWeek.equals("5")){
+				week = "星期五";
+			}else if(dayOfWeek.equals("6")){
+				week = "星期六";
+			}else if(dayOfWeek.equals("7")){
+				week = "星期日";
+			}
+			return week;
+		} catch (Exception localException) {
+			Log.e("localException", localException.getMessage());
+		}
+		return "";
+	}
 
 }

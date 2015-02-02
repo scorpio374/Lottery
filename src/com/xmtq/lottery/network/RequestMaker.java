@@ -1,8 +1,5 @@
 package com.xmtq.lottery.network;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

@@ -149,6 +149,12 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		vp.setCurrentItem(1);
 		fragmentPagerAdater.notifyDataSetChanged();
 	}
+	
+	public void closeRightDrawer() {
+		// menu.showSecondaryMenu();
+		vp.setCurrentItem(0);
+		fragmentPagerAdater.notifyDataSetChanged();
+	}
 
 	@Override
 	protected void onDestroy() {

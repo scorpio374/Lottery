@@ -1,6 +1,6 @@
 package com.xmtq.lottery.fragment;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.os.Bundle;
@@ -10,15 +10,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.adapter.RecomendListAdapter;
 import com.xmtq.lottery.bean.BaseResponse;
+import com.xmtq.lottery.bean.GameCanBetBean;
+import com.xmtq.lottery.bean.GameCanBetResponse;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
+import com.xmtq.lottery.utils.DateUtil;
+import com.xmtq.lottery.utils.LogUtil;
 
 /**
  * 首页推荐
@@ -29,10 +38,16 @@ import com.xmtq.lottery.network.RequestMaker;
 public class RecomendFragment extends BaseFragment {
 
 	private ImageButton imgBtnLeft, imgBtnRight;
+	private PullToRefreshListView mPullToRefreshListView;
 	private ListView recomend_list;
+	private TextView recomend_lottery_times;
+	private TextView recomend_date;
+	private TextView recomend_week;
+	
 	private Toast toast;
 	private String pagenum = "1";
 	private String pagesize = "10";
+	private List<GameCanBetBean> gameCanBetBeans;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +76,7 @@ public class RecomendFragment extends BaseFragment {
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getGameCanBet(pagenum,
 				pagesize));
-		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
+		mAsyncTask.setOnCompleteListener(mOnGameCompleteListener);
 	}
 
 	public void initView(View v) {
@@ -69,19 +84,32 @@ public class RecomendFragment extends BaseFragment {
 		imgBtnRight = (ImageButton) v.findViewById(R.id.recomend_right);
 		imgBtnLeft.setOnClickListener(this);
 		imgBtnRight.setOnClickListener(this);
+		// mPullToRefreshListView = (PullToRefreshListView)
+		// v.findViewById(R.id.recomend_list);
+		// recomend_list= mPullToRefreshListView.getRefreshableView();
 		recomend_list = (ListView) v.findViewById(R.id.recomend_list);
+		
+		recomend_lottery_times = (TextView) v.findViewById(R.id.recomend_lottery_times);
+		recomend_date = (TextView) v.findViewById(R.id.recomend_date);
+		recomend_week = (TextView) v.findViewById(R.id.recomend_week);
 
 		dealLogicAfterInitView();
 	}
 
 	public void dealLogicAfterInitView() {
-		List<String> mList = new ArrayList<String>();
-		for (int i = 0; i < 10; i++) {
-			mList.add(i + "");
-		}
-		RecomendListAdapter mAdapter = new RecomendListAdapter(getActivity(),
-				mList);
-		recomend_list.setAdapter(mAdapter);
+		Date date = new Date(System.currentTimeMillis());
+		String time = DateUtil.getyyyy_MM_ddTime(date);
+		String week = DateUtil.getWeek(date);
+		recomend_date.setText(time);
+		recomend_week.setText(week);
+		
+		// List<String> mList = new ArrayList<String>();
+		// for (int i = 0; i < 10; i++) {
+		// mList.add(i + "");
+		// }
+		// RecomendListAdapter mAdapter = new RecomendListAdapter(getActivity(),
+		// mList);
+		// recomend_list.setAdapter(mAdapter);
 	}
 
 	@Override
@@ -103,7 +131,7 @@ public class RecomendFragment extends BaseFragment {
 	/**
 	 * 用户登陆回调处理
 	 */
-	private OnCompleteListener<BaseResponse> mOnCompleteListener = new OnCompleteListener<BaseResponse>() {
+	private OnCompleteListener<BaseResponse> mOnGameCompleteListener = new OnCompleteListener<BaseResponse>() {
 		@Override
 		public void onComplete(BaseResponse result, String resultString) {
 			// TODO Auto-generated method stub
@@ -123,8 +151,28 @@ public class RecomendFragment extends BaseFragment {
 	 * 请求成功
 	 */
 	private void onSuccess(BaseResponse result) {
-		toast.setText("请求成功");
-		toast.show();
+		GameCanBetResponse gameCanBetResponse = (GameCanBetResponse)result;
+		recomend_lottery_times.setText("推荐"+gameCanBetResponse.count+"场比赛");
+		gameCanBetBeans = gameCanBetResponse.gameCanBetBeans;
+		RecomendListAdapter mAdapter = new RecomendListAdapter(getActivity(),
+				gameCanBetBeans);
+		recomend_list.setAdapter(mAdapter);
+
+		// // 设置pull-to-refresh模式为Mode.Both
+		// mPullToRefreshListView.setMode(Mode.BOTH);
+		//
+		// // 设置上拉下拉事件
+		// mPullToRefreshListView
+		// .setOnRefreshListener(new OnRefreshListener<ListView>() {
+		//
+		// @Override
+		// public void onRefresh(
+		// PullToRefreshBase<ListView> refreshView) {
+		// // TODO Auto-generated method stub
+		// LogUtil.log("mode" + refreshView.getCurrentMode());
+		// }
+		// });
+		mAdapter.notifyDataSetChanged();
 	}
 
 	/**

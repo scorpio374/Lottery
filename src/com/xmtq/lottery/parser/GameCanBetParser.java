@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.GameCanBetResponse;
 import com.xmtq.lottery.utils.JsonUtil;
+import com.xmtq.lottery.utils.LogUtil;
 
 public class GameCanBetParser extends BaseParser<GameCanBetResponse> {
 
@@ -28,38 +29,52 @@ public class GameCanBetParser extends BaseParser<GameCanBetResponse> {
 			JSONObject elementsObj = bodyObj.getJSONObject("elements");
 			response.count = elementsObj.getString("count");
 
-			JSONArray elementArray = elementsObj.getJSONArray("element");
-			if (elementArray != null) {
-				for (int i = 0; i < elementArray.size(); i++) {
-					JSONObject j = elementArray.getJSONObject(i);
-					GameCanBetBean gameCanBetBean = new GameCanBetBean();
-					gameCanBetBean.setCommendId(j.getString("companyId"));
-					gameCanBetBean.setLeague(j.getString("league"));
-					gameCanBetBean.setMatchTeam(j.getString("matchTeam"));
-					gameCanBetBean.setMatchId(j.getString("matchId"));
-					gameCanBetBean.setHostTeam(j.getString("hostTeam"));
-					gameCanBetBean.setBuyEndTime(j.getString("buyEndTime"));
-					gameCanBetBean.setGameTime(j.getString("gameTime"));
-					gameCanBetBean.setRqOdds(j.getString("rqOdds"));
-					gameCanBetBean.setSpOdds(j.getString("spOdds"));
-					gameCanBetBean.setBfOdds(j.getString("bfOdds"));
-					gameCanBetBean.setBqOdds(j.getString("bqOdds"));
-					gameCanBetBean.setJqOdds(j.getString("jqOdds"));
-					gameCanBetBean.setCommendUser(j.getString("commendUser"));
-					gameCanBetBean.setCompanyId(j.getString("commendId"));
-					gameCanBetBean.setSupportVotes(j.getString("supportVotes"));
-					gameCanBetBean.setAgainstVotes(j.getString("againstVotes"));
-					gameCanBetBean.setContent(j.getString("content"));
-					gameCanBetBean.setRqDg(j.getString("rqDg"));
-					gameCanBetBean.setSpDg(j.getString("spDg"));
-					gameCanBetBean.setBfDg(j.getString("bfDg"));
-					gameCanBetBean.setBqDg(j.getString("bqDg"));
-					gameCanBetBean.setJqDg(j.getString("jqDg"));
+			try {
+				JSONArray elementArray = elementsObj.getJSONArray("element");
+				if (elementArray != null) {
+					for (int i = 0; i < elementArray.size(); i++) {
+						JSONObject j = elementArray.getJSONObject(i);
+						GameCanBetBean gameCanBetBean = saveBean(j);
+						response.gameCanBetBeans.add(gameCanBetBean);
+					}
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				JSONObject j = elementsObj.getJSONObject("element");
+				if (j != null) {
+					GameCanBetBean gameCanBetBean = saveBean(j);
 					response.gameCanBetBeans.add(gameCanBetBean);
 				}
 			}
-		}
 
+		}
 		return response;
+	}
+
+	private GameCanBetBean saveBean(JSONObject j) {
+		GameCanBetBean gameCanBetBean = new GameCanBetBean();
+		gameCanBetBean.setCommendId(j.getString("companyId"));
+		gameCanBetBean.setLeague(j.getString("league"));
+		gameCanBetBean.setMatchTeam(j.getString("matchTeam"));
+		gameCanBetBean.setMatchId(j.getString("matchId"));
+		gameCanBetBean.setHostTeam(j.getString("hostTeam"));
+		gameCanBetBean.setBuyEndTime(j.getString("buyEndTime"));
+		gameCanBetBean.setGameTime(j.getString("gameTime"));
+		gameCanBetBean.setRqOdds(j.getString("rqOdds"));
+		gameCanBetBean.setSpOdds(j.getString("spOdds"));
+		gameCanBetBean.setBfOdds(j.getString("bfOdds"));
+		gameCanBetBean.setBqOdds(j.getString("bqOdds"));
+		gameCanBetBean.setJqOdds(j.getString("jqOdds"));
+		gameCanBetBean.setCommendUser(j.getString("commendUser"));
+		gameCanBetBean.setCompanyId(j.getString("commendId"));
+		gameCanBetBean.setSupportVotes(j.getString("supportVotes"));
+		gameCanBetBean.setAgainstVotes(j.getString("againstVotes"));
+		gameCanBetBean.setContent(j.getString("content"));
+		gameCanBetBean.setRqDg(j.getString("rqDg"));
+		gameCanBetBean.setSpDg(j.getString("spDg"));
+		gameCanBetBean.setBfDg(j.getString("bfDg"));
+		gameCanBetBean.setBqDg(j.getString("bqDg"));
+		gameCanBetBean.setJqDg(j.getString("jqDg"));
+		return gameCanBetBean;
 	}
 }
