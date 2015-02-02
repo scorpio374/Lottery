@@ -1,11 +1,9 @@
 package com.xmtq.lottery.activity;
 
-import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
@@ -44,12 +42,6 @@ public class RechargeMoneyActivity extends BaseActivity {
 
 		search_edit = (EditText) findViewById(R.id.search_edit);
 		RadioGroup check_money = (RadioGroup) findViewById(R.id.check_money);
-		// RadioButton btn_ten = (RadioButton) findViewById(R.id.rec_ten);
-		// RadioButton btn_fifty = (RadioButton) findViewById(R.id.rec_fifty);
-		// RadioButton btn_hundred = (RadioButton)
-		// findViewById(R.id.rec_hundred);
-		// RadioButton btn_five_hundred = (RadioButton)
-		// findViewById(R.id.rec_five_hundred);
 
 		check_money.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 

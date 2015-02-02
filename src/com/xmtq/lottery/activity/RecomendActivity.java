@@ -10,14 +10,13 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
 import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.FragmentPagerAdater;
-import com.xmtq.lottery.fragment.BetRecordFragment;
 import com.xmtq.lottery.fragment.LoginFragment;
 import com.xmtq.lottery.fragment.RecomendFragment;
+import com.xmtq.lottery.fragment.RecomendHistoryFragment;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.view.slidingmenu.SlidingMenu;
 import com.xmtq.lottery.view.slidingmenu.app.SlidingFragmentActivity;
@@ -103,12 +102,13 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 
 		vp = new ViewPager(this);
 		vp.setId("VP".hashCode());
-		RecomendFragment recomendFragment =  new RecomendFragment();
-		BetRecordFragment betRecordFragment = new BetRecordFragment();
+		RecomendFragment recomendFragment = new RecomendFragment();
+		RecomendHistoryFragment mHistoryFragment = new RecomendHistoryFragment();
 		List<Fragment> fragments = new ArrayList<Fragment>();
 		fragments.add(recomendFragment);
-		fragments.add(betRecordFragment);
-		fragmentPagerAdater = new FragmentPagerAdater(getSupportFragmentManager(),fragments);
+		fragments.add(mHistoryFragment);
+		fragmentPagerAdater = new FragmentPagerAdater(
+				getSupportFragmentManager(), fragments);
 		vp.setAdapter(fragmentPagerAdater);
 		setContentView(vp);
 

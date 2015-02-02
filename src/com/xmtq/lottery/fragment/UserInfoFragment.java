@@ -12,12 +12,12 @@ import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.activity.AccountDetailActivity;
+import com.xmtq.lottery.activity.BetRecordActivity;
 import com.xmtq.lottery.activity.ExtractMoneyActivity;
 import com.xmtq.lottery.activity.ModifiPasswordActivity;
 import com.xmtq.lottery.activity.PersonDataActivity;
 import com.xmtq.lottery.activity.RechargeMoneyActivity;
 import com.xmtq.lottery.activity.RecomendActivity;
-import com.xmtq.lottery.activity.RecomendHistoryActivity;
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.NewUserLoginBean;
 import com.xmtq.lottery.bean.UserInfoBean;
@@ -155,7 +155,7 @@ public class UserInfoFragment extends BaseFragment {
 		case R.id.rl_bet_record:
 			// intent = new Intent(getActivity(), BetRecordActivity.class);
 			// 测试推荐历史
-			intent = new Intent(getActivity(), RecomendHistoryActivity.class);
+			intent = new Intent(getActivity(), BetRecordActivity.class);
 			startActivity(intent);
 
 			break;
