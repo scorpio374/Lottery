@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.activity.GameResultActivity;
+import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.adapter.RecomendHistoryListAdapter;
 import com.xmtq.lottery.bean.GameHistoryDateBean;
 import com.xmtq.lottery.bean.GameHistoryDateResponse;
@@ -115,8 +116,10 @@ public class RecomendHistoryFragment extends BaseFragment {
 
 	@Override
 	public void onClickEvent(View v) {
-		Intent intent;
 		switch (v.getId()) {
+		case R.id.back:
+			((RecomendActivity) getActivity()).closeRightDrawer();
+			break;
 		default:
 			break;
 		}

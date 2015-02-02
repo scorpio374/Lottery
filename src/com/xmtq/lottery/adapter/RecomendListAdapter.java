@@ -86,6 +86,11 @@ public class RecomendListAdapter extends BaseAdapter {
 			holder.draw.setText("平 " + spOdds.getDrawOdds());
 			holder.lose.setText("负 " + spOdds.getLoseOdds());
 		}
+		
+		String bfOddsData = gameCanBetBeans.get(position).getBfOdds();
+		if (!TextUtils.isEmpty(spOddsData)) {
+			OddsUtil.getOdds(bfOddsData);
+		}
 		return convertView;
 	}
 

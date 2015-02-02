@@ -92,7 +92,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		// setContentView(R.layout.content_frame);
 		// getSupportFragmentManager().beginTransaction()
 		// .replace(R.id.content_frame, new RecomendFragment()).commit();
-		//
+		
 		// // right sliding menu
 		// menu.setSecondaryMenu(R.layout.menu_frame_two);
 		// menu.setSecondaryShadowDrawable(R.drawable.shadowright);
@@ -166,6 +166,13 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			
+			// 关闭右边的Fragment
+			if(vp != null && vp.getCurrentItem() != 0){
+				closeRightDrawer();
+				return true;
+			}
+			
 			if ((System.currentTimeMillis() - exitTime) > TIME_DIFF) {
 				Toast.makeText(RecomendActivity.this, "再按一次退出",
 						Toast.LENGTH_SHORT).show();
