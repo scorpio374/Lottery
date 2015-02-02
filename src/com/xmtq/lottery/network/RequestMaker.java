@@ -10,6 +10,7 @@ import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.parser.AccountDetailParser;
 import com.xmtq.lottery.parser.BettingBusinessParser;
 import com.xmtq.lottery.parser.CheckUserParser;
+import com.xmtq.lottery.parser.CreateOrderParser;
 import com.xmtq.lottery.parser.ExtractCashParser;
 import com.xmtq.lottery.parser.GameCanBetParser;
 import com.xmtq.lottery.parser.GameHistoryDateParser;
@@ -823,13 +824,13 @@ public class RequestMaker {
 	 * @return
 	 */
 	public Request getFengPay(String userIdIdentity, String totalPrice) {
-
+		CreateOrderParser parser = new CreateOrderParser();
 		String body = createFengPay(userIdIdentity, totalPrice);
 		String xmlBody = makeXml(body, "15006");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
-				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 

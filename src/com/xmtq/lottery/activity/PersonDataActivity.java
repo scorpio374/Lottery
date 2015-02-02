@@ -66,7 +66,7 @@ public class PersonDataActivity extends BaseActivity {
 	private UserInfoBean userInfoBean;
 	private boolean isAddUserInfo = false;
 	private boolean isAddBankInfo = false;
-
+	
 	@Override
 	public void setContentLayout() {
 		setContentView(R.layout.userdata_first);
@@ -109,6 +109,7 @@ public class PersonDataActivity extends BaseActivity {
 		bank_address = (EditText) findViewById(R.id.bank_address);
 		user_password = (EditText) findViewById(R.id.password);
 
+		
 		btn_back.setOnClickListener(this);
 		img_checkbank.setOnClickListener(this);
 		userinfo_commit.setOnClickListener(this);

@@ -15,27 +15,28 @@ import com.xmtq.lottery.bean.BankBean;
 import com.xmtq.lottery.bean.BankCBean;
 
 /**
- * 储蓄卡adapter
+ * 信用卡adapter
  * 
  * @author mwz123
  * 
  */
-public class BankSavingListAdapter extends BaseAdapter {
+public class BankSavingCListAdapter extends BaseAdapter {
 	private Context mContext;
-	private List<BankBean> bankList;
-	private int[] a = { R.drawable.a3, R.drawable.a1, R.drawable.a5,
-			R.drawable.a9, R.drawable.a13, R.drawable.a12, R.drawable.a11,
-			R.drawable.a10, R.drawable.a8 };
+	private List<BankCBean> bankCList;
+	private int[] a = { R.drawable.a6, R.drawable.a14, R.drawable.a3,
+			R.drawable.a5, R.drawable.a15, R.drawable.a8, R.drawable.a7,
+			R.drawable.a9, R.drawable.a13, R.drawable.a9, R.drawable.a11,
+			R.drawable.a10, R.drawable.a1, R.drawable.a4, R.drawable.a2 };
 
-	public BankSavingListAdapter(Context c, List<BankBean> bankList) {
+	public BankSavingCListAdapter(Context c, List<BankCBean> bankCList) {
 		this.mContext = c;
-		this.bankList = bankList;
+		this.bankCList = bankCList;
 	}
 
 	@Override
 	public int getCount() {
 
-		return bankList.size();
+		return bankCList.size();
 	}
 
 	@Override
@@ -67,13 +68,12 @@ public class BankSavingListAdapter extends BaseAdapter {
 		}
 		holder.img_bank_icon.setBackground(mContext.getResources().getDrawable(
 				a[arg0]));
-		holder.tv_bank_name.setText(bankList.get(arg0).getBankName());
+		holder.tv_bank_name.setText(bankCList.get(arg0).getBankName());
 
 		return convertView;
 	}
 
 	public class Holder {
-
 		ImageView img_bank_icon;
 		TextView tv_bank_name;
 	}
