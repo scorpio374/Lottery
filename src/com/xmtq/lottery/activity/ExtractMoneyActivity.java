@@ -92,10 +92,9 @@ public class ExtractMoneyActivity extends BaseActivity {
 		// startActivity(intent);
 		// break;
 		case R.id.ectract_money_commit:
-			intent = new Intent(ExtractMoneyActivity.this,
-					ExtractMoneySuccessActivity.class);
+
 			request();
-			startActivity(intent);
+
 			break;
 		default:
 			break;
@@ -110,12 +109,12 @@ public class ExtractMoneyActivity extends BaseActivity {
 			return;
 		}
 
-		if (Integer.parseInt(drawalmoney) < Integer.parseInt(userInfoBean
+		if (Integer.parseInt(drawalmoney) > Integer.parseInt(userInfoBean
 				.getAccount())) {
 			ToastUtil.showCenterToast(ExtractMoneyActivity.this, "余额不足");
 			return;
 		}
-		
+
 		String password = SharedPrefHelper.getInstance(getApplicationContext())
 				.getUserPassward();
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
@@ -123,6 +122,7 @@ public class ExtractMoneyActivity extends BaseActivity {
 		mAsyncTask.execute(mRequestMaker.getExtractCash(userid, password,
 				drawalmoney));
 		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
+
 	}
 
 	private OnCompleteListener<ExtractCashResponse> mOnCompleteListener = new OnCompleteListener<ExtractCashResponse>() {
@@ -133,8 +133,13 @@ public class ExtractMoneyActivity extends BaseActivity {
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
 					ExtractCashResponse mResponse = result;
-					Toast.makeText(ExtractMoneyActivity.this,
-							"AccountDetailBean获取到了数据", 2000).show();
+					Toast.makeText(ExtractMoneyActivity.this, "提现成功", 2000)
+							.show();
+
+					Intent intent = new Intent(ExtractMoneyActivity.this,
+							ExtractMoneySuccessActivity.class);
+					startActivity(intent);
+
 				} else {
 					Toast.makeText(ExtractMoneyActivity.this, result.errormsg,
 							2000).show();
