@@ -122,7 +122,7 @@
                     android:src="@drawable/refresh" />
             </LinearLayout>
 
-            <ListView
+            <com.xmtq.lottery.widget.CustomPullListView
                 android:id="@+id/recomend_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

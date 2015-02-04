@@ -36,7 +36,8 @@
     <color name="login_out_text">#424449</color>
     <color name="gray">#262932</color>
     <color name="gray_item">#313440</color>
-    <color name="soft_gray">#41444d</color> <!-- <color name="soft_gray">#f2f2f2</color> -->
+    <color name="soft_gray">#41444d</color>
+ <!-- <color name="soft_gray">#f2f2f2</color> -->
     <!-- <color name="soft_gray2">#55eaeaea</color> -->
     <color name="deep_gray">#272b32</color>
     <color name="light_gray">#d0d0d0</color>
@@ -44,5 +45,13 @@
     <color name="line_color">#333844</color>
     <color name="stroke_color">#454B5B</color>
     <color name="list_item_gary">#313742</color>
+    <color name="odds_detail_bg">#393F4D</color>
+    <color name="odds_match_bg">#D19F0A</color>
+    
+    
+    <color name="pull_refresh_textview">#FFFFFF</color>
+    <color name="gold">#FFFFFF</color>
+    <color name="labelColor">#0B273D</color>
+    <color name="labelColorChoose">#f44930</color>
 
 </resources>
