@@ -119,7 +119,11 @@ public class CheckBankActivity extends BaseActivity {
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
 			Intent intent = new Intent();
-			intent.putExtra("bankName", bankCList.get(arg2).getBankName());
+			if (bankCList.get(arg2).getBankName() != null) {
+
+				intent.putExtra("bankName", bankCList.get(arg2).getBankName());
+				intent.putExtra("bankCode", bankCList.get(arg2).getBankCode());
+			}
 			setResult(1 * 1000, intent);
 			finish();
 		}
@@ -133,6 +137,7 @@ public class CheckBankActivity extends BaseActivity {
 
 			Intent intent = new Intent();
 			intent.putExtra("bankName", bankList.get(arg2).getBankName());
+			intent.putExtra("bankCode", bankList.get(arg2).getBankCode());
 			setResult(2 * 1000, intent);
 			finish();
 		}

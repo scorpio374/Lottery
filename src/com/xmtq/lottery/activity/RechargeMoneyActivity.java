@@ -7,6 +7,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lottery.R;
@@ -33,6 +34,10 @@ public class RechargeMoneyActivity extends BaseActivity {
 	private SharedPrefHelper spfs;
 	private LinearLayout recharge_bank;
 	private CreateOrderBean mCreateOrderBean;
+	// 订单号
+	private String requestId;
+	private TextView bank_name;
+	private TextView bank_tail_num;
 
 	@Override
 	public void setContentLayout() {
@@ -53,6 +58,10 @@ public class RechargeMoneyActivity extends BaseActivity {
 		recharge_bank = (LinearLayout) findViewById(R.id.recharge_bank);
 
 		check_bank = (LinearLayout) findViewById(R.id.check_bank);
+
+		bank_name = (TextView) findViewById(R.id.bank_name);
+		bank_tail_num = (TextView) findViewById(R.id.bank_card_tail_num);
+
 		ImageButton back = (ImageButton) findViewById(R.id.back);
 		back.setOnClickListener(this);
 		check_bank.setOnClickListener(this);
@@ -98,6 +107,7 @@ public class RechargeMoneyActivity extends BaseActivity {
 			}
 			Intent intent = new Intent(RechargeMoneyActivity.this,
 					CheckBankFirstActivity.class);
+			intent.putExtra("requestId", requestId);
 			intent.putExtra("mCreateOrderBean", mCreateOrderBean);
 			startActivity(intent);
 
@@ -121,18 +131,29 @@ public class RechargeMoneyActivity extends BaseActivity {
 	}
 
 	private OnCompleteListener<BaseResponse> mOnCompleteListener = new OnCompleteListener<BaseResponse>() {
+
 		@Override
 		public void onComplete(BaseResponse result, String resultString) {
 			// TODO Auto-generated method stub
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
 					CreateOrderResponse mOrderResponse = (CreateOrderResponse) result;
+					if (mOrderResponse.requestId != null) {
+						requestId = mOrderResponse.requestId;
+					}
+
 					mCreateOrderBean = mOrderResponse.createOrderBean;
 					if (mCreateOrderBean.getUserBankList().size() > 0) {
-
+						bank_name.setText(mCreateOrderBean.getUserBankList()
+								.get(0).getBankCodeUsed());
+						bank_tail_num.setText("卡号："
+								+ mCreateOrderBean.getUserBankList().get(0)
+										.getBankAccount());
 						recharge_bank.setVisibility(View.VISIBLE);
 
 					}
+					ToastUtil.showCenterToast(RechargeMoneyActivity.this,
+							"测试 ： 数据请求完成");
 				} else {
 					ToastUtil.showCenterToast(RechargeMoneyActivity.this,
 							result.errormsg);
