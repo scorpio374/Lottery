@@ -18,8 +18,10 @@ import com.xmtq.lottery.parser.ImproveUserInfoParser;
 import com.xmtq.lottery.parser.NewUserLoginParser;
 import com.xmtq.lottery.parser.PhoneMessageDepositFirstParser;
 import com.xmtq.lottery.parser.PhoneMessageFirstParser;
+import com.xmtq.lottery.parser.PhoneMessageNotFirstParser;
 import com.xmtq.lottery.parser.PhonePayDepositFirstParser;
 import com.xmtq.lottery.parser.PhonePayFirstParser;
+import com.xmtq.lottery.parser.PhonePayNotFirstParser;
 import com.xmtq.lottery.parser.PurchaseRecordsParser;
 import com.xmtq.lottery.parser.RecomendHistoryParser;
 import com.xmtq.lottery.parser.RepasswordParser;
@@ -998,14 +1000,14 @@ public class RequestMaker {
 	public Request getFengPayNotFirst(String requestOrderId, String bankCode,
 			String bindId, String userIdIdentity, String randomValidateId,
 			String randomCode, String tradeId) {
-
+		PhonePayNotFirstParser parser = new PhonePayNotFirstParser();
 		String body = createFengPayNotFirst(requestOrderId, bankCode, bindId,
 				userIdIdentity, randomValidateId, randomCode, tradeId);
 		String xmlBody = makeXml(body, "15008");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
-				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -1163,14 +1165,14 @@ public class RequestMaker {
 	 */
 	public Request getFengMessagePayNotFirst(String requestOrderId,
 			String bankCode, String bindId, String userIdIdentity) {
-
+		PhoneMessageNotFirstParser parser = new PhoneMessageNotFirstParser();
 		String body = createFengMessagePayNotFirst(requestOrderId, bankCode,
 				bindId, userIdIdentity);
-		String xmlBody = makeXml(body, "15008");
+		String xmlBody = makeXml(body, "15010");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
-				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 

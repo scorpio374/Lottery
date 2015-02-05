@@ -8,34 +8,40 @@ import android.widget.TextView;
 import com.example.lottery.R;
 
 /**
- * 提现成功
+ * 快捷支付成功
  * 
  * @author mwz123
  * 
  */
-public class ExtractMoneySuccessActivity extends BaseActivity {
+public class QuickPaymentSuccessActivity extends BaseActivity {
 
 	private ImageButton btn_back;
-	private TextView extract_money_done;
+	private TextView quick_pay_done;
+	private TextView quick_pay_done_money;
+	private String money;
 
 	@Override
 	public void setContentLayout() {
-		setContentView(R.layout.extract_money_success);
+		setContentView(R.layout.quick_payment_success);
 
 	}
 
 	@Override
 	public void dealLogicBeforeInitView() {
-		// TODO Auto-generated method stub
+		money = getIntent().getStringExtra("money");
 
 	}
 
 	@Override
 	public void initView() {
+		quick_pay_done_money = (TextView) findViewById(R.id.quick_pay_done_money);
+		if (money != null) {
+			quick_pay_done_money.setText(money);
+		}
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
-		extract_money_done = (TextView) findViewById(R.id.extract_money_done);
-		extract_money_done.setOnClickListener(this);
+		quick_pay_done = (TextView) findViewById(R.id.quick_pay_done);
+		quick_pay_done.setOnClickListener(this);
 	}
 
 	@Override
@@ -50,8 +56,8 @@ public class ExtractMoneySuccessActivity extends BaseActivity {
 		case R.id.back:
 			this.finish();
 			break;
-		case R.id.extract_money_done:
-			Intent intent = new Intent(ExtractMoneySuccessActivity.this,
+		case R.id.quick_pay_done:
+			Intent intent = new Intent(QuickPaymentSuccessActivity.this,
 					RecomendActivity.class);
 			startActivity(intent);
 			break;
