@@ -44,7 +44,7 @@ public class QuickPaymentSuccessActivity extends BaseActivity {
 		quick_pay_done.setOnClickListener(this);
 	}
 
-	@Override
+	@Override 
 	public void dealLogicAfterInitView() {
 		// TODO Auto-generated method stub
 

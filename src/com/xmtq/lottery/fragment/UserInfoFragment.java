@@ -196,6 +196,7 @@ public class UserInfoFragment extends BaseFragment {
 			if (isAddBankInfo && isAddUserInfo) {
 				intent = new Intent(getActivity(), ExtractMoneyActivity.class);
 				intent.putExtra("userInfoBean", userInfoBean);
+				intent.putExtra("accountbalance", account_balance.getText());
 				startActivity(intent);
 			} else {
 				ToastUtil.showCenterToast(getActivity(), "请完善个人信息");

@@ -93,6 +93,7 @@
             android:textSize="@dimen/main_textsize" />
 
         <TextView
+            android:id="@+id/extract_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -100,7 +101,7 @@
             android:paddingLeft="8dip"
             android:paddingRight="3dip"
             android:paddingTop="5dip"
-            android:text="100"
+            android:text=" "
             android:textColor="@color/green"
             android:textSize="@dimen/main_textsize2" />
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,9 @@ public class ExtractMoneyActivity extends BaseActivity {
 	private UserInfoBean userInfoBean;
 	private TextView tv_balance;
 	private EditText edit_extract_money;
+	private String drawalmoney;
+	private LinearLayout extract_checkbank;
+	private String accountbalance;
 
 	@Override
 	public void setContentLayout() {
@@ -51,10 +55,21 @@ public class ExtractMoneyActivity extends BaseActivity {
 	public void dealLogicBeforeInitView() {
 		userInfoBean = (UserInfoBean) getIntent().getSerializableExtra(
 				"userInfoBean");
+		accountbalance = getIntent().getStringExtra("accountbalance");
+
+		if (TextUtils.isEmpty(userInfoBean.getBankaccount())) {
+
+			ToastUtil.showCenterToast(ExtractMoneyActivity.this, "请先完善个人信息");
+		}
 	}
 
 	@Override
 	public void initView() {
+
+		extract_checkbank = (LinearLayout) findViewById(R.id.extract_checkbank);
+		if (userInfoBean != null) {
+			extract_checkbank.setVisibility(View.VISIBLE);
+		}
 		edit_extract_money = (EditText) findViewById(R.id.edit_extract_money);
 		tv_bank_name = (TextView) findViewById(R.id.bank_name);
 		bank_card_tail_num = (TextView) findViewById(R.id.bank_card_tail_num);
@@ -64,7 +79,7 @@ public class ExtractMoneyActivity extends BaseActivity {
 
 		tv_bank_name.setText(userInfoBean.getBankname());
 		bank_card_tail_num.setText("尾号：" + str);
-		tv_balance.setText(userInfoBean.getAccount());
+		tv_balance.setText(accountbalance);
 
 		// img_checkbank = (ImageView) findViewById(R.id.img_checkbank);
 		ectract_money_commit = (TextView) findViewById(R.id.ectract_money_commit);
@@ -103,7 +118,7 @@ public class ExtractMoneyActivity extends BaseActivity {
 	}
 
 	private void request() {
-		String drawalmoney = edit_extract_money.getText().toString().trim();
+		drawalmoney = edit_extract_money.getText().toString().trim();
 		if (TextUtils.isEmpty(drawalmoney)) {
 			ToastUtil.showCenterToast(ExtractMoneyActivity.this, "请输入金额");
 			return;
@@ -115,12 +130,16 @@ public class ExtractMoneyActivity extends BaseActivity {
 			return;
 		}
 
+		String userid = SharedPrefHelper.getInstance(getApplicationContext())
+				.getUid();
+
 		String password = SharedPrefHelper.getInstance(getApplicationContext())
 				.getUserPassward();
+
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(mRequestMaker.getExtractCash(userid, password,
-				drawalmoney));
+				drawalmoney + "00"));
 		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
 
 	}
@@ -138,6 +157,7 @@ public class ExtractMoneyActivity extends BaseActivity {
 
 					Intent intent = new Intent(ExtractMoneyActivity.this,
 							ExtractMoneySuccessActivity.class);
+					intent.putExtra("drawalmoney", drawalmoney);
 					startActivity(intent);
 
 				} else {

@@ -59,8 +59,25 @@ public class AccountDetailListAdapter extends BaseAdapter {
 		} else {
 			holder = (Holder) convertView.getTag();
 		}
+
+		String date = "";
+		String[] d = mList.get(arg0).getEntertime().split("-");
+		date = d[1] + "/" + d[2];
+
+		String style = "";
+		String money = "";
 		if (mList.size() > 0) {
-			holder.bet_count.setText(mList.get(arg0).getEntertime());
+			if (mList.get(arg0).getMflag().equals("5")) {
+				style = "银行提款";
+				money = "- " + mList.get(arg0).getMoney() + ".00 元";
+			} else if (mList.get(arg0).getMflag().equals("93")) {
+				style = "快捷支付";
+				money = "+ " + mList.get(arg0).getMoney() + ".00 元";
+			}
+			holder.bet_count.setText(money);
+			holder.bet_date.setText(date);
+			holder.bet_style.setText(style);
+			holder.bet_time.setText(date);
 		}
 
 		return convertView;

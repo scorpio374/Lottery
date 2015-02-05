@@ -25,6 +25,7 @@ import com.xmtq.lottery.bean.GameHistoryDateResponse;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.utils.SharedPrefHelper;
 
 /**
  * 账户明细
@@ -47,7 +48,7 @@ public class AccountDetailActivity extends BaseActivity {
 	@Override
 	public void dealLogicBeforeInitView() {
 		// 默认请求
-		request("0");
+		request("");
 	}
 
 	@Override
@@ -68,15 +69,15 @@ public class AccountDetailActivity extends BaseActivity {
 						if (checkedId == R.id.account_my) {
 							Toast.makeText(AccountDetailActivity.this, "账户",
 									2000).show();
-							request("0");
+							request("");
 						} else if (checkedId == R.id.account_recharge) {
 							Toast.makeText(AccountDetailActivity.this, "充值",
 									2000).show();
-							request("0");
+							request("93,1");
 						} else if (checkedId == R.id.account_deposit) {
 							Toast.makeText(AccountDetailActivity.this, "提现",
 									2000).show();
-							request("0");
+							request("5,6");
 						}
 					}
 				});
@@ -84,6 +85,8 @@ public class AccountDetailActivity extends BaseActivity {
 	}
 
 	private void request(String mFlag) {
+		String userid = SharedPrefHelper.getInstance(getApplicationContext())
+				.getUid();
 
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();

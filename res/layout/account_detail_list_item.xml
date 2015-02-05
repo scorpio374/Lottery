@@ -52,6 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginRight="10dip"
         android:text="-2.00元"
         android:textColor="@color/white"
         android:textSize="17sp" />
@@ -60,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dip"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="15dip"
+        android:layout_marginLeft="10dip"
         android:layout_toRightOf="@id/bet_ll_left"
         android:background="#3e424e" />
 

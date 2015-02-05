@@ -54,7 +54,7 @@ public class RecomendHistoryFragment extends BaseFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		// request();
+		request();
 		super.onActivityCreated(savedInstanceState);
 	}
 
@@ -124,6 +124,5 @@ public class RecomendHistoryFragment extends BaseFragment {
 			break;
 		}
 	}
-	
-	
+
 }

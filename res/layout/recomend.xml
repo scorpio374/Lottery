@@ -58,13 +58,31 @@
                 android:layout_marginTop="2dip"
                 android:background="@color/deep_gray" >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <!-- <TextView -->
+                <!-- android:layout_width="wrap_content" -->
+                <!-- android:layout_height="wrap_content" -->
+                <!-- android:layout_gravity="center" -->
+                <!-- android:layout_marginBottom="1dip" -->
+                <!-- android:layout_marginLeft="10dip" -->
+                <!-- android:layout_marginTop="1dip" -->
+                <!-- android:singleLine="true" -->
+                <!-- android:text="刘某某竞彩足球混合过关2串1  7690元           吴某某竞彩足球混合过关3串1  12500元" -->
+                <!-- android:textColor="#7a7c7f" /> -->
+
+                <com.xmtq.lottery.widget.MarqueeText
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginBottom="1dip"
                     android:layout_marginLeft="10dip"
                     android:layout_marginTop="1dip"
+                    android:duplicateParentState="true"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:marqueeRepeatLimit="marquee_forever"
                     android:singleLine="true"
                     android:text="刘某某竞彩足球混合过关2串1  7690元           吴某某竞彩足球混合过关3串1  12500元"
                     android:textColor="#7a7c7f" />

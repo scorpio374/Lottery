@@ -416,7 +416,7 @@ public class RequestMaker {
 		sb.append(makeTag("startDate", startDate));
 		sb.append(makeTag("endDate", endDate));
 		sb.append(makeTag("uid", uid));
-		sb.append("<mflag/>");
+		sb.append(makeTag("mflag", mflag));
 		sb.append(makeTag("pageNum", pageNum));
 		sb.append(makeTag("pageSize", pageSize));
 
@@ -484,9 +484,9 @@ public class RequestMaker {
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element drawaltype=\"0\">");
-		sb.append(makeTag("uid", "14244"));
+		sb.append(makeTag("uid", uid));
 		sb.append(makeTag("password", password));
-		sb.append(makeTag("drawalmoney", "10"));
+		sb.append(makeTag("drawalmoney", drawalmoney));
 
 		sb.append("</element>");
 		sb.append("</elements>");
