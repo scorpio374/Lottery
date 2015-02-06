@@ -7,22 +7,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.bean.PurchaseRecordsBean;
 
 public class BetRecordListAdapter extends BaseAdapter {
 	private Context mContext;
-	private List<String> mList;
+	private List<PurchaseRecordsBean> mRecordsBeansList;
 
-	public BetRecordListAdapter(Context c, List<String> mList) {
+	public BetRecordListAdapter(Context c,
+			List<PurchaseRecordsBean> RecordsBeansList) {
 		this.mContext = c;
-		this.mList = mList;
+		this.mRecordsBeansList = RecordsBeansList;
 	}
 
 	@Override
 	public int getCount() {
 
-		return mList.size();
+		return mRecordsBeansList.size();
 	}
 
 	@Override
@@ -44,11 +47,26 @@ public class BetRecordListAdapter extends BaseAdapter {
 			holder = new Holder();
 			convertView = LayoutInflater.from(mContext).inflate(
 					R.layout.bet_record_list_item, null);
+			holder.bet_date = (TextView) convertView
+					.findViewById(R.id.bet_date);
+			holder.bet_time = (TextView) convertView
+					.findViewById(R.id.bet_time);
+			holder.bet_style = (TextView) convertView
+					.findViewById(R.id.bet_style);
+			holder.bet_money = (TextView) convertView
+					.findViewById(R.id.bet_money);
+			holder.bet_state = (TextView) convertView
+					.findViewById(R.id.bet_state);
 			convertView.setTag(holder);
 		} else {
 			holder = (Holder) convertView.getTag();
 		}
 
+		holder.bet_date.setText(mRecordsBeansList.get(arg0).getAddtime());
+		holder.bet_time.setText(mRecordsBeansList.get(arg0).getAddtime());
+		holder.bet_state.setText(mRecordsBeansList.get(arg0).getGuoguan());
+		holder.bet_style.setText(mRecordsBeansList.get(arg0).getPlaytype());
+		holder.bet_money.setText(mRecordsBeansList.get(arg0).getBonusAfterfax());
 		// holder.tv_program_name.setText(childList.get(position).getTitle());
 
 		return convertView;
@@ -56,6 +74,11 @@ public class BetRecordListAdapter extends BaseAdapter {
 
 	public class Holder {
 
+		TextView bet_date;
+		TextView bet_time;
+		TextView bet_style;
+		TextView bet_money;
+		TextView bet_state;
 	}
 
 }

@@ -14,6 +14,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.BetRecordListAdapter;
 import com.xmtq.lottery.bean.ExtractCashResponse;
+import com.xmtq.lottery.bean.PurchaseRecordsBean;
 import com.xmtq.lottery.bean.PurchaseRecordsResponse;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.RequestMaker;
@@ -88,15 +89,6 @@ public class BetRecordActivity extends BaseActivity {
 
 	@Override
 	public void dealLogicAfterInitView() {
-		List<String> mList = new ArrayList<String>();
-		for (int i = 0; i < 10; i++) {
-			mList.add(i + "");
-		}
-		BetRecordListAdapter mAdapter = new BetRecordListAdapter(
-				BetRecordActivity.this, mList);
-		bet_record_all.setAdapter(mAdapter);
-		bet_record_wait.setAdapter(mAdapter);
-		bet_record_win.setAdapter(mAdapter);
 
 	}
 
@@ -135,6 +127,17 @@ public class BetRecordActivity extends BaseActivity {
 				if (result.errorcode.equals("0")) {
 					PurchaseRecordsResponse mResponse = result;
 					Toast.makeText(BetRecordActivity.this, "查询成功", 2000).show();
+
+					List<PurchaseRecordsBean> mRecordsBeansList = mResponse.purchaseRecordsBeans;
+					// List<String> mList = new ArrayList<String>();
+					// for (int i = 0; i < 10; i++) {
+					// mList.add(i + "");
+					// }
+					BetRecordListAdapter mAdapter = new BetRecordListAdapter(
+							BetRecordActivity.this, mRecordsBeansList);
+					bet_record_all.setAdapter(mAdapter);
+					bet_record_wait.setAdapter(mAdapter);
+					bet_record_win.setAdapter(mAdapter);
 
 				} else {
 					Toast.makeText(BetRecordActivity.this, result.errormsg,

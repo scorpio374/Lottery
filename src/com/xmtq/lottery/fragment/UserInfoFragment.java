@@ -28,6 +28,11 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.ToastUtil;
+import com.xmtq.lottery.widget.AnalyzeDialog;
+import com.xmtq.lottery.widget.BalanceNotEnoughDialog;
+import com.xmtq.lottery.widget.BetConfirmDialog;
+import com.xmtq.lottery.widget.BetSuccessDialog;
+import com.xmtq.lottery.widget.DisagreeDialog;
 
 /**
  * 个人中心
@@ -159,10 +164,20 @@ public class UserInfoFragment extends BaseFragment {
 		switch (v.getId()) {
 		// 投注记录
 		case R.id.rl_bet_record:
-			// intent = new Intent(getActivity(), BetRecordActivity.class);
-			// 测试推荐历史
 			intent = new Intent(getActivity(), BetRecordActivity.class);
 			startActivity(intent);
+
+			// // 测试dialog
+			// BalanceNotEnoughDialog dialog = new BalanceNotEnoughDialog(
+			// getActivity(), new View.OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View arg0) {
+			// // TODO Auto-generated method stub
+			//
+			// }
+			// });
+			// dialog.show();
 
 			break;
 		// 个人资料
