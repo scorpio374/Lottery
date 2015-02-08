@@ -17,6 +17,7 @@ import com.example.lottery.R;
 import com.xmtq.lottery.bean.GameHistoryDateBean;
 import com.xmtq.lottery.bean.RecomendHistoryBean;
 import com.xmtq.lottery.utils.DateUtil;
+import com.xmtq.lottery.utils.OddsUtil;
 
 public class GameResuleDetailListAdapter extends BaseAdapter {
 	private Context mContext;
@@ -72,13 +73,15 @@ public class GameResuleDetailListAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-		long time = DateUtil.getMillisecondsFromString(mHistoryBeansList.get(
+//		long time = DateUtil.getMillisecondsFromString(mHistoryBeansList.get(
+//				arg0).getGameTime());
+//		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+//		String gameTime = sdf.format(time);
+//		
+		String gameTime = OddsUtil.getGameTime(mHistoryBeansList.get(
 				arg0).getGameTime());
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-
-		String gameTime = sdf.format(new Date(time));
-
 		holder.tv_gameTime.setText(gameTime);
+		
 		holder.tv_league.setText(mHistoryBeansList.get(arg0).getLeague());
 		holder.tv_matchId.setText(mHistoryBeansList.get(arg0).getNum());
 		holder.tv_matchteam.setText(mHistoryBeansList.get(arg0).getMatchTeam());
