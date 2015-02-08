@@ -9,6 +9,7 @@ import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -27,6 +28,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
+import com.xmtq.lottery.widget.CheckChuanGuanDialog;
 import com.xmtq.lottery.widget.ChuanGuanDialog;
 import com.xmtq.lottery.widget.CustomPullListView;
 import com.xmtq.lottery.widget.CustomPullListView.OnLoadMoreListener;
@@ -56,9 +58,11 @@ public class RecomendFragment extends BaseFragment {
 	private static final int LOAD_DATA_FINISH = 10;// 上拉刷新
 	private static final int REFRESH_DATA_FINISH = 11;// 下拉刷新
 	private RadioButton chuan_guan;
-	private LinearLayout tv_more_style;
+
 	private GridView chuanguan_more;
 	private boolean isShowMore = false;
+	private ChuanGuanDialog mChuanGuanDialog;
+	private RadioButton check_chuan_guan;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -94,9 +98,8 @@ public class RecomendFragment extends BaseFragment {
 		imgBtnLeft = (ImageButton) v.findViewById(R.id.recomend_left);
 		imgBtnRight = (ImageButton) v.findViewById(R.id.recomend_right);
 		chuan_guan = (RadioButton) v.findViewById(R.id.chuan_guan);
-		tv_more_style = (LinearLayout) v.findViewById(R.id.tv_more_style);
-		chuanguan_more = (GridView) v.findViewById(R.id.chuanguan_more);
-		tv_more_style.setOnClickListener(this);
+		check_chuan_guan = (RadioButton) v.findViewById(R.id.check_chuan_guan);
+		check_chuan_guan.setOnClickListener(this);
 		chuan_guan.setOnClickListener(this);
 		imgBtnLeft.setOnClickListener(this);
 		imgBtnRight.setOnClickListener(this);
@@ -138,26 +141,51 @@ public class RecomendFragment extends BaseFragment {
 		case R.id.recomend_right:
 			((RecomendActivity) getActivity()).openRightDrawer();
 			break;
-		case R.id.tv_more_style:
-			if (isShowMore) {
-				chuanguan_more.setVisibility(View.VISIBLE);
-			} else {
-				chuanguan_more.setVisibility(View.GONE);
-			}
-			isShowMore = !isShowMore;
-
-			break;
 
 		case R.id.chuan_guan:
-			ChuanGuanDialog mChuanGuanDialog = new ChuanGuanDialog(
-					getActivity());
+			mChuanGuanDialog = new ChuanGuanDialog(getActivity(),
+					mCancelListener, mCommitListener);
 			mChuanGuanDialog.show();
+			break;
+
+		case R.id.check_chuan_guan:
+			mCheckChuanGuanDialog = new CheckChuanGuanDialog(getActivity(),
+					mSureListener);
+			mCheckChuanGuanDialog.show();
 			break;
 
 		default:
 			break;
 		}
 	}
+
+	// 弹窗选择监听
+	private OnClickListener mCancelListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			mChuanGuanDialog.dismiss();
+		}
+	};
+	private OnClickListener mCommitListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			mChuanGuanDialog.dismiss();
+		}
+	};
+
+	// 输入选择dialog点击监听
+	private OnClickListener mSureListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			mCheckChuanGuanDialog.dismiss();
+		}
+	};
 
 	/**
 	 * 用户登陆回调处理
@@ -240,5 +268,6 @@ public class RecomendFragment extends BaseFragment {
 			super.handleMessage(msg);
 		}
 	};
+	private CheckChuanGuanDialog mCheckChuanGuanDialog;
 
 }

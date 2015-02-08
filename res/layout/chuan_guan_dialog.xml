@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#773c3f48"
-    android:gravity="bottom"
+    android:background="#553c3f48"
+    android:gravity="center"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#3c3f48"
+        android:gravity="bottom"
         android:orientation="vertical" >
 
         <TextView
@@ -74,6 +75,7 @@
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/chuanguan_togglebtn_selector"
                 android:button="@null"
@@ -109,8 +111,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numColumns="5"
-            android:scrollbars="none" >
+            android:scrollbars="none"
+            android:visibility="gone" >
         </GridView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@color/deep_gray"
+                android:padding="10dp"
+                android:text="取消"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btn_commit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@color/green"
+                android:padding="10dp"
+                android:text="确定"
+                android:textColor="@color/white" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
