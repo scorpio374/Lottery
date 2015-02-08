@@ -34,6 +34,8 @@ public class CheckBankActivity extends BaseActivity {
 	private ListView bank_savings_list;
 	private ListView bank_card_list;
 	private CreateOrderBean mCreateOrderBean;
+	private List<BankCBean> bankCList;
+	private List<BankBean> bankList;
 
 	@Override
 	public void setContentLayout() {
@@ -65,11 +67,9 @@ public class CheckBankActivity extends BaseActivity {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				if (checkedId == R.id.bank_savings) {
-					Toast.makeText(CheckBankActivity.this, "储蓄卡", 2000).show();
 					bank_savings_list.setVisibility(View.VISIBLE);
 					bank_card_list.setVisibility(View.GONE);
 				} else if (checkedId == R.id.bank_credit_card) {
-					Toast.makeText(CheckBankActivity.this, "信用卡", 2000).show();
 					bank_savings_list.setVisibility(View.GONE);
 					bank_card_list.setVisibility(View.VISIBLE);
 				}
@@ -77,9 +77,6 @@ public class CheckBankActivity extends BaseActivity {
 		});
 
 	}
-
-	private List<BankCBean> bankCList;
-	private List<BankBean> bankList;
 
 	public void dealLogicAfterInitView() {
 		bankList = new ArrayList<BankBean>();

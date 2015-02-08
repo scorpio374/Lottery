@@ -134,6 +134,7 @@ public class QuickPaymentActivity extends BaseActivity {
 			String bankCode = mUserBankBean.getBankCodeUsed();
 			String bindId = mUserBankBean.getBindId();
 			Log.d("xm", "bankCode" + bankCode + "bindId" + bindId);
+			mLoadingDialog.show("数据记载中...");
 			RequestMaker mRequestMaker = RequestMaker.getInstance();
 			HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 			mAsyncTask.execute(mRequestMaker.getFengMessagePayNotFirst(
@@ -171,6 +172,8 @@ public class QuickPaymentActivity extends BaseActivity {
 			} else {
 				ToastUtil.showCenterToast(QuickPaymentActivity.this, "请求失败");
 			}
+
+			mLoadingDialog.dismiss();
 		}
 	};
 
@@ -188,6 +191,8 @@ public class QuickPaymentActivity extends BaseActivity {
 			String bankCode = mUserBankBean.getBankCodeUsed();
 			String bindId = mUserBankBean.getBindId();
 			Log.d("xm", "bankCode" + bankCode + "bindId" + bindId);
+
+			mLoadingDialog.show("数据加载中...");
 			RequestMaker mRequestMaker = RequestMaker.getInstance();
 			HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 			mAsyncTask.execute(mRequestMaker.getFengPayNotFirst(requestOrderId,
@@ -222,6 +227,8 @@ public class QuickPaymentActivity extends BaseActivity {
 			} else {
 				ToastUtil.showCenterToast(QuickPaymentActivity.this, "请求失败");
 			}
+
+			mLoadingDialog.dismiss();
 		}
 	};
 

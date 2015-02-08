@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.GameResuleDetailListAdapter;
@@ -21,6 +22,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
+import com.xmtq.lottery.utils.ToastUtil;
 
 /**
  * 赛果详情
@@ -102,7 +104,7 @@ public class GameResultActivity extends BaseActivity {
 	}
 
 	private void request(GameHistoryDateBean mDateBean) {
-
+		mLoadingDialog.show("数据加载中...");
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(mRequestMaker.getGameHistorySearch(mDateBean
@@ -116,15 +118,25 @@ public class GameResultActivity extends BaseActivity {
 		public void onComplete(RecomendHistoryResponse result,
 				String resultString) {
 			if (result != null) {
-				RecomendHistoryResponse mResponse = result;
-				List<RecomendHistoryBean> mHistoryBeansList = mResponse.mRecomendHistoryList;
-				if (mHistoryBeansList != null) {
-					GameResuleDetailListAdapter mAdapter = new GameResuleDetailListAdapter(
-							GameResultActivity.this, mHistoryBeansList);
-					game_result_detail_list.setAdapter(mAdapter);
+				if (result.errorcode.equals("0")) {
+					RecomendHistoryResponse mResponse = result;
+					List<RecomendHistoryBean> mHistoryBeansList = mResponse.mRecomendHistoryList;
+					if (mHistoryBeansList != null) {
+						GameResuleDetailListAdapter mAdapter = new GameResuleDetailListAdapter(
+								GameResultActivity.this, mHistoryBeansList);
+						game_result_detail_list.setAdapter(mAdapter);
 
+					}
+				} else {
+					Toast.makeText(GameResultActivity.this, result.errormsg,
+							2000).show();
 				}
+
+			} else {
+				ToastUtil.showCenterToast(GameResultActivity.this, "数据请求失败");
 			}
+
+			mLoadingDialog.dismiss();
 
 		}
 	};

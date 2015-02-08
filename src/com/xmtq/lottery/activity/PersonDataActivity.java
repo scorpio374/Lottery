@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dvt.lottery.util.MD5;
 import com.example.lottery.R;
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.ImproveUserInfoBean;
@@ -66,7 +67,7 @@ public class PersonDataActivity extends BaseActivity {
 	private UserInfoBean userInfoBean;
 	private boolean isAddUserInfo = false;
 	private boolean isAddBankInfo = false;
-	
+
 	@Override
 	public void setContentLayout() {
 		setContentView(R.layout.userdata_first);
@@ -109,7 +110,6 @@ public class PersonDataActivity extends BaseActivity {
 		bank_address = (EditText) findViewById(R.id.bank_address);
 		user_password = (EditText) findViewById(R.id.password);
 
-		
 		btn_back.setOnClickListener(this);
 		img_checkbank.setOnClickListener(this);
 		userinfo_commit.setOnClickListener(this);
@@ -282,6 +282,7 @@ public class PersonDataActivity extends BaseActivity {
 			return;
 		}
 
+		mLoadingDialog.show("数据加载中...");
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getPerfectUserInfo(uid,
 				realName, idCard));
@@ -340,6 +341,7 @@ public class PersonDataActivity extends BaseActivity {
 			toast.show();
 			return;
 		}
+		mLoadingDialog.show("数据加载中...");
 
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getPerfectUserInfo(uid,
@@ -370,6 +372,8 @@ public class PersonDataActivity extends BaseActivity {
 				toast.setText("请求错误");
 				toast.show();
 			}
+
+			mLoadingDialog.dismiss();
 		}
 	};
 

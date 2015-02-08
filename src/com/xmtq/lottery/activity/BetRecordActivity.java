@@ -64,21 +64,15 @@ public class BetRecordActivity extends BaseActivity {
 					@Override
 					public void onCheckedChanged(RadioGroup group, int checkedId) {
 						if (checkedId == R.id.bet_record_all) {
-							Toast.makeText(BetRecordActivity.this, "全部", 2000)
-									.show();
 							bet_record_all.setVisibility(View.VISIBLE);
 							bet_record_win.setVisibility(View.GONE);
 							bet_record_wait.setVisibility(View.GONE);
 
 						} else if (checkedId == R.id.bet_record_win) {
-							Toast.makeText(BetRecordActivity.this, "中奖", 2000)
-									.show();
 							bet_record_all.setVisibility(View.GONE);
 							bet_record_win.setVisibility(View.VISIBLE);
 							bet_record_wait.setVisibility(View.GONE);
 						} else if (checkedId == R.id.bet_record_wait) {
-							Toast.makeText(BetRecordActivity.this, "待开", 2000)
-									.show();
 							bet_record_all.setVisibility(View.GONE);
 							bet_record_win.setVisibility(View.GONE);
 							bet_record_wait.setVisibility(View.VISIBLE);

@@ -135,7 +135,7 @@ public class ExtractMoneyActivity extends BaseActivity {
 
 		String password = SharedPrefHelper.getInstance(getApplicationContext())
 				.getUserPassward();
-
+		mLoadingDialog.show("数据加载中...");
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(mRequestMaker.getExtractCash(userid, password,
@@ -167,6 +167,8 @@ public class ExtractMoneyActivity extends BaseActivity {
 			} else {
 				Toast.makeText(ExtractMoneyActivity.this, "请求错误", 2000).show();
 			}
+
+			mLoadingDialog.dismiss();
 		}
 	};
 

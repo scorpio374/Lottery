@@ -5,8 +5,11 @@
     <drawable name="blue">#770000ff</drawable>
     <drawable name="green">#019b79</drawable>
     <drawable name="gray">#3a3e4d</drawable>
+    <drawable name="dialog_window_bg">#502c2e3a</drawable>
     <drawable name="trtransparent">#00000000</drawable>
 
+    <color name="dialog_ok">#ff7200</color>
+    <color name="black_text">#272727</color>
     <color name="bank_selected_color">#5B5D69</color>
     <color name="bank_unselected_coor">#40444f</color>
     <color name="button_gray">#3a3e4d </color>

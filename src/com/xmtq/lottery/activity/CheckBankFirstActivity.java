@@ -254,6 +254,7 @@ public class CheckBankFirstActivity extends BaseActivity {
 			ToastUtil.showCenterToast(this, "请输入验证码");
 			return;
 		}
+		mLoadingDialog.show("数据加载中...");
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		Log.d("xm", "储蓄卡 请求 depositCardRequest()");
@@ -289,6 +290,8 @@ public class CheckBankFirstActivity extends BaseActivity {
 				Log.d("xm", "PhonePayDepositFirstResponse" + "请求失败");
 				ToastUtil.showCenterToast(CheckBankFirstActivity.this, "请求失败");
 			}
+
+			mLoadingDialog.dismiss();
 		}
 	};
 
@@ -302,6 +305,8 @@ public class CheckBankFirstActivity extends BaseActivity {
 			return;
 		}
 		Log.d("xm", "信用卡 creditCardRequest()");
+
+		mLoadingDialog.show("数据加载中...");
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		if (requestOrderId != null && bankCode != null) {
@@ -326,6 +331,7 @@ public class CheckBankFirstActivity extends BaseActivity {
 					PhonePayFirstResponse mPayFirstResponse = (PhonePayFirstResponse) result;
 					ToastUtil.showCenterToast(CheckBankFirstActivity.this,
 							"充值成功");
+
 				} else {
 					ToastUtil.showCenterToast(CheckBankFirstActivity.this,
 							result.errormsg);
@@ -333,6 +339,8 @@ public class CheckBankFirstActivity extends BaseActivity {
 			} else {
 				ToastUtil.showCenterToast(CheckBankFirstActivity.this, "请求失败");
 			}
+
+			mLoadingDialog.dismiss();
 		}
 	};
 
@@ -368,9 +376,6 @@ public class CheckBankFirstActivity extends BaseActivity {
 					PhoneMessageResponse mMessageResponse = (PhoneMessageResponse) result;
 					randomValidateId = mMessageResponse.randomValidateId;
 					tradeId = mMessageResponse.tradeId;
-
-					ToastUtil.showCenterToast(CheckBankFirstActivity.this,
-							"信用卡短信请求");
 
 					Log.d("xm", "tradeId" + tradeId + "++++"
 							+ "randomValidateId" + randomValidateId);

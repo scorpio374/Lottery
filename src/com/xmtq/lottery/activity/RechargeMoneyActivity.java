@@ -28,6 +28,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.StringUtil;
 import com.xmtq.lottery.utils.ToastUtil;
+import com.xmtq.lottery.widget.LoadingDialog;
 
 /**
  * 充值
@@ -68,6 +69,7 @@ public class RechargeMoneyActivity extends BaseActivity {
 
 	@Override
 	public void dealLogicBeforeInitView() {
+		mDialog = new LoadingDialog(this);
 		request("10");
 
 		spfs = SharedPrefHelper.getInstance(this);
@@ -185,6 +187,7 @@ public class RechargeMoneyActivity extends BaseActivity {
 	 * 创建支付订单
 	 */
 	private void request(String totalPrice) {
+		mDialog.show("数据正在加载中...");
 		String userid = SharedPrefHelper.getInstance(this).getUid();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getFengPay(userid,
@@ -239,8 +242,6 @@ public class RechargeMoneyActivity extends BaseActivity {
 						recharge_commit.setVisibility(View.VISIBLE);
 					}
 
-					ToastUtil.showCenterToast(RechargeMoneyActivity.this,
-							"测试 ： 数据请求完成");
 				} else {
 					ToastUtil.showCenterToast(RechargeMoneyActivity.this,
 							result.errormsg);
@@ -250,7 +251,10 @@ public class RechargeMoneyActivity extends BaseActivity {
 				ToastUtil.showCenterToast(RechargeMoneyActivity.this, "请求失败");
 				recharge_binding_list.setVisibility(View.GONE);
 			}
+
+			mDialog.dismiss();
 		}
 	};
+	private LoadingDialog mDialog;
 
 }

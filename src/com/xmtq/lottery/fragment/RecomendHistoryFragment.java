@@ -88,10 +88,6 @@ public class RecomendHistoryFragment extends BaseFragment {
 				GameHistoryDateResponse mResponse = result;
 				mHistoryBeansList = mResponse.mHistoryDateBeansList;
 				if (mHistoryBeansList != null) {
-					Toast.makeText(
-							getActivity(),
-							"RecomendHistoryBean获取到了数据"
-									+ mHistoryBeansList.size(), 2000).show();
 
 					RecomendHistoryListAdapter mAdapter = new RecomendHistoryListAdapter(
 							getActivity(), mHistoryBeansList);
