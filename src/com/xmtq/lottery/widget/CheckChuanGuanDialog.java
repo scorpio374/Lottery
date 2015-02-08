@@ -22,6 +22,7 @@ public class CheckChuanGuanDialog {
 	private Button tv_cancel;
 	private OnClickListener myShureListener;
 
+	
 	public CheckChuanGuanDialog(Context context, OnClickListener myShureListener) {
 		this.context = context;
 		this.myShureListener = myShureListener;
