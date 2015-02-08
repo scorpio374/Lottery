@@ -4,14 +4,20 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.bean.BaseResponse;
+import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.utils.ToastUtil;
 
 public class CheckChuanGuanDialog {
 
@@ -20,18 +26,20 @@ public class CheckChuanGuanDialog {
 	private LinearLayout layout;
 	private Button tv_shure;
 	private Button tv_cancel;
-	private OnClickListener myShureListener;
+	private EditText dialog_edit;
+	public String edit_text;
+	private OnCompleteListener onCompleteListener;
 
-	
-	public CheckChuanGuanDialog(Context context, OnClickListener myShureListener) {
+	public CheckChuanGuanDialog(Context context) {
 		this.context = context;
-		this.myShureListener = myShureListener;
+		// this.myShureListener = myShureListener;
 		// this.myCancelListener = myCancelListener;
 	}
 
 	private void initview() {
 		layout = (LinearLayout) LayoutInflater.from(context).inflate(
 				R.layout.check_chuan_guan_dialog, null);
+		dialog_edit = (EditText) layout.findViewById(R.id.dialog_edit);
 
 	}
 
@@ -66,5 +74,26 @@ public class CheckChuanGuanDialog {
 		if (mdialog != null) {
 			mdialog.dismiss();
 		}
+	}
+
+	private OnClickListener myShureListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			edit_text = dialog_edit.getText().toString();
+			if (!TextUtils.isEmpty(edit_text) && onCompleteListener != null) {
+				onCompleteListener.onComplete(edit_text);
+			}
+			dismiss();
+		}
+	};
+
+	public interface OnCompleteListener {
+		public void onComplete(String resultString);
+	}
+
+	public void setOnCompleteListener(OnCompleteListener onCompleteListener) {
+		this.onCompleteListener = onCompleteListener;
 	}
 }

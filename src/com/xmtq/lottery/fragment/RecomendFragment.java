@@ -27,6 +27,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
+import com.xmtq.lottery.widget.CheckChuanGuanDialog;
 import com.xmtq.lottery.widget.ChuanGuanDialog;
 import com.xmtq.lottery.widget.CustomPullListView;
 import com.xmtq.lottery.widget.CustomPullListView.OnLoadMoreListener;
@@ -147,8 +148,18 @@ public class RecomendFragment extends BaseFragment {
 			break;
 
 		case R.id.check_chuan_guan:
-			mCheckChuanGuanDialog = new CheckChuanGuanDialog(getActivity(),
-					mSureListener);
+			mCheckChuanGuanDialog = new CheckChuanGuanDialog(getActivity());
+			mCheckChuanGuanDialog
+					.setOnCompleteListener(new CheckChuanGuanDialog.OnCompleteListener() {
+
+						@Override
+						public void onComplete(String resultString) {
+							// TODO Auto-generated method stub
+							if (resultString != null) {
+								check_chuan_guan.setText(resultString + "倍");
+							}
+						}
+					});
 			mCheckChuanGuanDialog.show();
 			break;
 
@@ -233,7 +244,7 @@ public class RecomendFragment extends BaseFragment {
 				@Override
 				public void onLoadMore() {
 					// TODO Auto-generated method stub
-					if (currentPageNum * pageSize > count){
+					if (currentPageNum * pageSize > count) {
 						toast.setText("已获取全部数据");
 						toast.show();
 						mHandler.sendEmptyMessage(LOAD_DATA_FINISH);

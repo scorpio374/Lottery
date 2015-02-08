@@ -214,7 +214,7 @@
                 android:button="@null"
                 android:gravity="center"
                 android:padding="10dip"
-                android:text="3倍"
+                android:text="倍数"
                 android:textColor="@drawable/radiobtn_textcolor_selector"
                 android:textSize="@dimen/main_textsize" />
         </LinearLayout>
