@@ -32,30 +32,33 @@
 
             <TextView
                 android:id="@+id/match_team"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:layout_gravity="center"
                 android:text="特兰米尔"
                 android:textColor="@color/white_shallow" />
 
             <TextView
                 android:id="@+id/league"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dip"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:layout_gravity="center"
                 android:text="欧冠杯"
                 android:textColor="@color/white_light" />
 
             <TextView
                 android:id="@+id/host_team"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dip"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:layout_gravity="center"
                 android:text="沃尔索尔"
                 android:textColor="@color/white_shallow" />
         </LinearLayout>
@@ -94,6 +97,7 @@
                 android:id="@+id/more_down"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="3dip"
                 android:background="@null"
                 android:gravity="center"
                 android:src="@drawable/more_down" />
@@ -116,11 +120,11 @@
                 android:background="@drawable/recomend_bg_selector"
                 android:button="@null"
                 android:gravity="center"
-                android:paddingBottom="10dip"
-                android:paddingTop="10dip"
-                android:textColor="@drawable/odds_textcolor_selector"
-                android:textOff="胜 1.55"
-                android:textOn="胜 1.55"
+                android:paddingBottom="12dip"
+                android:paddingTop="12dip"
+                android:textColor="@drawable/recomend_textcolor_selector"
+                android:textOff=""
+                android:textOn=""
                 android:textSize="@dimen/main_textsize" />
 
             <ToggleButton
@@ -134,9 +138,9 @@
                 android:background="@drawable/recomend_bg_selector"
                 android:button="@null"
                 android:gravity="center"
-                android:textColor="@drawable/odds_textcolor_selector"
-                android:textOff="平 1.23"
-                android:textOn="平 1.23"
+                android:textColor="@drawable/recomend_textcolor_selector"
+                android:textOff=""
+                android:textOn=""
                 android:textSize="@dimen/main_textsize" />
 
             <ToggleButton
@@ -151,16 +155,16 @@
                 android:background="@drawable/recomend_bg_selector"
                 android:button="@null"
                 android:gravity="center"
-                android:textColor="@drawable/odds_textcolor_selector"
-                android:textOff="负 1.55"
-                android:textOn="负 1.55"
+                android:textColor="@drawable/recomend_textcolor_selector"
+                android:textOff=""
+                android:textOn=""
                 android:textSize="@dimen/main_textsize" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="20dip"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dip"
+            android:layout_marginLeft="10dip"
             android:gravity="center"
             android:orientation="vertical" >
 

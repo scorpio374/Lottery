@@ -37,7 +37,9 @@ public class DisagreeDialog {
 	private void setListener() {
 		ImageView dialog_commit = (ImageView) layout
 				.findViewById(R.id.dialog_commit);
-		dialog_commit.setOnClickListener(myShureListener);
+		if (myShureListener != null) {
+			dialog_commit.setOnClickListener(myShureListener);
+		}
 	}
 
 	private void createDialog() {

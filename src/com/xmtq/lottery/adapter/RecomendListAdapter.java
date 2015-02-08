@@ -13,16 +13,19 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.activity.OddsDetailActivity;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.SpOdds;
 import com.xmtq.lottery.utils.OddsUtil;
+import com.xmtq.lottery.widget.DisagreeDialog;
 
 public class RecomendListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<GameCanBetBean> gameCanBetBeans;
+	private DisagreeDialog dialog;
 
 	public RecomendListAdapter(Context c, List<GameCanBetBean> gameCanBetBeans) {
 		this.mContext = c;
@@ -59,9 +62,9 @@ public class RecomendListAdapter extends BaseAdapter {
 		holder.league = (TextView) convertView.findViewById(R.id.league);
 		holder.host_team = (TextView) convertView.findViewById(R.id.host_team);
 		holder.play_type = (TextView) convertView.findViewById(R.id.play_type);
-		holder.win = (TextView) convertView.findViewById(R.id.win);
-		holder.draw = (TextView) convertView.findViewById(R.id.draw);
-		holder.lose = (TextView) convertView.findViewById(R.id.lose);
+		holder.win = (ToggleButton) convertView.findViewById(R.id.win);
+		holder.draw = (ToggleButton) convertView.findViewById(R.id.draw);
+		holder.lose = (ToggleButton) convertView.findViewById(R.id.lose);
 		holder.analyze = (TextView) convertView.findViewById(R.id.analyze);
 		holder.dis_agree = (ImageView) convertView.findViewById(R.id.dis_agree);
 		holder.odds_more = (LinearLayout) convertView
@@ -104,9 +107,9 @@ public class RecomendListAdapter extends BaseAdapter {
 		String spOddsData = gameCanBetBeans.get(position).getSpOdds();
 		if (!TextUtils.isEmpty(spOddsData)) {
 			SpOdds spOdds = OddsUtil.getSpOdds(spOddsData);
-			holder.win.setText("胜 " + spOdds.getWinOdds());
-			holder.draw.setText("平 " + spOdds.getDrawOdds());
-			holder.lose.setText("负 " + spOdds.getLoseOdds());
+			setText(holder.win,"胜 " + spOdds.getWinOdds());
+			setText(holder.draw,"平 " + spOdds.getDrawOdds());
+			setText(holder.lose,"负 " + spOdds.getLoseOdds());
 		}
 
 		// 赛事分析
@@ -114,11 +117,10 @@ public class RecomendListAdapter extends BaseAdapter {
 			holder.analyze.setVisibility(View.GONE);
 		}
 		holder.dis_agree.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				
+				dialog = new DisagreeDialog(mContext, mDisAgreeListener);
+				dialog.show();
 			}
 		});
 
@@ -132,10 +134,31 @@ public class RecomendListAdapter extends BaseAdapter {
 		TextView league;
 		TextView host_team;
 		TextView play_type;
-		TextView win;
-		TextView draw;
-		TextView lose;
+		ToggleButton win;
+		ToggleButton draw;
+		ToggleButton lose;
 		TextView analyze;
 		ImageView dis_agree;
+	}
+	
+	private OnClickListener mDisAgreeListener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			dialog.dismiss();
+		}
+	};
+	
+	/**
+	 * 设置开关按钮的文字
+	 * 
+	 * @param toggleButton
+	 * @param text
+	 */
+	private void setText(ToggleButton toggleButton, String text) {
+		toggleButton.setText(text);
+		toggleButton.setTextOn(text);
+		toggleButton.setTextOff(text);
 	}
 }

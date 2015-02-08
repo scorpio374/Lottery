@@ -363,7 +363,7 @@ public final class DateUtil {
 				week = "星期五";
 			}else if(dayOfWeek.equals("6")){
 				week = "星期六";
-			}else if(dayOfWeek.equals("7")){
+			}else if(dayOfWeek.equals("0")){
 				week = "星期日";
 			}
 			return week;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -35,6 +36,8 @@ public class OddsDetailActivity extends BaseActivity {
 	private MyGridView bfGridView;
 	private MyGridView jqGridView;
 	private MyGridView bqGridview;
+	private Button button_cancle;
+	private Button button_ok;
 
 	@Override
 	public void setContentLayout() {
@@ -58,9 +61,14 @@ public class OddsDetailActivity extends BaseActivity {
 		rq_odds_win = (ToggleButton) findViewById(R.id.rq_odds_win);
 		rq_odds_draw = (ToggleButton) findViewById(R.id.rq_odds_draw);
 		rq_odds_lose = (ToggleButton) findViewById(R.id.rq_odds_lose);
-		bfGridView = (MyGridView)findViewById(R.id.bf_gridview);
-		jqGridView = (MyGridView)findViewById(R.id.jq_gridview);
-		bqGridview = (MyGridView)findViewById(R.id.bq_gridview);
+		bfGridView = (MyGridView) findViewById(R.id.bf_gridview);
+		jqGridView = (MyGridView) findViewById(R.id.jq_gridview);
+		bqGridview = (MyGridView) findViewById(R.id.bq_gridview);
+		button_cancle = (Button) findViewById(R.id.button_cancle);
+		button_ok = (Button) findViewById(R.id.button_ok);
+		
+		button_cancle.setOnClickListener(this);
+		button_ok.setOnClickListener(this);
 
 		if (gameCanBetBean != null) {
 			match_team.setText(gameCanBetBean.getMatchTeam() + "(主)");
@@ -88,23 +96,26 @@ public class OddsDetailActivity extends BaseActivity {
 			String bfOddsData = gameCanBetBean.getBfOdds();
 			if (!TextUtils.isEmpty(bfOddsData)) {
 				List<Odds> oddsList = OddsUtil.getOdds(bfOddsData);
-				OddsGridviewAdapter adapter = new OddsGridviewAdapter(this, oddsList);
+				OddsGridviewAdapter adapter = new OddsGridviewAdapter(this,
+						oddsList);
 				bfGridView.setAdapter(adapter);
 			}
-			
+
 			// 进球
 			String jqOddsData = gameCanBetBean.getJqOdds();
 			if (!TextUtils.isEmpty(jqOddsData)) {
 				List<Odds> oddsList = OddsUtil.getOdds(jqOddsData);
-				OddsGridviewAdapter adapter = new OddsGridviewAdapter(this, oddsList);
+				OddsGridviewAdapter adapter = new OddsGridviewAdapter(this,
+						oddsList);
 				jqGridView.setAdapter(adapter);
 			}
-			
+
 			// 半全场
-			String bqOddsData = gameCanBetBean.getJqOdds();
+			String bqOddsData = gameCanBetBean.getBqOdds();
 			if (!TextUtils.isEmpty(bqOddsData)) {
 				List<Odds> oddsList = OddsUtil.getOdds(bqOddsData);
-				OddsGridviewAdapter adapter = new OddsGridviewAdapter(this, oddsList);
+				OddsGridviewAdapter adapter = new OddsGridviewAdapter(this,
+						oddsList);
 				bqGridview.setAdapter(adapter);
 			}
 		}
@@ -118,8 +129,12 @@ public class OddsDetailActivity extends BaseActivity {
 	@Override
 	public void onClickEvent(View view) {
 		switch (view.getId()) {
-		case R.id.back:
-			this.finish();
+		case R.id.button_cancle:
+			finish();
+			break;
+			
+		case R.id.button_ok:
+			finish();
 			break;
 
 		default:
