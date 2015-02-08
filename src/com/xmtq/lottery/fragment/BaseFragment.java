@@ -2,6 +2,8 @@ package com.xmtq.lottery.fragment;
 
 import java.lang.reflect.Field;
 
+import com.xmtq.lottery.widget.LoadingDialog;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,10 +13,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
-public abstract class BaseFragment extends Fragment implements
-		OnClickListener {
+public abstract class BaseFragment extends Fragment implements OnClickListener {
 	public final String TAG = this.getClass().getSimpleName();
-//	protected SharedPrefHelper mSharedPrefHelper;
+	// protected SharedPrefHelper mSharedPrefHelper;
+	public LoadingDialog mLoadingDialog;
 	public String userid;
 	public int currentPage = 1;
 	public final static int pageItemSize = 10;
@@ -27,6 +29,7 @@ public abstract class BaseFragment extends Fragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mLoadingDialog = new LoadingDialog(getActivity());
 	}
 
 	@Override
@@ -41,9 +44,9 @@ public abstract class BaseFragment extends Fragment implements
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 
-//		mSharedPrefHelper = SharedPrefHelper.getInstance(getActivity());
-//		userid = getActivity().getSharedPreferences("userInfo",
-//				Context.MODE_PRIVATE).getString(Config.USER_ID_PARAMS, "");
+		// mSharedPrefHelper = SharedPrefHelper.getInstance(getActivity());
+		// userid = getActivity().getSharedPreferences("userInfo",
+		// Context.MODE_PRIVATE).getString(Config.USER_ID_PARAMS, "");
 	}
 
 	@Override

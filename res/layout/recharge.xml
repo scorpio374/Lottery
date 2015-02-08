@@ -158,56 +158,21 @@
         </RadioGroup>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/recharge_bank"
+    <ListView
+        android:id="@+id/recharge_binding_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
         android:layout_marginTop="10dip"
-        android:background="#474955"
-        android:orientation="horizontal"
         android:visibility="gone" >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:padding="10dip"
-            android:src="@drawable/bank_icon"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:orientation="vertical"
-            android:padding="5dp" >
-
-            <TextView
-                android:id="@+id/bank_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text=""
-                android:textColor="@color/white"
-                android:textSize="@dimen/main_textsize2" />
-
-            <TextView
-                android:id="@+id/bank_card_tail_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dip"
-                android:text=""
-                android:textColor="#888eb2"
-                android:textSize="13sp" />
-        </LinearLayout>
-    </LinearLayout>
+    </ListView>
 
     <LinearLayout
         android:id="@+id/check_bank"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
         android:layout_marginTop="10dip"
@@ -218,14 +183,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:src="@drawable/check_bank" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="选择支付银行卡"
-            android:textColor="@color/white"
-            android:textSize="@dimen/main_textsize2" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/recharge_commit"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:layout_marginBottom="20dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:background="@drawable/button_bg_selector"
+        android:gravity="center"
+        android:text="快捷支付"
+        android:textColor="@drawable/button_textcolor_selector"
+        android:textSize="@dimen/main_textsize2"
+        android:visibility="gone" />
 
 </LinearLayout>

@@ -65,16 +65,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="提现成功"
+                android:text="充值成功"
                 android:textColor="@color/white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
-                android:text="预计20分钟内到账"
-                android:textColor="@color/green"
-                android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -88,11 +80,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dip"
             android:layout_marginRight="8dip"
-            android:text="提现金额"
+            android:text="账户余额"
             android:textColor="@color/white"
             android:textSize="@dimen/main_textsize" />
 
         <TextView
+            android:id="@+id/quick_pay_done_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -100,20 +93,20 @@
             android:paddingLeft="8dip"
             android:paddingRight="3dip"
             android:paddingTop="5dip"
-            android:text="100"
+            android:text=""
             android:textColor="@color/green"
             android:textSize="@dimen/main_textsize2" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="元"
+            android:text=" 元"
             android:textColor="@color/white"
             android:textSize="@dimen/main_textsize" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/extract_money_done"
+        android:id="@+id/quick_pay_done"
         android:layout_width="match_parent"
         android:layout_height="35dip"
         android:layout_marginLeft="20dip"

@@ -65,7 +65,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <EditText
-                android:id="@+id/search_edit"
+                android:id="@+id/et_card_name"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -73,8 +73,9 @@
                 android:background="@null"
                 android:cursorVisible="true"
                 android:hint=" "
+                android:padding="5dp"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -99,7 +100,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <EditText
-                android:id="@+id/search_edit"
+                android:id="@+id/et_id_card"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -107,8 +108,9 @@
                 android:background="@null"
                 android:cursorVisible="true"
                 android:hint=" "
+                android:padding="5dp"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -133,7 +135,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <EditText
-                android:id="@+id/check_bank"
+                android:id="@+id/et_bank_name"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -141,8 +143,9 @@
                 android:background="@null"
                 android:cursorVisible="true"
                 android:hint="请选择银行"
+                android:padding="5dp"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -176,7 +179,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <EditText
-                android:id="@+id/search_edit"
+                android:id="@+id/et_bank_account"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -184,8 +187,9 @@
                 android:background="@null"
                 android:cursorVisible="true"
                 android:hint="请填写卡号"
+                android:padding="5dp"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -217,7 +221,7 @@
                     android:textSize="@dimen/main_textsize" />
 
                 <EditText
-                    android:id="@+id/search_edit"
+                    android:id="@+id/et_valid_date"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -225,8 +229,9 @@
                     android:background="@null"
                     android:cursorVisible="true"
                     android:hint="格式1410"
+                    android:padding="5dp"
                     android:singleLine="true"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textColorHint="@color/edit_color"
                     android:textCursorDrawable="@drawable/edit"
                     android:textSize="@dimen/main_textsize" />
@@ -251,7 +256,7 @@
                     android:textSize="@dimen/main_textsize" />
 
                 <EditText
-                    android:id="@+id/search_edit"
+                    android:id="@+id/et_cvn_code"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -259,8 +264,9 @@
                     android:background="@null"
                     android:cursorVisible="true"
                     android:hint="格式866"
+                    android:padding="5dp"
                     android:singleLine="true"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textColorHint="@color/edit_color"
                     android:textCursorDrawable="@drawable/edit"
                     android:textSize="@dimen/main_textsize" />
@@ -286,7 +292,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <EditText
-                android:id="@+id/search_edit"
+                android:id="@+id/et_mobile_phone"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -294,8 +300,9 @@
                 android:background="@null"
                 android:cursorVisible="true"
                 android:hint=" "
+                android:padding="5dp"
                 android:singleLine="true"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
                 android:textCursorDrawable="@drawable/edit"
                 android:textSize="@dimen/main_textsize" />
@@ -314,7 +321,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dip"
+                android:layout_marginLeft="10dip"
                 android:text="检验码："
                 android:textColor="@color/white"
                 android:textSize="@dimen/main_textsize" />
@@ -329,6 +336,7 @@
                 android:cursorVisible="true"
                 android:hint=""
                 android:maxLength="16"
+                android:padding="5dp"
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/edit_color"
@@ -349,6 +357,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/commit"
             android:layout_width="match_parent"
             android:layout_height="35dip"
             android:layout_marginLeft="20dip"

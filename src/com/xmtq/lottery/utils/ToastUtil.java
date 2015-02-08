@@ -1,6 +1,7 @@
 package com.xmtq.lottery.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -21,9 +22,9 @@ public class ToastUtil {
 		toastMessage(activity, message, null);
 	}
 
-	public static final void showCenterToast(final Activity activity,
+	public static final void showCenterToast(final Context ctx,
 			final String message) {
-		Toast toast = Toast.makeText(activity, message, Toast.LENGTH_SHORT);
+		Toast toast = Toast.makeText(ctx, message, Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.show();
 	}

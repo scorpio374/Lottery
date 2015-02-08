@@ -1,24 +1,34 @@
 package com.xmtq.lottery.activity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.adapter.RechargeBindingListAdapter;
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.CreateOrderBean;
 import com.xmtq.lottery.bean.CreateOrderResponse;
+import com.xmtq.lottery.bean.UserBankBean;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.StringUtil;
 import com.xmtq.lottery.utils.ToastUtil;
+import com.xmtq.lottery.widget.LoadingDialog;
 
 /**
  * 充值
@@ -31,8 +41,25 @@ public class RechargeMoneyActivity extends BaseActivity {
 	private LinearLayout check_bank;
 	private EditText search_edit;
 	private SharedPrefHelper spfs;
-	private LinearLayout recharge_bank;
+	// private LinearLayout recharge_bank;
 	private CreateOrderBean mCreateOrderBean;
+	// 订单号
+	private String requestId;
+	private ListView recharge_binding_list;
+
+	private RechargeBindingListAdapter adapter;
+	private boolean isCheckedBank = false;
+	private TextView recharge_commit;
+
+	private String rechargeMoney;
+
+	private UserBankBean selectedBankBean;
+
+	public static Map<String, String> bankMap = new HashMap<String, String>();
+	public static Map<String, String> bankCMap = new HashMap<String, String>();
+
+	// private TextView bank_name;
+	// private TextView bank_tail_num;
 
 	@Override
 	public void setContentLayout() {
@@ -42,6 +69,7 @@ public class RechargeMoneyActivity extends BaseActivity {
 
 	@Override
 	public void dealLogicBeforeInitView() {
+		mDialog = new LoadingDialog(this);
 		request("10");
 
 		spfs = SharedPrefHelper.getInstance(this);
@@ -50,9 +78,18 @@ public class RechargeMoneyActivity extends BaseActivity {
 	@Override
 	public void initView() {
 
-		recharge_bank = (LinearLayout) findViewById(R.id.recharge_bank);
+		recharge_commit = (TextView) findViewById(R.id.recharge_commit);
+
+		recharge_commit.setOnClickListener(this);
+		recharge_binding_list = (ListView) findViewById(R.id.recharge_binding_list);
+
+		recharge_binding_list.setOnItemClickListener(bindingBankListener);
 
 		check_bank = (LinearLayout) findViewById(R.id.check_bank);
+
+		// bank_name = (TextView) findViewById(R.id.bank_name);
+		// bank_tail_num = (TextView) findViewById(R.id.bank_card_tail_num);
+
 		ImageButton back = (ImageButton) findViewById(R.id.back);
 		back.setOnClickListener(this);
 		check_bank.setOnClickListener(this);
@@ -66,12 +103,16 @@ public class RechargeMoneyActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				if (checkedId == R.id.rec_ten) {
 					search_edit.setText("10");
+					rechargeMoney = "10";
 				} else if (checkedId == R.id.rec_fifty) {
 					search_edit.setText("50");
+					rechargeMoney = "50";
 				} else if (checkedId == R.id.rec_hundred) {
 					search_edit.setText("100");
+					rechargeMoney = "100";
 				} else if (checkedId == R.id.rec_five_hundred) {
 					search_edit.setText("500");
+					rechargeMoney = "500";
 				}
 			}
 		});
@@ -85,6 +126,7 @@ public class RechargeMoneyActivity extends BaseActivity {
 
 	@Override
 	public void onClickEvent(View view) {
+		Intent intent;
 		switch (view.getId()) {
 		case R.id.back:
 			this.finish();
@@ -96,11 +138,33 @@ public class RechargeMoneyActivity extends BaseActivity {
 						.show();
 				return;
 			}
-			Intent intent = new Intent(RechargeMoneyActivity.this,
+			intent = new Intent(RechargeMoneyActivity.this,
 					CheckBankFirstActivity.class);
+			intent.putExtra("requestId", requestId);
 			intent.putExtra("mCreateOrderBean", mCreateOrderBean);
 			startActivity(intent);
 
+			break;
+		case R.id.recharge_commit:
+			if (StringUtil.isNullOrEmpty(search_edit.getText().toString())) {
+				Toast.makeText(RechargeMoneyActivity.this, "请输入充值金额", 2000)
+						.show();
+				return;
+			}
+
+			if (!isCheckedBank) {
+				Toast.makeText(RechargeMoneyActivity.this, "请选择银行卡", 2000)
+						.show();
+				return;
+			}
+
+			intent = new Intent(RechargeMoneyActivity.this,
+					QuickPaymentActivity.class);
+			intent.putExtra("requestId", requestId);
+			intent.putExtra("selectedBankBean", selectedBankBean);
+			intent.putExtra("rechargeMoney", rechargeMoney);
+
+			startActivity(intent);
 			break;
 		default:
 			break;
@@ -108,10 +172,22 @@ public class RechargeMoneyActivity extends BaseActivity {
 
 	}
 
+	private OnItemClickListener bindingBankListener = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+				long arg3) {
+			isCheckedBank = true;
+			adapter.setSelectedPos(arg2);
+			selectedBankBean = mCreateOrderBean.getUserBankList().get(arg2);
+		}
+	};
+
 	/**
 	 * 创建支付订单
 	 */
 	private void request(String totalPrice) {
+		mDialog.show("数据正在加载中...");
 		String userid = SharedPrefHelper.getInstance(this).getUid();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getFengPay(userid,
@@ -121,28 +197,64 @@ public class RechargeMoneyActivity extends BaseActivity {
 	}
 
 	private OnCompleteListener<BaseResponse> mOnCompleteListener = new OnCompleteListener<BaseResponse>() {
+
 		@Override
 		public void onComplete(BaseResponse result, String resultString) {
 			// TODO Auto-generated method stub
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
 					CreateOrderResponse mOrderResponse = (CreateOrderResponse) result;
-					mCreateOrderBean = mOrderResponse.createOrderBean;
-					if (mCreateOrderBean.getUserBankList().size() > 0) {
+					if (mOrderResponse.requestId != null) {
+						requestId = mOrderResponse.requestId;
+					}
 
-						recharge_bank.setVisibility(View.VISIBLE);
+					mCreateOrderBean = mOrderResponse.createOrderBean;
+					if (mCreateOrderBean != null) {
+
+						if (mCreateOrderBean.getBankList().size() > 0) {
+							for (int i = 0; i < mCreateOrderBean.getBankList()
+									.size(); i++) {
+								bankMap.put(
+										mCreateOrderBean.getBankList().get(i)
+												.getBankCode(),
+										mCreateOrderBean.getBankList().get(i)
+												.getBankName());
+							}
+						}
+						if (mCreateOrderBean.getBankCList().size() > 0) {
+							for (int j = 0; j < mCreateOrderBean.getBankCList()
+									.size(); j++) {
+								bankCMap.put(mCreateOrderBean.getBankCList()
+										.get(j).getBankCode(), mCreateOrderBean
+										.getBankCList().get(j).getBankName());
+							}
+						}
 
 					}
+
+					if (mCreateOrderBean.getUserBankList().size() > 0) {
+
+						adapter = new RechargeBindingListAdapter(
+								RechargeMoneyActivity.this,
+								mCreateOrderBean.getUserBankList());
+						recharge_binding_list.setAdapter(adapter);
+						recharge_binding_list.setVisibility(View.VISIBLE);
+						recharge_commit.setVisibility(View.VISIBLE);
+					}
+
 				} else {
 					ToastUtil.showCenterToast(RechargeMoneyActivity.this,
 							result.errormsg);
-					recharge_bank.setVisibility(View.GONE);
+					recharge_binding_list.setVisibility(View.GONE);
 				}
 			} else {
 				ToastUtil.showCenterToast(RechargeMoneyActivity.this, "请求失败");
-				recharge_bank.setVisibility(View.GONE);
+				recharge_binding_list.setVisibility(View.GONE);
 			}
+
+			mDialog.dismiss();
 		}
 	};
+	private LoadingDialog mDialog;
 
 }

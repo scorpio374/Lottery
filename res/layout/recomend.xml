@@ -58,13 +58,31 @@
                 android:layout_marginTop="2dip"
                 android:background="@color/deep_gray" >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <!-- <TextView -->
+                <!-- android:layout_width="wrap_content" -->
+                <!-- android:layout_height="wrap_content" -->
+                <!-- android:layout_gravity="center" -->
+                <!-- android:layout_marginBottom="1dip" -->
+                <!-- android:layout_marginLeft="10dip" -->
+                <!-- android:layout_marginTop="1dip" -->
+                <!-- android:singleLine="true" -->
+                <!-- android:text="刘某某竞彩足球混合过关2串1  7690元           吴某某竞彩足球混合过关3串1  12500元" -->
+                <!-- android:textColor="#7a7c7f" /> -->
+
+                <com.xmtq.lottery.widget.MarqueeText
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginBottom="1dip"
                     android:layout_marginLeft="10dip"
                     android:layout_marginTop="1dip"
+                    android:duplicateParentState="true"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:marqueeRepeatLimit="marquee_forever"
                     android:singleLine="true"
                     android:text="刘某某竞彩足球混合过关2串1  7690元           吴某某竞彩足球混合过关3串1  12500元"
                     android:textColor="#7a7c7f" />
@@ -172,45 +190,33 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:background="@drawable/rect_bg" >
+            android:layout_marginLeft="10dip" >
 
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <RadioButton
+                android:id="@+id/chuan_guan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/chuanguan_btn_selector"
+                android:button="@null"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="1dip" >
+                android:padding="10dip"
+                android:text="串关"
+                android:textColor="@drawable/radiobtn_textcolor_selector"
+                android:textSize="@dimen/main_textsize" />
 
-                <RadioButton
-                    android:id="@+id/draw"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/radio_btn_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:padding="10dip"
-                    android:text="串关"
-                    android:textColor="@drawable/radiobtn_textcolor_selector"
-                    android:textSize="@dimen/main_textsize" />
-
-                <ImageView
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:background="@color/green" />
-
-                <RadioButton
-                    android:id="@+id/draw"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/radio_btn_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:padding="10dip"
-                    android:text="3倍"
-                    android:textColor="@drawable/radiobtn_textcolor_selector"
-                    android:textSize="@dimen/main_textsize" />
-            </RadioGroup>
+            <RadioButton
+                android:id="@+id/check_chuan_guan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/chuanguan_btn_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="10dip"
+                android:text="3倍"
+                android:textColor="@drawable/radiobtn_textcolor_selector"
+                android:textSize="@dimen/main_textsize" />
         </LinearLayout>
 
         <LinearLayout
@@ -289,12 +295,8 @@
             android:layout_marginRight="10dip"
             android:layout_marginTop="10dip"
             android:layout_weight="1"
-            android:background="@color/green"
-            android:gravity="center"
-            android:padding="10dip"
-            android:text="投注"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:background="@drawable/touzhu_btn_selector"
+            android:gravity="center" />
     </LinearLayout>
 
     <LinearLayout

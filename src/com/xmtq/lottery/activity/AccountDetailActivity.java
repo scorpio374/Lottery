@@ -25,6 +25,9 @@ import com.xmtq.lottery.bean.GameHistoryDateResponse;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.utils.SharedPrefHelper;
+import com.xmtq.lottery.utils.ToastUtil;
+import com.xmtq.lottery.widget.LoadingDialog;
 
 /**
  * 账户明细
@@ -33,7 +36,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
  * 
  */
 public class AccountDetailActivity extends BaseActivity {
-
+	private LoadingDialog mDialog;
 	private ListView account_detail_list;
 	private ImageButton btn_back;
 	private TextView head_right;
@@ -46,8 +49,9 @@ public class AccountDetailActivity extends BaseActivity {
 
 	@Override
 	public void dealLogicBeforeInitView() {
+		mDialog = new LoadingDialog(this);
 		// 默认请求
-		request("0");
+		request("");
 	}
 
 	@Override
@@ -66,17 +70,11 @@ public class AccountDetailActivity extends BaseActivity {
 					public void onCheckedChanged(RadioGroup group, int checkedId) {
 						// TODO Auto-generated method stub
 						if (checkedId == R.id.account_my) {
-							Toast.makeText(AccountDetailActivity.this, "账户",
-									2000).show();
-							request("0");
+							request("");
 						} else if (checkedId == R.id.account_recharge) {
-							Toast.makeText(AccountDetailActivity.this, "充值",
-									2000).show();
-							request("0");
+							request("93,1");
 						} else if (checkedId == R.id.account_deposit) {
-							Toast.makeText(AccountDetailActivity.this, "提现",
-									2000).show();
-							request("0");
+							request("5,6");
 						}
 					}
 				});
@@ -84,7 +82,9 @@ public class AccountDetailActivity extends BaseActivity {
 	}
 
 	private void request(String mFlag) {
-
+		String userid = SharedPrefHelper.getInstance(getApplicationContext())
+				.getUid();
+		mDialog.show("数据加载中...");
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(mRequestMaker.getAccountDetail("", "", userid,
@@ -100,19 +100,14 @@ public class AccountDetailActivity extends BaseActivity {
 				AccountDetailResponse mResponse = result;
 				List<AccountDetailBean> mHistoryBeansList = mResponse.accountDetailList;
 				if (mHistoryBeansList != null) {
-					Toast.makeText(
-							AccountDetailActivity.this,
-							"AccountDetailBean获取到了数据"
-									+ mHistoryBeansList.size(), 2000).show();
 
-					// for (int i = 0; i < mHistoryBeansList.size(); i++) {
-					//
-					// }
 					AccountDetailListAdapter mAdapter = new AccountDetailListAdapter(
 							AccountDetailActivity.this, mHistoryBeansList);
 					account_detail_list.setAdapter(mAdapter);
-
+					mDialog.dismiss();
 				}
+			} else {
+				ToastUtil.showCenterToast(AccountDetailActivity.this, "数据请求失败");
 			}
 
 		}

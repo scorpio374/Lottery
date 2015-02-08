@@ -25,7 +25,6 @@ public class BetDetailActivity extends BaseActivity {
 	@Override
 	public void setContentLayout() {
 		setContentView(R.layout.bet_orderdetail);
-
 	}
 
 	@Override

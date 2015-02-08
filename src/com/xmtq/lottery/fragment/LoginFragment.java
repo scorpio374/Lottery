@@ -24,6 +24,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.StringUtil;
+import com.xmtq.lottery.widget.LoadingDialog;
 
 /**
  * 登录
@@ -125,8 +126,9 @@ public class LoginFragment extends BaseFragment {
 			// return;
 		}
 
-		toast.setText("登陆中，请稍候...");
-		toast.show();
+		// toast.setText("登陆中，请稍候...");
+		// toast.show();
+		mLoadingDialog.show("登录中，请稍候...");
 		if (spfs.getIsRememberPwd()) {
 			spfs.setUserPassward(password);
 			spfs.setUserName(userName);
@@ -154,6 +156,7 @@ public class LoginFragment extends BaseFragment {
 			} else {
 				onFailure("请求错误");
 			}
+			mLoadingDialog.dismiss();
 		}
 	};
 
@@ -163,9 +166,6 @@ public class LoginFragment extends BaseFragment {
 	private void onSuccess(BaseResponse result) {
 		NewUserLoginResponse response = (NewUserLoginResponse) result;
 		NewUserLoginBean newUserLoginBean = response.newUserLoginBean;
-
-		toast.setText("登陆成功");
-		toast.show();
 
 		// 保存用户登陆状态及信息
 		spfs.setIsLogin(true);

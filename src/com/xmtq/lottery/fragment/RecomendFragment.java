@@ -10,7 +10,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
+import com.xmtq.lottery.widget.ChuanGuanDialog;
 import com.xmtq.lottery.widget.CustomPullListView;
 import com.xmtq.lottery.widget.CustomPullListView.OnLoadMoreListener;
 import com.xmtq.lottery.widget.CustomPullListView.OnRefreshListener;
@@ -51,6 +55,10 @@ public class RecomendFragment extends BaseFragment {
 
 	private static final int LOAD_DATA_FINISH = 10;// 上拉刷新
 	private static final int REFRESH_DATA_FINISH = 11;// 下拉刷新
+	private RadioButton chuan_guan;
+	private LinearLayout tv_more_style;
+	private GridView chuanguan_more;
+	private boolean isShowMore = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,14 +85,19 @@ public class RecomendFragment extends BaseFragment {
 	private void request() {
 		// TODO Auto-generated method stub
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		mAsyncTask.execute(RequestMaker.getInstance().getGameCanBet(""+pagenum,
-				""+pagesize));
+		mAsyncTask.execute(RequestMaker.getInstance().getGameCanBet(
+				"" + pagenum, "" + pagesize));
 		mAsyncTask.setOnCompleteListener(mOnGameCompleteListener);
 	}
 
 	public void initView(View v) {
 		imgBtnLeft = (ImageButton) v.findViewById(R.id.recomend_left);
 		imgBtnRight = (ImageButton) v.findViewById(R.id.recomend_right);
+		chuan_guan = (RadioButton) v.findViewById(R.id.chuan_guan);
+		tv_more_style = (LinearLayout) v.findViewById(R.id.tv_more_style);
+		chuanguan_more = (GridView) v.findViewById(R.id.chuanguan_more);
+		tv_more_style.setOnClickListener(this);
+		chuan_guan.setOnClickListener(this);
 		imgBtnLeft.setOnClickListener(this);
 		imgBtnRight.setOnClickListener(this);
 		recomend_list = (CustomPullListView) v.findViewById(R.id.recomend_list);
@@ -125,6 +138,21 @@ public class RecomendFragment extends BaseFragment {
 		case R.id.recomend_right:
 			((RecomendActivity) getActivity()).openRightDrawer();
 			break;
+		case R.id.tv_more_style:
+			if (isShowMore) {
+				chuanguan_more.setVisibility(View.VISIBLE);
+			} else {
+				chuanguan_more.setVisibility(View.GONE);
+			}
+			isShowMore = !isShowMore;
+
+			break;
+
+		case R.id.chuan_guan:
+			ChuanGuanDialog mChuanGuanDialog = new ChuanGuanDialog(
+					getActivity());
+			mChuanGuanDialog.show();
+			break;
 
 		default:
 			break;
@@ -155,29 +183,29 @@ public class RecomendFragment extends BaseFragment {
 	 */
 	private void onSuccess(BaseResponse result) {
 		GameCanBetResponse gameCanBetResponse = (GameCanBetResponse) result;
-		
+
 		recomend_lottery_times.setText("推荐" + gameCanBetResponse.count + "场比赛");
 		gameCanBetBeans = gameCanBetResponse.gameCanBetBeans;
 		mAdapter = new RecomendListAdapter(getActivity(), gameCanBetBeans);
 		recomend_list.setAdapter(mAdapter);
-		
+
 		// 下拉刷新
 		recomend_list.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
 			public void onRefresh() {
 				// TODO Auto-generated method stub
-				mHandler.sendEmptyMessageDelayed(REFRESH_DATA_FINISH,1000);
+				mHandler.sendEmptyMessageDelayed(REFRESH_DATA_FINISH, 1000);
 			}
 		});
-		
+
 		// 上拉加载
 		recomend_list.setOnLoadListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
 				// TODO Auto-generated method stub
-				mHandler.sendEmptyMessageDelayed(LOAD_DATA_FINISH,1000);
+				mHandler.sendEmptyMessageDelayed(LOAD_DATA_FINISH, 1000);
 			}
 		});
 		mAdapter.notifyDataSetChanged();

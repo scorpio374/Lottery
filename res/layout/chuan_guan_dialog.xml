@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#773c3f48"
+    android:gravity="bottom"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#3c3f48"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:text="标准过关"
+            android:textColor="@color/white"
+            android:textSize="@dimen/main_textsize3" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ToggleButton
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/chuanguan_togglebtn_selector"
+                android:button="@null"
+                android:textColor="@color/white"
+                android:textOff="单关"
+                android:textOn="单关 " />
+
+            <ToggleButton
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/chuanguan_togglebtn_selector"
+                android:button="@null"
+                android:textColor="@color/white"
+                android:textOff="3串1"
+                android:textOn="3串1" />
+
+            <ToggleButton
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/chuanguan_togglebtn_selector"
+                android:button="@null"
+                android:textColor="@color/white"
+                android:textOff="4串1"
+                android:textOn="4串1" />
+
+            <ToggleButton
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/chuanguan_togglebtn_selector"
+                android:button="@null"
+                android:textColor="@color/white"
+                android:textOff="5串1"
+                android:textOn="5串1" />
+
+            <ToggleButton
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/chuanguan_togglebtn_selector"
+                android:button="@null"
+                android:textColor="@color/white"
+                android:textOff="2串1"
+                android:textOn="2串1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tv_more_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:text="更多方式过关"
+                android:textColor="@color/white"
+                android:textSize="@dimen/main_textsize3" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/chuanguan_arrow" />
+        </LinearLayout>
+
+        <GridView
+            android:id="@+id/chuanguan_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numColumns="5"
+            android:scrollbars="none" >
+        </GridView>
+    </LinearLayout>
+
+</LinearLayout>

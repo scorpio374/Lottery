@@ -56,20 +56,16 @@ public class RecomendHistoryParser extends BaseParser<RecomendHistoryResponse> {
 
 	private void getParser(RecomendHistoryResponse response, JSONObject j) {
 		RecomendHistoryBean mRecomendHistoryBean = new RecomendHistoryBean();
-		mRecomendHistoryBean.setAgainstVotes(j.getString("againstVotes"));
-		mRecomendHistoryBean.setBqContent(j.getString("bqContent"));
-		mRecomendHistoryBean.setBqHit(j.getString("bqHit"));
-		mRecomendHistoryBean.setBqkj(j.getString("bqkj"));
-		mRecomendHistoryBean.setCommendId(j.getString("commendId"));
-		mRecomendHistoryBean.setCommendUser(j.getString("commendUser"));
+		mRecomendHistoryBean.setBfkj(j.getString("bfkj"));
+		mRecomendHistoryBean.setBfkjBc(j.getString("bfkjBc"));
 		mRecomendHistoryBean.setCompanyId(j.getString("companyId"));
-		mRecomendHistoryBean.setContent(j.getString("content"));
 		mRecomendHistoryBean.setGameTime(j.getString("gameTime"));
+		mRecomendHistoryBean.setHit(j.getString("hit"));
 		mRecomendHistoryBean.setHostTeam(j.getString("hostTeam"));
 		mRecomendHistoryBean.setLeague(j.getString("league"));
 		mRecomendHistoryBean.setMatchId(j.getString("matchId"));
 		mRecomendHistoryBean.setMatchTeam(j.getString("matchTeam"));
-		mRecomendHistoryBean.setSupportVotes(j.getString("supportVotes"));
+		mRecomendHistoryBean.setNum(j.getString("num"));
 		response.mRecomendHistoryList.add(mRecomendHistoryBean);
 	}
 }

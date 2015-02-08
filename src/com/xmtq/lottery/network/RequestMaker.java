@@ -16,6 +16,12 @@ import com.xmtq.lottery.parser.GameCanBetParser;
 import com.xmtq.lottery.parser.GameHistoryDateParser;
 import com.xmtq.lottery.parser.ImproveUserInfoParser;
 import com.xmtq.lottery.parser.NewUserLoginParser;
+import com.xmtq.lottery.parser.PhoneMessageDepositFirstParser;
+import com.xmtq.lottery.parser.PhoneMessageFirstParser;
+import com.xmtq.lottery.parser.PhoneMessageNotFirstParser;
+import com.xmtq.lottery.parser.PhonePayDepositFirstParser;
+import com.xmtq.lottery.parser.PhonePayFirstParser;
+import com.xmtq.lottery.parser.PhonePayNotFirstParser;
 import com.xmtq.lottery.parser.PurchaseRecordsParser;
 import com.xmtq.lottery.parser.RecomendHistoryParser;
 import com.xmtq.lottery.parser.RepasswordParser;
@@ -410,7 +416,7 @@ public class RequestMaker {
 		sb.append(makeTag("startDate", startDate));
 		sb.append(makeTag("endDate", endDate));
 		sb.append(makeTag("uid", uid));
-		sb.append("<mflag/>");
+		sb.append(makeTag("mflag", mflag));
 		sb.append(makeTag("pageNum", pageNum));
 		sb.append(makeTag("pageSize", pageSize));
 
@@ -478,9 +484,9 @@ public class RequestMaker {
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element drawaltype=\"0\">");
-		sb.append(makeTag("uid", "14244"));
+		sb.append(makeTag("uid", uid));
 		sb.append(makeTag("password", password));
-		sb.append(makeTag("drawalmoney", "10"));
+		sb.append(makeTag("drawalmoney", drawalmoney));
 
 		sb.append("</element>");
 		sb.append("</elements>");
@@ -850,7 +856,7 @@ public class RequestMaker {
 	}
 
 	/**
-	 * 4.1.10丰付首次快捷支付（15007）
+	 * 4.1.10丰付首次快捷支付 信用卡（15007）
 	 * 
 	 * @param requestOrderId
 	 * @param bankCode
@@ -875,6 +881,7 @@ public class RequestMaker {
 			String mobilePhone, String isNeedBind, String userIdIdentity,
 			String randomValidateId, String randomCode, String tradeId) {
 
+		PhonePayFirstParser paser = new PhonePayFirstParser();
 		String body = createFengPayFirst(requestOrderId, bankCode, bankAccount,
 				bankCardType, validDate, cvnCode, idType, idNumber, name,
 				mobilePhone, isNeedBind, userIdIdentity, randomValidateId,
@@ -883,7 +890,7 @@ public class RequestMaker {
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
-				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, paser);
 		return request;
 	}
 
@@ -920,19 +927,87 @@ public class RequestMaker {
 	}
 
 	/**
+	 * 
+	 * 4.1.10丰付首次快捷支付 储蓄卡（15007）
+	 * 
+	 * @param requestOrderId
+	 * @param bankCode
+	 * @param bankAccount
+	 * @param bankCardType
+	 * @param idType
+	 * @param idNumber
+	 * @param name
+	 * @param mobilePhone
+	 * @param isNeedBind
+	 * @param userIdIdentity
+	 * @param randomValidateId
+	 * @param randomCode
+	 * @param tradeId
+	 * @return
+	 */
+	public Request getFengPayDepositFirst(String requestOrderId,
+			String bankCode, String bankAccount, String bankCardType,
+			String idType, String idNumber, String name, String mobilePhone,
+			String isNeedBind, String userIdIdentity, String randomValidateId,
+			String randomCode, String tradeId) {
+
+		PhonePayDepositFirstParser paser = new PhonePayDepositFirstParser();
+		String body = createFengPayDepositFirst(requestOrderId, bankCode,
+				bankAccount, bankCardType, idType, idNumber, name, mobilePhone,
+				isNeedBind, userIdIdentity, randomValidateId, randomCode,
+				tradeId);
+		String xmlBody = makeXml(body, "15007");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, paser);
+		return request;
+	}
+
+	private String createFengPayDepositFirst(String requestOrderId,
+			String bankCode, String bankAccount, String bankCardType,
+			String idType, String idNumber, String name, String mobilePhone,
+			String isNeedBind, String userIdIdentity, String randomValidateId,
+			String randomCode, String tradeId) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element>");
+		sb.append(makeTag("requestOrderId", requestOrderId));
+		sb.append(makeTag("bankCode", bankCode));
+		sb.append(makeTag("bankAccount", bankAccount));
+		sb.append(makeTag("bankCardType", bankCardType));
+		sb.append(makeTag("idType", idType));
+		sb.append(makeTag("idNumber", idNumber));
+		sb.append(makeTag("name", name));
+		sb.append(makeTag("mobilePhone", mobilePhone));
+		sb.append(makeTag("isNeedBind", isNeedBind));
+		sb.append(makeTag("userIdIdentity", userIdIdentity));
+		sb.append(makeTag("randomValidateId", randomValidateId));
+		sb.append(makeTag("randomCode", randomCode));
+		sb.append(makeTag("tradeId", tradeId));
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
+	/**
 	 * 4.1.11丰付非首次快捷支付（15008）
 	 */
 	public Request getFengPayNotFirst(String requestOrderId, String bankCode,
 			String bindId, String userIdIdentity, String randomValidateId,
 			String randomCode, String tradeId) {
-
+		PhonePayNotFirstParser parser = new PhonePayNotFirstParser();
 		String body = createFengPayNotFirst(requestOrderId, bankCode, bindId,
 				userIdIdentity, randomValidateId, randomCode, tradeId);
 		String xmlBody = makeXml(body, "15008");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
-				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -960,7 +1035,7 @@ public class RequestMaker {
 	}
 
 	/**
-	 * 4.1.12丰付首次快捷支付短信验证（15009）
+	 * 4.1.12丰付首次快捷支付短信验证 信用卡（15009）
 	 * 
 	 * @param requestOrderId
 	 * @param bankCode
@@ -981,14 +1056,15 @@ public class RequestMaker {
 			String idNumber, String name, String mobilePhone,
 			String userIdIdentity) {
 
+		PhoneMessageFirstParser paser = new PhoneMessageFirstParser();
 		String body = createFengMessagePayFirst(requestOrderId, bankCode,
 				bankAccount, validDate, bankCardType, cvnCode, idType,
 				idNumber, name, mobilePhone, userIdIdentity);
-		String xmlBody = makeXml(body, "15008");
+		String xmlBody = makeXml(body, "15009");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
-				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, paser);
 		return request;
 	}
 
@@ -1007,8 +1083,64 @@ public class RequestMaker {
 		sb.append(makeTag("bankAccount", bankAccount));
 		sb.append(makeTag("bankCardType", bankCardType));
 		sb.append(makeTag("validDate", validDate));
-
 		sb.append(makeTag("cvnCode", cvnCode));
+		sb.append(makeTag("idType", idType));
+		sb.append(makeTag("idNumber", idNumber));
+		sb.append(makeTag("name", name));
+		sb.append(makeTag("mobilePhone", mobilePhone));
+		sb.append(makeTag("userIdIdentity", userIdIdentity));
+		sb.append("</element>");
+		sb.append("</elements>");
+		sb.append("</body>");
+
+		return sb.toString();
+	}
+
+	/**
+	 * 
+	 * 4.1.12丰付首次快捷支付短信验证 储蓄卡（15009）
+	 * 
+	 * @param requestOrderId
+	 * @param bankCode
+	 * @param bankAccount
+	 * @param bankCardType
+	 * @param idType
+	 * @param idNumber
+	 * @param name
+	 * @param mobilePhone
+	 * @param userIdIdentity
+	 * @return
+	 */
+	public Request getFengMessagePayDepositFirst(String requestOrderId,
+			String bankCode, String bankAccount, String bankCardType,
+			String idType, String idNumber, String name, String mobilePhone,
+			String userIdIdentity) {
+
+		PhoneMessageDepositFirstParser paser = new PhoneMessageDepositFirstParser();
+		String body = createFengMessagePayDepositFirst(requestOrderId,
+				bankCode, bankAccount, bankCardType, idType, idNumber, name,
+				mobilePhone, userIdIdentity);
+		String xmlBody = makeXml(body, "15009");
+		LogUtil.log("xmlBody:" + xmlBody);
+
+		Request request = new Request(
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, paser);
+		return request;
+	}
+
+	private String createFengMessagePayDepositFirst(String requestOrderId,
+			String bankCode, String bankAccount, String bankCardType,
+			String idType, String idNumber, String name, String mobilePhone,
+			String userIdIdentity) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("<body>");
+		sb.append("<elements>");
+		sb.append("<element>");
+		sb.append(makeTag("requestOrderId", requestOrderId));
+		sb.append(makeTag("bankCode", bankCode));
+		sb.append(makeTag("bankAccount", bankAccount));
+		sb.append(makeTag("bankCardType", bankCardType));
 
 		sb.append(makeTag("idType", idType));
 		sb.append(makeTag("idNumber", idNumber));
@@ -1033,14 +1165,14 @@ public class RequestMaker {
 	 */
 	public Request getFengMessagePayNotFirst(String requestOrderId,
 			String bankCode, String bindId, String userIdIdentity) {
-
+		PhoneMessageNotFirstParser parser = new PhoneMessageNotFirstParser();
 		String body = createFengMessagePayNotFirst(requestOrderId, bankCode,
 				bindId, userIdIdentity);
-		String xmlBody = makeXml(body, "15008");
+		String xmlBody = makeXml(body, "15010");
 		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
-				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
