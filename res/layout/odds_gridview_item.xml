@@ -10,18 +10,20 @@
         android:id="@+id/odds_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="1dip"
         android:layout_marginLeft="1dip"
-        android:layout_marginTop="1dip"
         android:layout_marginRight="1dip"
         android:layout_marginBottom="1dip"
         android:padding="2dip"
+        android:layout_marginTop="1dip"
         android:background="@drawable/odds_bg_selector"
         android:button="@null"
         android:gravity="center"
+        android:padding="1dip"
         android:text=""
         android:textColor="@drawable/odds_textcolor_selector"
-        android:textSize="12sp"
-        android:textOff=""
-        android:textOn="" />
+        android:textOff=" "
+        android:textOn=" "
+        android:textSize="12sp" />
 
 </LinearLayout>
