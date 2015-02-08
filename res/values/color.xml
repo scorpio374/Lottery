@@ -6,6 +6,7 @@
     <drawable name="green">#019b79</drawable>
     <drawable name="gray">#3a3e4d</drawable>
     <drawable name="trtransparent">#00000000</drawable>
+    <drawable name="odds_detail_bg">#393F4D</drawable>
 
     <color name="button_gray">#3a3e4d </color>
     <color name="yellow">#b69966</color>
@@ -47,6 +48,10 @@
     <color name="list_item_gary">#313742</color>
     <color name="odds_detail_bg">#393F4D</color>
     <color name="odds_match_bg">#D19F0A</color>
+    <color name="odds_rect_solid">#444A5A</color>
+    <color name="odds_check">#C08F0C</color>
+    <color name="odds_text">#D9DEFE</color>
+    <color name="odds_check_bg">#20232A</color>
     
     
     <color name="pull_refresh_textview">#FFFFFF</color>

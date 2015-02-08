@@ -44,6 +44,11 @@ public class GameCanBetBean extends EntityBase {
 	private String bfDg;
 	private String bqDg;
 	private String jqDg;
+	private String rqContent;
+	private String spContent;
+	private String bfContent;
+	private String bqContent;
+	private String jqContent;
 
 	public String getCompanyId() {
 		return companyId;
@@ -219,6 +224,46 @@ public class GameCanBetBean extends EntityBase {
 
 	public void setJqDg(String jqDg) {
 		this.jqDg = jqDg;
+	}
+
+	public String getRqContent() {
+		return rqContent;
+	}
+
+	public void setRqContent(String rqContent) {
+		this.rqContent = rqContent;
+	}
+
+	public String getSpContent() {
+		return spContent;
+	}
+
+	public void setSpContent(String spContent) {
+		this.spContent = spContent;
+	}
+
+	public String getBfContent() {
+		return bfContent;
+	}
+
+	public void setBfContent(String bfContent) {
+		this.bfContent = bfContent;
+	}
+
+	public String getBqContent() {
+		return bqContent;
+	}
+
+	public void setBqContent(String bqContent) {
+		this.bqContent = bqContent;
+	}
+
+	public String getJqContent() {
+		return jqContent;
+	}
+
+	public void setJqContent(String jqContent) {
+		this.jqContent = jqContent;
 	}
 
 }

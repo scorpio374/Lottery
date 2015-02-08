@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.GameCanBetResponse;
 import com.xmtq.lottery.utils.JsonUtil;
-import com.xmtq.lottery.utils.LogUtil;
 
 public class GameCanBetParser extends BaseParser<GameCanBetResponse> {
 
@@ -75,6 +74,22 @@ public class GameCanBetParser extends BaseParser<GameCanBetResponse> {
 		gameCanBetBean.setBfDg(j.getString("bfDg"));
 		gameCanBetBean.setBqDg(j.getString("bqDg"));
 		gameCanBetBean.setJqDg(j.getString("jqDg"));
+
+		if (j.containsKey("rqContent")) {
+			gameCanBetBean.setRqContent(j.getString("rqContent"));
+		}
+		if (j.containsKey("spContent")) {
+			gameCanBetBean.setSpContent(j.getString("spContent"));
+		}
+		if (j.containsKey("bfContent")) {
+			gameCanBetBean.setBfContent(j.getString("bfContent"));
+		}
+		if (j.containsKey("bqContent")) {
+			gameCanBetBean.setBqContent(j.getString("bqContent"));
+		}
+		if (j.containsKey("jqContent")) {
+			gameCanBetBean.setJqContent(j.getString("jqContent"));
+		}
 		return gameCanBetBean;
 	}
 }
