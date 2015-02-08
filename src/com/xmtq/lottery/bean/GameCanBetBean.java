@@ -49,6 +49,10 @@ public class GameCanBetBean extends EntityBase {
 	private String bfContent;
 	private String bqContent;
 	private String jqContent;
+	private boolean isWinChecked = false;
+	private boolean isDrawChecked = false;
+	private boolean isLoseChecked = false;
+	
 
 	public String getCompanyId() {
 		return companyId;
@@ -266,4 +270,29 @@ public class GameCanBetBean extends EntityBase {
 		this.jqContent = jqContent;
 	}
 
+	public boolean isWinChecked() {
+		return isWinChecked;
+	}
+
+	public void setWinChecked(boolean isWinChecked) {
+		this.isWinChecked = isWinChecked;
+	}
+
+	public boolean isDrawChecked() {
+		return isDrawChecked;
+	}
+
+	public void setDrawChecked(boolean isDrawChecked) {
+		this.isDrawChecked = isDrawChecked;
+	}
+
+	public boolean isLoseChecked() {
+		return isLoseChecked;
+	}
+
+	public void setLoseChecked(boolean isLoseChecked) {
+		this.isLoseChecked = isLoseChecked;
+	}
+
+	
 }

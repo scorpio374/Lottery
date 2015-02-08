@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,28 +54,32 @@ public class RecomendListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup arg2) {
 		Holder holder = null;
-		// if (convertView == null) {
-		holder = new Holder();
-		convertView = LayoutInflater.from(mContext).inflate(
-				R.layout.recomend_list_item, null);
-		holder.game_time = (TextView) convertView.findViewById(R.id.game_time);
-		holder.match_team = (TextView) convertView
-				.findViewById(R.id.match_team);
-		holder.league = (TextView) convertView.findViewById(R.id.league);
-		holder.host_team = (TextView) convertView.findViewById(R.id.host_team);
-		holder.play_type = (TextView) convertView.findViewById(R.id.play_type);
-		holder.win = (ToggleButton) convertView.findViewById(R.id.win);
-		holder.draw = (ToggleButton) convertView.findViewById(R.id.draw);
-		holder.lose = (ToggleButton) convertView.findViewById(R.id.lose);
-		holder.analyze = (TextView) convertView.findViewById(R.id.analyze);
-		holder.dis_agree = (ImageView) convertView.findViewById(R.id.dis_agree);
-		holder.odds_more = (LinearLayout) convertView
-				.findViewById(R.id.odds_more);
-		holder.odds_more.setTag(position);
-		convertView.setTag(holder);
-		// } else {
-		// holder = (Holder) convertView.getTag();
-		// }
+		if (convertView == null) {
+			holder = new Holder();
+			convertView = LayoutInflater.from(mContext).inflate(
+					R.layout.recomend_list_item, null);
+			holder.game_time = (TextView) convertView
+					.findViewById(R.id.game_time);
+			holder.match_team = (TextView) convertView
+					.findViewById(R.id.match_team);
+			holder.league = (TextView) convertView.findViewById(R.id.league);
+			holder.host_team = (TextView) convertView
+					.findViewById(R.id.host_team);
+			holder.play_type = (TextView) convertView
+					.findViewById(R.id.play_type);
+			holder.win = (ToggleButton) convertView.findViewById(R.id.win);
+			holder.draw = (ToggleButton) convertView.findViewById(R.id.draw);
+			holder.lose = (ToggleButton) convertView.findViewById(R.id.lose);
+			holder.analyze = (TextView) convertView.findViewById(R.id.analyze);
+			holder.dis_agree = (ImageView) convertView
+					.findViewById(R.id.dis_agree);
+			holder.odds_more = (LinearLayout) convertView
+					.findViewById(R.id.odds_more);
+			holder.odds_more.setTag(position);
+			convertView.setTag(holder);
+		} else {
+			holder = (Holder) convertView.getTag();
+		}
 
 		// 赔率详情
 		holder.odds_more.setOnClickListener(new OnClickListener() {
@@ -107,9 +113,80 @@ public class RecomendListAdapter extends BaseAdapter {
 		String spOddsData = gameCanBetBeans.get(position).getSpOdds();
 		if (!TextUtils.isEmpty(spOddsData)) {
 			SpOdds spOdds = OddsUtil.getSpOdds(spOddsData);
-			setText(holder.win,"胜 " + spOdds.getWinOdds());
-			setText(holder.draw,"平 " + spOdds.getDrawOdds());
-			setText(holder.lose,"负 " + spOdds.getLoseOdds());
+			setText(holder.win, "胜 " + spOdds.getWinOdds());
+			setText(holder.draw, "平 " + spOdds.getDrawOdds());
+			setText(holder.lose, "负 " + spOdds.getLoseOdds());
+			holder.win.setTag(position);
+			holder.draw.setTag(position);
+			holder.lose.setTag(position);
+
+			holder.win
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+						@Override
+						public void onCheckedChanged(CompoundButton arg0,
+								boolean arg1) {
+							// TODO Auto-generated method stub
+							int position = (Integer) arg0.getTag();
+							if (arg1) {
+								gameCanBetBeans.get(position).setWinChecked(
+										true);
+							} else {
+								gameCanBetBeans.get(position).setWinChecked(
+										false);
+							}
+						}
+					});
+			holder.draw
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+						@Override
+						public void onCheckedChanged(CompoundButton arg0,
+								boolean arg1) {
+							// TODO Auto-generated method stub
+							int position = (Integer) arg0.getTag();
+							if (arg1) {
+								gameCanBetBeans.get(position).setDrawChecked(
+										true);
+							} else {
+								gameCanBetBeans.get(position).setDrawChecked(
+										false);
+							}
+						}
+					});
+			holder.lose
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+						@Override
+						public void onCheckedChanged(CompoundButton arg0,
+								boolean arg1) {
+							// TODO Auto-generated method stub
+							int position = (Integer) arg0.getTag();
+							if (arg1) {
+								gameCanBetBeans.get(position).setLoseChecked(
+										true);
+							} else {
+								gameCanBetBeans.get(position).setLoseChecked(
+										false);
+							}
+						}
+					});
+
+			if (gameCanBetBeans.get(position).isWinChecked()) {
+				holder.win.setChecked(true);
+			} else {
+				holder.win.setChecked(false);
+			}
+			if (gameCanBetBeans.get(position).isDrawChecked()) {
+				holder.draw.setChecked(true);
+			} else {
+				holder.draw.setChecked(false);
+			}
+			if (gameCanBetBeans.get(position).isLoseChecked()) {
+				holder.lose.setChecked(true);
+			} else {
+				holder.lose.setChecked(false);
+			}
 		}
 
 		// 赛事分析
@@ -140,16 +217,16 @@ public class RecomendListAdapter extends BaseAdapter {
 		TextView analyze;
 		ImageView dis_agree;
 	}
-	
+
 	private OnClickListener mDisAgreeListener = new OnClickListener() {
-		
+
 		@Override
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
 			dialog.dismiss();
 		}
 	};
-	
+
 	/**
 	 * 设置开关按钮的文字
 	 * 

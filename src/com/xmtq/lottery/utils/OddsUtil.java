@@ -52,8 +52,8 @@ public class OddsUtil {
 			if(oddsArray != null && oddsArray.length > 1){
 				odds.setResult(oddsArray[0]);
 				odds.setOdds(oddsArray[1]);
-				LogUtil.log("result:"+oddsArray[0]);
-				LogUtil.log("odds:"+oddsArray[1]);
+				// LogUtil.log("result:"+oddsArray[0]);
+				// LogUtil.log("odds:"+oddsArray[1]);
 			}
 			
 			oddsList.add(odds);
