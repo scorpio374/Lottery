@@ -90,9 +90,9 @@ public class ModifiPasswordActivity extends BaseActivity {
 			toast.show();
 			return;
 		} else if (!StringUtil.matchPwd(newPassword)) {
-			toast.setText("请输入6-16位密码,新密码必须包含数字和字母");
-			toast.show();
-			return;
+			// toast.setText("请输入6-16位密码,新密码必须包含数字和字母");
+			// toast.show();
+			// return;
 		}
 
 		if (StringUtil.isNullOrEmpty(confirmPassword)
