@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lottery.R;
-import com.universe.lottery.util.SplitLotteryJCZC;
 import com.xmtq.lottery.activity.OddsDetailActivity;
 import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.adapter.RecomendListAdapter;
@@ -30,7 +29,6 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
-import com.xmtq.lottery.utils.LogUtil;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.widget.CheckChuanGuanDialog;
 import com.xmtq.lottery.widget.ChuanGuanDialog;
@@ -374,6 +372,7 @@ public class RecomendFragment extends BaseFragment {
 
 	/**
 	 * 更多玩法点击Listener
+	 * 说明：Adapter的context没有startActivityForResult方法
 	 */
 	private OnClickListener onMoreListener = new OnClickListener() {
 

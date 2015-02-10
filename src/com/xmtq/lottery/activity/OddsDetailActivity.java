@@ -182,7 +182,7 @@ public class OddsDetailActivity extends BaseActivity {
 		Intent intent = new Intent();
 		intent.putExtra("GameCanBetBean", gameCanBetBean);
 		intent.putExtra("position", position);
-		setResult(1000, intent);
+		setResult(RESULT_OK, intent);
 
 		finish();
 	}
