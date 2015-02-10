@@ -1,11 +1,13 @@
 package com.xmtq.lottery.activity;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -40,6 +42,11 @@ public class AccountDetailActivity extends BaseActivity {
 	private ListView account_detail_list;
 	private ImageButton btn_back;
 	private TextView head_right;
+	private List<AccountDetailBean> mHistoryBeansList;
+
+	private String count;
+	private String pay;
+	private String income;
 
 	@Override
 	public void setContentLayout() {
@@ -98,13 +105,17 @@ public class AccountDetailActivity extends BaseActivity {
 		public void onComplete(AccountDetailResponse result, String resultString) {
 			if (result != null) {
 				AccountDetailResponse mResponse = result;
-				List<AccountDetailBean> mHistoryBeansList = mResponse.accountDetailList;
+				mHistoryBeansList = mResponse.accountDetailList;
 				if (mHistoryBeansList != null) {
 
 					AccountDetailListAdapter mAdapter = new AccountDetailListAdapter(
 							AccountDetailActivity.this, mHistoryBeansList);
 					account_detail_list.setAdapter(mAdapter);
 					mDialog.dismiss();
+
+					pay = mResponse.getPay();
+					income = mResponse.getIncome();
+
 				}
 			} else {
 				ToastUtil.showCenterToast(AccountDetailActivity.this, "数据请求失败");
@@ -135,12 +146,20 @@ public class AccountDetailActivity extends BaseActivity {
 
 			Intent intent = new Intent(AccountDetailActivity.this,
 					AccountDetailLastweekActivity.class);
-			startActivity(intent);
+			if (mHistoryBeansList != null && mHistoryBeansList.size() > 0) {
+				intent.putExtra("mHistoryBeansList",
+						(Serializable) mHistoryBeansList);
+				intent.putExtra("pay", pay);
+				intent.putExtra("income", income);
+				startActivity(intent);
+			} else {
+				ToastUtil.showCenterToast(AccountDetailActivity.this,
+						"近一周没有交易信息");
+			}
 			break;
 		default:
 			break;
 		}
 
 	}
-
 }

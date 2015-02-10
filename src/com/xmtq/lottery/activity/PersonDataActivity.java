@@ -67,6 +67,8 @@ public class PersonDataActivity extends BaseActivity {
 	private UserInfoBean userInfoBean;
 	private boolean isAddUserInfo = false;
 	private boolean isAddBankInfo = false;
+	private TextView bank_card_name;
+	private TextView bank_card_tail_num;
 
 	@Override
 	public void setContentLayout() {
@@ -173,6 +175,9 @@ public class PersonDataActivity extends BaseActivity {
 		userinfo_added = (LinearLayout) findViewById(R.id.userinfo_added);
 		bankcard_no_add = (LinearLayout) findViewById(R.id.bankcard_no_add);
 		bankcard_added = (LinearLayout) findViewById(R.id.bankcard_added);
+		bank_card_name = (TextView) findViewById(R.id.bank_card_name);
+		bank_card_tail_num = (TextView) findViewById(R.id.bank_card_tail_num);
+
 		if (isAddUserInfo) {
 			userinfo_no_add.setVisibility(View.GONE);
 			userinfo_added.setVisibility(View.VISIBLE);
@@ -187,7 +192,15 @@ public class PersonDataActivity extends BaseActivity {
 		if (isAddBankInfo) {
 			bankcard_no_add.setVisibility(View.GONE);
 			bankcard_added.setVisibility(View.VISIBLE);
-			// 还差个绑定的银行卡布局
+			bank_card_name.setText(userInfoBean.getBankname());
+			if (userInfoBean.getBankaccount().length() > 4) {
+
+				String tail = userInfoBean.getBankaccount().substring(
+						userInfoBean.getBankaccount().length() - 4,
+						userInfoBean.getBankaccount().length());
+				bank_card_tail_num.setText("尾号 " + tail);
+			}
+
 		}
 	}
 

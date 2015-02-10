@@ -8,6 +8,7 @@
     <drawable name="dialog_window_bg">#502c2e3a</drawable>
     <drawable name="trtransparent">#00000000</drawable>
     <drawable name="odds_detail_bg">#393F4D</drawable>
+    <!-- #818ba9 -->
 
     <color name="dialog_ok">#ff7200</color>
     <color name="black_text">#272727</color>
@@ -57,7 +58,6 @@
     <color name="odds_check">#C08F0C</color>
     <color name="odds_text">#D9DEFE</color>
     <color name="odds_check_bg">#20232A</color>
-    
     <color name="pull_refresh_textview">#FFFFFF</color>
     <color name="gold">#FFFFFF</color>
     <color name="labelColor">#0B273D</color>

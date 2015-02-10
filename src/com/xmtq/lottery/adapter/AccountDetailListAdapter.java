@@ -77,7 +77,16 @@ public class AccountDetailListAdapter extends BaseAdapter {
 			holder.bet_count.setText(money);
 			holder.bet_date.setText(date);
 			holder.bet_style.setText(style);
+
+			if (arg0 > 0) {
+				if (mList.get(arg0).getEntertime()
+						.equals(mList.get(arg0 - 1).getEntertime())) {
+					holder.bet_date.setVisibility(View.INVISIBLE);
+				}
+			}
+
 			holder.bet_time.setText(date);
+			holder.bet_time.setVisibility(View.GONE);
 		}
 
 		return convertView;

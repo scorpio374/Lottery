@@ -281,8 +281,10 @@ public class RecomendFragment extends BaseFragment {
 				recomend_list.onRefreshComplete();
 				break;
 			case LOAD_DATA_FINISH:
-				mAdapter.notifyDataSetChanged();
-				recomend_list.onLoadMoreComplete();
+				if (mAdapter != null) {
+					mAdapter.notifyDataSetChanged();
+					recomend_list.onLoadMoreComplete();
+				}
 				break;
 			default:
 				break;

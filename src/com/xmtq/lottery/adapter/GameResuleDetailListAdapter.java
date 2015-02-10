@@ -1,7 +1,5 @@
 package com.xmtq.lottery.adapter;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -14,9 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.bean.GameHistoryDateBean;
 import com.xmtq.lottery.bean.RecomendHistoryBean;
-import com.xmtq.lottery.utils.DateUtil;
 import com.xmtq.lottery.utils.OddsUtil;
 
 public class GameResuleDetailListAdapter extends BaseAdapter {

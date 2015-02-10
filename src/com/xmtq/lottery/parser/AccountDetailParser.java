@@ -42,6 +42,17 @@ public class AccountDetailParser extends BaseParser<AccountDetailResponse> {
 					getParser(response, j);
 				}
 			}
+
+			if (elementsObj.containsKey("pay")) {
+				response.setPay(elementsObj.getString("pay"));
+			}
+			if (elementsObj.containsKey("income")) {
+				response.setIncome(elementsObj.getString("income"));
+			}
+			if (elementsObj.containsKey("count")) {
+				response.setCount(elementsObj.getString("count"));
+			}
+
 		}
 
 		return response;
