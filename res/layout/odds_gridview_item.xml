@@ -17,7 +17,7 @@
         android:background="@drawable/odds_bg_selector"
         android:button="@null"
         android:gravity="center"
-        android:padding="2dip"
+        android:padding="1dip"
         android:text=""
         android:textColor="@drawable/odds_textcolor_selector"
         android:textOff=" "

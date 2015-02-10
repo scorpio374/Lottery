@@ -1,5 +1,7 @@
 package com.xmtq.lottery.parser;
 
+import java.util.List;
+
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -7,7 +9,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.GameCanBetResponse;
+import com.xmtq.lottery.bean.Odds;
+import com.xmtq.lottery.bean.SpOdds;
 import com.xmtq.lottery.utils.JsonUtil;
+import com.xmtq.lottery.utils.OddsUtil;
 
 public class GameCanBetParser extends BaseParser<GameCanBetResponse> {
 
@@ -74,7 +79,30 @@ public class GameCanBetParser extends BaseParser<GameCanBetResponse> {
 		gameCanBetBean.setBfDg(j.getString("bfDg"));
 		gameCanBetBean.setBqDg(j.getString("bqDg"));
 		gameCanBetBean.setJqDg(j.getString("jqDg"));
+		
+		// 解析各项玩法赔率
+		if (!TextUtils.isEmpty(j.getString("rqOdds"))) {
+			List<Odds> rqOddsList = OddsUtil.getOdds(j.getString("rqOdds"));
+			gameCanBetBean.setRqOddsList(rqOddsList);
+		}
+		if (!TextUtils.isEmpty(j.getString("spOdds"))) {
+			List<Odds> spOddsList = OddsUtil.getOdds(j.getString("spOdds"));
+			gameCanBetBean.setSpOddsList(spOddsList);
+		}
+		if (!TextUtils.isEmpty(j.getString("bfOdds"))) {
+			List<Odds> bfOddsList = OddsUtil.getOdds(j.getString("bfOdds"));
+			gameCanBetBean.setBfOddsList(bfOddsList);
+		}
+		if (!TextUtils.isEmpty(j.getString("bqOdds"))) {
+			List<Odds> bqOddsList = OddsUtil.getOdds(j.getString("bqOdds"));
+			gameCanBetBean.setBqOddsList(bqOddsList);
+		}
+		if (!TextUtils.isEmpty(j.getString("jqOdds"))) {
+			List<Odds> jqOddsList = OddsUtil.getOdds(j.getString("jqOdds"));
+			gameCanBetBean.setJqOddsList(jqOddsList);
+		}
 
+		// 赛事、玩法分析（非必传字段）
 		if (j.containsKey("rqContent")) {
 			gameCanBetBean.setRqContent(j.getString("rqContent"));
 		}
