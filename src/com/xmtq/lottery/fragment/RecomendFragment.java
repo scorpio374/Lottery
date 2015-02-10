@@ -27,6 +27,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
+import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.widget.CheckChuanGuanDialog;
 import com.xmtq.lottery.widget.ChuanGuanDialog;
 import com.xmtq.lottery.widget.CustomPullListView;
@@ -45,6 +46,7 @@ public class RecomendFragment extends BaseFragment {
 	private TextView recomend_lottery_times;
 	private TextView recomend_date;
 	private TextView recomend_week;
+	private TextView recomend_commit;
 
 	private Toast toast;
 	private int currentPageNum = 1;
@@ -84,12 +86,39 @@ public class RecomendFragment extends BaseFragment {
 		super.onActivityCreated(savedInstanceState);
 	}
 
+	/**
+	 * 请求可投注的场次
+	 */
 	private void request() {
 		// TODO Auto-generated method stub
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getGameCanBet(
 				"" + currentPageNum, "" + pageSize));
 		mAsyncTask.setOnCompleteListener(mOnGameCompleteListener);
+	}
+
+	/**
+	 * 投注
+	 */
+	private void requestBetting() {
+		String uid = SharedPrefHelper.getInstance(getActivity()).getUid();
+		String lotteryid = "136";
+		String votetype = "2";
+		String votenums = "1";
+		String multiple = "1";
+		String voteinfo = "HT@63356|SP=0&63357|SP=0@2_1@1";
+		String totalmoney = "2";
+		String playtype = "6";
+		String passtype = "2_1";
+		String buymoney = "2";
+		String protype = "1";
+		// LogUtil.log("votenums:" + SplitLotteryJCZC.exeNum(voteinfo));
+
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(RequestMaker.getInstance().getBettingBusiness(uid,
+				lotteryid, votetype, votenums, multiple, voteinfo, totalmoney,
+				playtype, passtype, buymoney, protype));
+		mAsyncTask.setOnCompleteListener(mOnBettingCompleteListener);
 	}
 
 	public void initView(View v) {
@@ -110,6 +139,8 @@ public class RecomendFragment extends BaseFragment {
 				.findViewById(R.id.recomend_lottery_times);
 		recomend_date = (TextView) v.findViewById(R.id.recomend_date);
 		recomend_week = (TextView) v.findViewById(R.id.recomend_week);
+		recomend_commit = (TextView) v.findViewById(R.id.recomend_commit);
+		recomend_commit.setOnClickListener(this);
 
 		dealLogicAfterInitView();
 	}
@@ -163,6 +194,12 @@ public class RecomendFragment extends BaseFragment {
 			mCheckChuanGuanDialog.show();
 			break;
 
+		case R.id.recomend_commit:
+			toast.setText("正在投注...");
+			toast.show();
+			requestBetting();
+			break;
+
 		default:
 			break;
 		}
@@ -197,7 +234,7 @@ public class RecomendFragment extends BaseFragment {
 	};
 
 	/**
-	 * 用户登陆回调处理
+	 * 可竞猜场次回调处理
 	 */
 	private OnCompleteListener<BaseResponse> mOnGameCompleteListener = new OnCompleteListener<BaseResponse>() {
 		@Override
@@ -206,6 +243,25 @@ public class RecomendFragment extends BaseFragment {
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
 					onSuccess(result);
+				} else {
+					onFailure(result.errormsg);
+				}
+			} else {
+				onFailure("请求错误");
+			}
+		}
+	};
+
+	/**
+	 * 投注回调处理
+	 */
+	private OnCompleteListener<BaseResponse> mOnBettingCompleteListener = new OnCompleteListener<BaseResponse>() {
+		@Override
+		public void onComplete(BaseResponse result, String resultString) {
+			// TODO Auto-generated method stub
+			if (result != null) {
+				if (result.errorcode.equals("0")) {
+
 				} else {
 					onFailure(result.errormsg);
 				}

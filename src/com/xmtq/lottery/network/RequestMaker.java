@@ -54,15 +54,6 @@ public class RequestMaker {
 		}
 	}
 
-	public static Request test() {
-		Request request = null;
-		request = RequestMaker.getInstance().getBettingBusiness("14244", "136",
-				"2", "352", "1", "", "704", "6", "2_1,3_1", "704", "1");
-		request = RequestMaker.getInstance().getPurchaseRecords("14244", "130",
-				"2014-09-08", "2015-10-08", "1", "1", "5", "0");
-		return request;
-	}
-
 	/**
 	 * @param sb
 	 */
@@ -95,6 +86,7 @@ public class RequestMaker {
 		}
 		sb.append("</message>");
 
+		LogUtil.log("xmlBody:" + sb.toString());
 		return sb.toString();
 	}
 
@@ -130,8 +122,7 @@ public class RequestMaker {
 		String body = createUserRegister(username, mail, actpassword, mobile,
 				serialuid, type, code);
 		String xmlBody = makeXml(body, "10001_1.1");
-		LogUtil.log("xmlBody:" + xmlBody);
-
+		
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
@@ -167,7 +158,6 @@ public class RequestMaker {
 		ImproveUserInfoParser parser = new ImproveUserInfoParser();
 		String body = createPerfectUserInfo(uid, realname, cardid);
 		String xmlBody = makeXml(body, "10002_1.1");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -201,7 +191,6 @@ public class RequestMaker {
 		String body = createPerfectUserInfo(uid, realname, cardid, phone,
 				bankname, bankcardid, bankaddress, actpassword);
 		String xmlBody = makeXml(body, "10002_1.1");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -240,7 +229,6 @@ public class RequestMaker {
 		RepasswordParser parser = new RepasswordParser();
 		String body = createModifyPassword(uid, oldpassword, newpassword);
 		String xmlBody = makeXml(body, "10003_1.1");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -273,7 +261,6 @@ public class RequestMaker {
 		NewUserLoginParser parser = new NewUserLoginParser();
 		String body = createUserLogin(username, actpassword);
 		String xmlBody = makeXml(body, "10008_1.1");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -303,7 +290,6 @@ public class RequestMaker {
 		CheckUserParser parser = new CheckUserParser();
 		String body = createCheckUser(parameter);
 		String xmlBody = makeXml(body, "10010");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -337,7 +323,6 @@ public class RequestMaker {
 		VerificationCodeParser parser = new VerificationCodeParser();
 		String body = createMessageVerification(tel, type);
 		String xmlBody = makeXml(body, "10011");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -369,7 +354,6 @@ public class RequestMaker {
 		VersionParser parser = new VersionParser();
 		String body = createVersion(version);
 		String xmlBody = makeXml(body, "10012");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -399,7 +383,6 @@ public class RequestMaker {
 		String body = createAccountDetail(startDate, endDate, uid, mflag,
 				pageNum, pageSize);
 		String xmlBody = makeXml(body, "11008_1.1");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -434,7 +417,6 @@ public class RequestMaker {
 		UserInfoParser parser = new UserInfoParser();
 		String body = createUserInfo(uid);
 		String xmlBody = makeXml(body, "20001_1.1");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -469,7 +451,6 @@ public class RequestMaker {
 		ExtractCashParser parser = new ExtractCashParser();
 		String body = createExtractCash(uid, password, drawalmoney);
 		String xmlBody = makeXml(body, "20003_1.1");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -521,7 +502,6 @@ public class RequestMaker {
 				multiple, voteinfo, totalmoney, playtype, passtype, buymoney,
 				protype);
 		String xmlBody = makeXml(body, "12006_1.1");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -580,7 +560,6 @@ public class RequestMaker {
 		String body = createPurchaseRecords(uid, lotteryid, startdate, enddate,
 				investtype, pageindex, pagesize, statue);
 		String xmlBody = makeXml(body, "12021_1.1");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -620,7 +599,6 @@ public class RequestMaker {
 
 		String body = createPurchaseRecordsDetail(serialid);
 		String xmlBody = makeXml(body, "12022_1.1");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
@@ -652,7 +630,6 @@ public class RequestMaker {
 		RecomendHistoryParser parser = new RecomendHistoryParser();
 		String body = createGameHistorySearch(date);
 		String xmlBody = makeXml(body, "12025");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -689,7 +666,6 @@ public class RequestMaker {
 		String body = createGameHistoryDateList(startdate, enddate, pageNum,
 				pageSize);
 		String xmlBody = makeXml(body, "12026");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -728,7 +704,6 @@ public class RequestMaker {
 
 		String body = createGameTodayRecomend(uid, matchId, vote, content);
 		String xmlBody = makeXml(body, "12028");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
@@ -763,10 +738,8 @@ public class RequestMaker {
 	 * @return
 	 */
 	public Request getGameWinRecord(String size) {
-
 		String body = createGameWinRecord(size);
 		String xmlBody = makeXml(body, "12029");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
@@ -800,7 +773,6 @@ public class RequestMaker {
 
 		String body = createGameCanBet(pagenum, pagesize);
 		String xmlBody = makeXml(body, "12030");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parse);
@@ -833,7 +805,6 @@ public class RequestMaker {
 		CreateOrderParser parser = new CreateOrderParser();
 		String body = createFengPay(userIdIdentity, totalPrice);
 		String xmlBody = makeXml(body, "15006");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -887,7 +858,6 @@ public class RequestMaker {
 				mobilePhone, isNeedBind, userIdIdentity, randomValidateId,
 				randomCode, tradeId);
 		String xmlBody = makeXml(body, "15007");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, paser);
@@ -957,7 +927,6 @@ public class RequestMaker {
 				isNeedBind, userIdIdentity, randomValidateId, randomCode,
 				tradeId);
 		String xmlBody = makeXml(body, "15007");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, paser);
@@ -1004,7 +973,6 @@ public class RequestMaker {
 		String body = createFengPayNotFirst(requestOrderId, bankCode, bindId,
 				userIdIdentity, randomValidateId, randomCode, tradeId);
 		String xmlBody = makeXml(body, "15008");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
@@ -1061,7 +1029,6 @@ public class RequestMaker {
 				bankAccount, validDate, bankCardType, cvnCode, idType,
 				idNumber, name, mobilePhone, userIdIdentity);
 		String xmlBody = makeXml(body, "15009");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, paser);
@@ -1121,7 +1088,6 @@ public class RequestMaker {
 				bankCode, bankAccount, bankCardType, idType, idNumber, name,
 				mobilePhone, userIdIdentity);
 		String xmlBody = makeXml(body, "15009");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, paser);
@@ -1169,7 +1135,6 @@ public class RequestMaker {
 		String body = createFengMessagePayNotFirst(requestOrderId, bankCode,
 				bindId, userIdIdentity);
 		String xmlBody = makeXml(body, "15010");
-		LogUtil.log("xmlBody:" + xmlBody);
 
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
