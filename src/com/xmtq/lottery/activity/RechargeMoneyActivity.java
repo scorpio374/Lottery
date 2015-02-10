@@ -2,6 +2,7 @@ package com.xmtq.lottery.activity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import android.content.Intent;
 import android.view.View;
@@ -57,6 +58,7 @@ public class RechargeMoneyActivity extends BaseActivity {
 
 	public static Map<String, String> bankMap = new HashMap<String, String>();
 	public static Map<String, String> bankCMap = new HashMap<String, String>();
+	private LoadingDialog mDialog;
 
 	// private TextView bank_name;
 	// private TextView bank_tail_num;
@@ -124,6 +126,11 @@ public class RechargeMoneyActivity extends BaseActivity {
 
 	}
 
+	public static boolean isNumeric(String str) {
+		Pattern pattern = Pattern.compile("[0-9]*");
+		return pattern.matcher(str).matches();
+	}
+
 	@Override
 	public void onClickEvent(View view) {
 		Intent intent;
@@ -133,8 +140,20 @@ public class RechargeMoneyActivity extends BaseActivity {
 			break;
 		// 选择银行卡
 		case R.id.check_bank:
-			if (StringUtil.isNullOrEmpty(search_edit.getText().toString())) {
+			if (StringUtil.isNullOrEmpty(search_edit.getText().toString()
+					.trim())) {
 				Toast.makeText(RechargeMoneyActivity.this, "请输入充值金额", 2000)
+						.show();
+				return;
+			}
+			if (Integer.parseInt(search_edit.getText().toString()) < 5) {
+				Toast.makeText(RechargeMoneyActivity.this, "充值金额不小于五元", 2000)
+						.show();
+				return;
+			}
+
+			if (isNumeric(search_edit.getText().toString())) {
+				Toast.makeText(RechargeMoneyActivity.this, "充值金额必须为整数", 2000)
 						.show();
 				return;
 			}
@@ -255,6 +274,5 @@ public class RechargeMoneyActivity extends BaseActivity {
 			mDialog.dismiss();
 		}
 	};
-	private LoadingDialog mDialog;
 
 }

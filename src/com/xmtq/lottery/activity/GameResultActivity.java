@@ -73,9 +73,9 @@ public class GameResultActivity extends BaseActivity {
 		// int dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
 		Date date = DateUtil.stringToDateFormat(mDateBean.getDate(),
 				"yyyy-MM-dd");
-		String dayOfWeek = DateUtil.dateToWeekFormat(date);
+		String dayOfWeek = DateUtil.getWeek(date);
 
-		tv_game_week.setText("周 " + dayOfWeek);
+		tv_game_week.setText(dayOfWeek);
 		tv_gametime.setText(mDateBean.getDate());
 		tv_game_result.setText("猜对" + mDateBean.getHitcount() + "/"
 				+ mDateBean.getCount() + "场比赛");

@@ -202,7 +202,7 @@
                 android:gravity="center"
                 android:padding="10dip"
                 android:text="串关"
-                android:textColor="@drawable/radiobtn_textcolor_selector"
+                android:textColor="@drawable/chuanguan_radiobtn_textcolor_selector"
                 android:textSize="@dimen/main_textsize" />
 
             <RadioButton
@@ -215,7 +215,7 @@
                 android:gravity="center"
                 android:padding="10dip"
                 android:text="倍数"
-                android:textColor="@drawable/radiobtn_textcolor_selector"
+                android:textColor="@drawable/chuanguan_radiobtn_textcolor_selector"
                 android:textSize="@dimen/main_textsize" />
         </LinearLayout>
 
