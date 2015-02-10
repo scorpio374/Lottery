@@ -7,11 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.ToggleButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.bean.Odds;
 
+/**
+ * 赔率详情GridView
+ *
+ */
 public class OddsGridviewAdapter extends BaseAdapter {
 
 	private Context context;
@@ -20,7 +26,6 @@ public class OddsGridviewAdapter extends BaseAdapter {
 	public OddsGridviewAdapter(Context context, List<Odds> oddsList) {
 		this.context = context;
 		this.oddsList = oddsList;
-
 	}
 
 	@Override
@@ -47,21 +52,43 @@ public class OddsGridviewAdapter extends BaseAdapter {
 		convertView = LayoutInflater.from(context).inflate(
 				R.layout.odds_gridview_item, null);
 		ToggleButton toggleButton = (ToggleButton)convertView.findViewById(R.id.odds_button);
-		String odds = oddsList.get(position).getResult()+"\n"+oddsList.get(position).getOdds();
+		Odds odds = oddsList.get(position);
 		setText(toggleButton, odds);
 		return convertView;
 	}
 
+	
 	/**
-	 * 设置开关按钮的文字
+	 * 设置开关按钮
 	 * 
 	 * @param toggleButton
 	 * @param text
 	 */
-	private void setText(ToggleButton toggleButton, String text) {
-		toggleButton.setText(text);
-		toggleButton.setTextOn(text);
-		toggleButton.setTextOff(text);
+	private void setText(ToggleButton toggleButton, Odds odds) {
+		String sOdds = odds.getResult()+"\n"+odds.getOdds();
+		toggleButton.setText(sOdds);
+		toggleButton.setTextOn(sOdds);
+		toggleButton.setTextOff(sOdds);
+
+		toggleButton.setTag(odds);
+		toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+				// TODO Auto-generated method stub
+				Odds odds = (Odds) arg0.getTag();
+				if (arg1) {
+					odds.setChecked(true);
+				} else {
+					odds.setChecked(false);
+				}
+			}
+		});
+		
+		if (odds.isChecked()) {
+			toggleButton.setChecked(true);
+		} else {
+			toggleButton.setChecked(false);
+		}
 	}
 
 }

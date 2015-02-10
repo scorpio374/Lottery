@@ -3,6 +3,7 @@ package com.xmtq.lottery.fragment;
 import java.util.Date;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.universe.lottery.util.SplitLotteryJCZC;
+import com.xmtq.lottery.activity.OddsDetailActivity;
 import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.adapter.RecomendListAdapter;
 import com.xmtq.lottery.bean.BaseResponse;
@@ -27,6 +30,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
+import com.xmtq.lottery.utils.LogUtil;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.widget.CheckChuanGuanDialog;
 import com.xmtq.lottery.widget.ChuanGuanDialog;
@@ -41,7 +45,13 @@ import com.xmtq.lottery.widget.CustomPullListView.OnLoadMoreListener;
  */
 public class RecomendFragment extends BaseFragment {
 
+	/**
+	 * 更多赔率玩法
+	 */
+	private final static int ODDS_REQUEST_CODE = 1;
+
 	private ImageButton imgBtnLeft, imgBtnRight;
+	private ImageButton recomend_refresh;
 	private CustomPullListView recomend_list;
 	private TextView recomend_lottery_times;
 	private TextView recomend_date;
@@ -106,7 +116,7 @@ public class RecomendFragment extends BaseFragment {
 		String votetype = "2";
 		String votenums = "1";
 		String multiple = "1";
-		String voteinfo = "HT@63356|SP=0&63357|SP=0@2_1@1";
+		String voteinfo = "HT@63356|SP=0&63357|SP=0@1_1@1";
 		String totalmoney = "2";
 		String playtype = "6";
 		String passtype = "2_1";
@@ -124,6 +134,7 @@ public class RecomendFragment extends BaseFragment {
 	public void initView(View v) {
 		imgBtnLeft = (ImageButton) v.findViewById(R.id.recomend_left);
 		imgBtnRight = (ImageButton) v.findViewById(R.id.recomend_right);
+		recomend_refresh = (ImageButton) v.findViewById(R.id.recomend_refresh);
 		chuan_guan = (RadioButton) v.findViewById(R.id.chuan_guan);
 		chuanguan_more = (GridView) v.findViewById(R.id.chuanguan_more);
 		check_chuan_guan = (RadioButton) v.findViewById(R.id.check_chuan_guan);
@@ -131,6 +142,7 @@ public class RecomendFragment extends BaseFragment {
 		chuan_guan.setOnClickListener(this);
 		imgBtnLeft.setOnClickListener(this);
 		imgBtnRight.setOnClickListener(this);
+		recomend_refresh.setOnClickListener(this);
 		recomend_list = (CustomPullListView) v.findViewById(R.id.recomend_list);
 		// recomend_list.setCanRefresh(true);
 		recomend_list.setCanLoadMore(true);
@@ -151,14 +163,6 @@ public class RecomendFragment extends BaseFragment {
 		String week = DateUtil.getWeek(date);
 		recomend_date.setText(time);
 		recomend_week.setText(week);
-
-		// List<String> mList = new ArrayList<String>();
-		// for (int i = 0; i < 10; i++) {
-		// mList.add(i + "");
-		// }
-		// RecomendListAdapter mAdapter = new RecomendListAdapter(getActivity(),
-		// mList);
-		// recomend_list.setAdapter(mAdapter);
 	}
 
 	@Override
@@ -282,6 +286,7 @@ public class RecomendFragment extends BaseFragment {
 			recomend_lottery_times.setText("推荐" + count + "场比赛");
 			gameCanBetBeans = gameCanBetResponse.gameCanBetBeans;
 			mAdapter = new RecomendListAdapter(getActivity(), gameCanBetBeans);
+			mAdapter.setOnMoreListener(onMoreListener);
 			recomend_list.setAdapter(mAdapter);
 
 			// // 下拉刷新
@@ -349,5 +354,38 @@ public class RecomendFragment extends BaseFragment {
 		}
 	};
 	private CheckChuanGuanDialog mCheckChuanGuanDialog;
+
+	/**
+	 * 处理回传数据
+	 * 
+	 * @param requestCode
+	 * @param resultCode
+	 * @param data
+	 */
+	public void setIntentResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == getActivity().RESULT_OK) {
+			GameCanBetBean gameCanBetBean = (GameCanBetBean) data
+					.getSerializableExtra("GameCanBetBean");
+			int position = data.getIntExtra("position", 0);
+			gameCanBetBeans.set(position, gameCanBetBean);
+			mAdapter.notifyDataSetChanged();
+		}
+	}
+
+	/**
+	 * 更多玩法点击Listener
+	 */
+	private OnClickListener onMoreListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View view) {
+			// TODO Auto-generated method stub
+			int position = (Integer) view.getTag();
+			Intent intent = new Intent(getActivity(), OddsDetailActivity.class);
+			intent.putExtra("GameCanBetBean", gameCanBetBeans.get(position));
+			intent.putExtra("position", position);
+			getActivity().startActivityForResult(intent, ODDS_REQUEST_CODE);
+		}
+	};
 
 }

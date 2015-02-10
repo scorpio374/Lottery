@@ -3,6 +3,7 @@ package com.xmtq.lottery.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -36,6 +37,8 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	private SharedPrefHelper spfs;
 	private ViewPager vp;
 	private FragmentPagerAdater fragmentPagerAdater;
+	private RecomendFragment recomendFragment;
+	private RecomendHistoryFragment mHistoryFragment;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -102,8 +105,8 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 
 		vp = new ViewPager(this);
 		vp.setId("VP".hashCode());
-		RecomendFragment recomendFragment = new RecomendFragment();
-		RecomendHistoryFragment mHistoryFragment = new RecomendHistoryFragment();
+		recomendFragment = new RecomendFragment();
+		mHistoryFragment = new RecomendHistoryFragment();
 		List<Fragment> fragments = new ArrayList<Fragment>();
 		fragments.add(recomendFragment);
 		fragments.add(mHistoryFragment);
@@ -184,6 +187,13 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		}
 
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		recomendFragment.setIntentResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 }

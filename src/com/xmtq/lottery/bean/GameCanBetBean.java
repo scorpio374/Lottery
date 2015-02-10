@@ -1,5 +1,8 @@
 package com.xmtq.lottery.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameCanBetBean extends EntityBase {
 
 	/**
@@ -52,6 +55,12 @@ public class GameCanBetBean extends EntityBase {
 	private boolean isWinChecked = false;
 	private boolean isDrawChecked = false;
 	private boolean isLoseChecked = false;
+	
+	private List<Odds> spOddsList = new ArrayList<Odds>();
+	private List<Odds> rqOddsList = new ArrayList<Odds>();
+	private List<Odds> bfOddsList = new ArrayList<Odds>();
+	private List<Odds> bqOddsList = new ArrayList<Odds>();
+	private List<Odds> jqOddsList = new ArrayList<Odds>();
 	
 
 	public String getCompanyId() {
@@ -294,5 +303,44 @@ public class GameCanBetBean extends EntityBase {
 		this.isLoseChecked = isLoseChecked;
 	}
 
-	
+	public List<Odds> getSpOddsList() {
+		return spOddsList;
+	}
+
+	public void setSpOddsList(List<Odds> spOddsList) {
+		this.spOddsList = spOddsList;
+	}
+
+	public List<Odds> getRqOddsList() {
+		return rqOddsList;
+	}
+
+	public void setRqOddsList(List<Odds> rqOddsList) {
+		this.rqOddsList = rqOddsList;
+	}
+
+	public List<Odds> getBfOddsList() {
+		return bfOddsList;
+	}
+
+	public void setBfOddsList(List<Odds> bfOddsList) {
+		this.bfOddsList = bfOddsList;
+	}
+
+	public List<Odds> getBqOddsList() {
+		return bqOddsList;
+	}
+
+	public void setBqOddsList(List<Odds> bqOddsList) {
+		this.bqOddsList = bqOddsList;
+	}
+
+	public List<Odds> getJqOddsList() {
+		return jqOddsList;
+	}
+
+	public void setJqOddsList(List<Odds> jqOddsList) {
+		this.jqOddsList = jqOddsList;
+	}
+
 }

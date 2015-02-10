@@ -3,7 +3,6 @@ package com.xmtq.lottery.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +17,18 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.activity.OddsDetailActivity;
 import com.xmtq.lottery.bean.GameCanBetBean;
-import com.xmtq.lottery.bean.SpOdds;
+import com.xmtq.lottery.bean.Odds;
 import com.xmtq.lottery.utils.OddsUtil;
+import com.xmtq.lottery.widget.AnalyzeDialog;
 import com.xmtq.lottery.widget.DisagreeDialog;
 
 public class RecomendListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<GameCanBetBean> gameCanBetBeans;
-	private DisagreeDialog dialog;
+	private DisagreeDialog disagreeDialog;
+	private AnalyzeDialog analyzeDialog;
+	private OnClickListener onMoreListener;
 
 	public RecomendListAdapter(Context c, List<GameCanBetBean> gameCanBetBeans) {
 		this.mContext = c;
@@ -75,24 +76,16 @@ public class RecomendListAdapter extends BaseAdapter {
 					.findViewById(R.id.dis_agree);
 			holder.odds_more = (LinearLayout) convertView
 					.findViewById(R.id.odds_more);
-			holder.odds_more.setTag(position);
+			if (onMoreListener != null) {
+				holder.odds_more.setOnClickListener(onMoreListener);
+			}
 			convertView.setTag(holder);
 		} else {
 			holder = (Holder) convertView.getTag();
 		}
 
 		// 赔率详情
-		holder.odds_more.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				// TODO Auto-generated method stub
-				int position = (Integer) view.getTag();
-				Intent intent = new Intent(mContext, OddsDetailActivity.class);
-				intent.putExtra("GameCanBetBean", gameCanBetBeans.get(position));
-				mContext.startActivity(intent);
-			}
-		});
+		holder.odds_more.setTag(position);
 
 		// 比赛时间
 		String gameTimeData = gameCanBetBeans.get(position).getGameTime();
@@ -110,94 +103,39 @@ public class RecomendListAdapter extends BaseAdapter {
 
 		// 胜负平赔率
 		holder.play_type.setText("胜负平");
-		String spOddsData = gameCanBetBeans.get(position).getSpOdds();
-		if (!TextUtils.isEmpty(spOddsData)) {
-			SpOdds spOdds = OddsUtil.getSpOdds(spOddsData);
-			setText(holder.win, "胜 " + spOdds.getWinOdds());
-			setText(holder.draw, "平 " + spOdds.getDrawOdds());
-			setText(holder.lose, "负 " + spOdds.getLoseOdds());
-			holder.win.setTag(position);
-			holder.draw.setTag(position);
-			holder.lose.setTag(position);
-
-			holder.win
-					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-						@Override
-						public void onCheckedChanged(CompoundButton arg0,
-								boolean arg1) {
-							// TODO Auto-generated method stub
-							int position = (Integer) arg0.getTag();
-							if (arg1) {
-								gameCanBetBeans.get(position).setWinChecked(
-										true);
-							} else {
-								gameCanBetBeans.get(position).setWinChecked(
-										false);
-							}
-						}
-					});
-			holder.draw
-					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-						@Override
-						public void onCheckedChanged(CompoundButton arg0,
-								boolean arg1) {
-							// TODO Auto-generated method stub
-							int position = (Integer) arg0.getTag();
-							if (arg1) {
-								gameCanBetBeans.get(position).setDrawChecked(
-										true);
-							} else {
-								gameCanBetBeans.get(position).setDrawChecked(
-										false);
-							}
-						}
-					});
-			holder.lose
-					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-						@Override
-						public void onCheckedChanged(CompoundButton arg0,
-								boolean arg1) {
-							// TODO Auto-generated method stub
-							int position = (Integer) arg0.getTag();
-							if (arg1) {
-								gameCanBetBeans.get(position).setLoseChecked(
-										true);
-							} else {
-								gameCanBetBeans.get(position).setLoseChecked(
-										false);
-							}
-						}
-					});
-
-			if (gameCanBetBeans.get(position).isWinChecked()) {
-				holder.win.setChecked(true);
-			} else {
-				holder.win.setChecked(false);
-			}
-			if (gameCanBetBeans.get(position).isDrawChecked()) {
-				holder.draw.setChecked(true);
-			} else {
-				holder.draw.setChecked(false);
-			}
-			if (gameCanBetBeans.get(position).isLoseChecked()) {
-				holder.lose.setChecked(true);
-			} else {
-				holder.lose.setChecked(false);
+		List<Odds> spOddsList = gameCanBetBeans.get(position).getSpOddsList();
+		if (spOddsList.size() > 0) {
+			for (int j = 0; j < spOddsList.size(); j++) {
+				Odds odds = spOddsList.get(j);
+				if (odds.getResult().equals("胜")) {
+					setText(holder.win, odds);
+				} else if (odds.getResult().equals("平")) {
+					setText(holder.draw, odds);
+				} else if (odds.getResult().equals("负")) {
+					setText(holder.lose, odds);
+				}
 			}
 		}
 
 		// 赛事分析
 		if (gameCanBetBeans.get(position).getSpContent() == null) {
 			holder.analyze.setVisibility(View.GONE);
+		} else {
+			holder.analyze.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					// 这个Dialog需要传赛事分析文字
+					analyzeDialog = new AnalyzeDialog(mContext,
+							mAnalyzeListener);
+					analyzeDialog.show();
+				}
+			});
 		}
 		holder.dis_agree.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				dialog = new DisagreeDialog(mContext, mDisAgreeListener);
-				dialog.show();
+				disagreeDialog = new DisagreeDialog(mContext, mDisAgreeListener);
+				disagreeDialog.show();
 			}
 		});
 
@@ -223,19 +161,58 @@ public class RecomendListAdapter extends BaseAdapter {
 		@Override
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
-			dialog.dismiss();
+			disagreeDialog.dismiss();
+		}
+	};
+
+	private OnClickListener mAnalyzeListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			analyzeDialog.dismiss();
 		}
 	};
 
 	/**
-	 * 设置开关按钮的文字
+	 * 设置开关按钮的状态
 	 * 
 	 * @param toggleButton
 	 * @param text
 	 */
-	private void setText(ToggleButton toggleButton, String text) {
-		toggleButton.setText(text);
-		toggleButton.setTextOn(text);
-		toggleButton.setTextOff(text);
+	private void setText(ToggleButton toggleButton, Odds odds) {
+		String sOdds = odds.getOdds() + " " + odds.getResult();
+		toggleButton.setText(sOdds);
+		toggleButton.setTextOn(sOdds);
+		toggleButton.setTextOff(sOdds);
+
+		toggleButton.setTag(odds);
+		toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+				// TODO Auto-generated method stub
+				Odds odds = (Odds) arg0.getTag();
+				if (arg1) {
+					odds.setChecked(true);
+				} else {
+					odds.setChecked(false);
+				}
+			}
+		});
+
+		if (odds.isChecked()) {
+			toggleButton.setChecked(true);
+		} else {
+			toggleButton.setChecked(false);
+		}
+	}
+
+	/**
+	 * 设置更多玩法Listener
+	 * 
+	 * @param onMoreListener
+	 */
+	public void setOnMoreListener(OnClickListener onMoreListener) {
+		this.onMoreListener = onMoreListener;
 	}
 }
