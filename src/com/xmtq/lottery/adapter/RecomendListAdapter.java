@@ -181,7 +181,7 @@ public class RecomendListAdapter extends BaseAdapter {
 	 * @param text
 	 */
 	private void setText(ToggleButton toggleButton, Odds odds) {
-		String sOdds = odds.getOdds() + " " + odds.getResult();
+		String sOdds = odds.getResult() + " " + odds.getOdds();
 		toggleButton.setText(sOdds);
 		toggleButton.setTextOn(sOdds);
 		toggleButton.setTextOff(sOdds);

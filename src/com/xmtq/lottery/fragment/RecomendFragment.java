@@ -1,5 +1,6 @@
 package com.xmtq.lottery.fragment;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,8 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
+import com.xmtq.lottery.utils.LogUtil;
+import com.xmtq.lottery.utils.OddsUtil;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.widget.CheckChuanGuanDialog;
 import com.xmtq.lottery.widget.ChuanGuanDialog;
@@ -109,12 +113,14 @@ public class RecomendFragment extends BaseFragment {
 	 * 投注
 	 */
 	private void requestBetting() {
+		getOddsData();
+
 		String uid = SharedPrefHelper.getInstance(getActivity()).getUid();
 		String lotteryid = "136";
 		String votetype = "2";
 		String votenums = "1";
 		String multiple = "1";
-		String voteinfo = "HT@63356|SP=0&63357|SP=0@1_1@1";
+		String voteinfo = "HT@62959|RQ=3/1/0,SP=3/1/0&62960|RQ=3/1/0,SP=3/1/0@2*1,3*1@1";
 		String totalmoney = "2";
 		String playtype = "6";
 		String passtype = "2_1";
@@ -371,8 +377,7 @@ public class RecomendFragment extends BaseFragment {
 	}
 
 	/**
-	 * 更多玩法点击Listener
-	 * 说明：Adapter的context没有startActivityForResult方法
+	 * 更多玩法点击Listener 说明：Adapter的context没有startActivityForResult方法
 	 */
 	private OnClickListener onMoreListener = new OnClickListener() {
 
@@ -386,5 +391,97 @@ public class RecomendFragment extends BaseFragment {
 			getActivity().startActivityForResult(intent, ODDS_REQUEST_CODE);
 		}
 	};
+
+	/**
+	 * 竞猜数据
+	 */
+	private String getOddsData() {
+		if (gameCanBetBeans == null || gameCanBetBeans.size() == 0) {
+			return null;
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("HT");
+		sb.append("@");
+		List<String> gameCheckList = new ArrayList<String>();
+		for (GameCanBetBean gameCanBetBean : gameCanBetBeans) {
+			List<String> gameOddsList = new ArrayList<String>();
+			StringBuilder gameSb = new StringBuilder();
+
+			// 胜负平拼接
+			String spOddsData = OddsUtil.getSpOddsData(gameCanBetBean
+					.getSpOddsList());
+			if (!TextUtils.isEmpty(spOddsData)) {
+				gameOddsList.add(spOddsData);
+			}
+
+			// 让球胜负平拼接
+			String rqOddsData = OddsUtil.getRqOddsData(gameCanBetBean
+					.getRqOddsList());
+			if (!TextUtils.isEmpty(rqOddsData)) {
+				gameOddsList.add(rqOddsData);
+			}
+
+			// 比分拼接
+			String bfOddsData = OddsUtil.getBfOddsData(gameCanBetBean
+					.getBfOddsList());
+			if (!TextUtils.isEmpty(bfOddsData)) {
+				gameOddsList.add(bfOddsData);
+			}
+
+			// 进球拼接
+			String jqOddsData = OddsUtil.getJqOddsData(gameCanBetBean
+					.getJqOddsList());
+			if (!TextUtils.isEmpty(jqOddsData)) {
+				gameOddsList.add(jqOddsData);
+			}
+
+			// 半全场拼接
+			String bqOddsData = OddsUtil.getBqOddsData(gameCanBetBean
+					.getBqOddsList());
+			if (!TextUtils.isEmpty(bqOddsData)) {
+				gameOddsList.add(bqOddsData);
+			}
+
+			// 本场比赛所有玩法拼接
+			if (gameOddsList.size() > 0) {
+				gameSb.append(gameCanBetBean.getMatchId() + "|");
+				for (int i = 0; i < gameOddsList.size(); i++) {
+					if (i == 0) {
+						gameSb.append(gameOddsList.get(i));
+					} else {
+						gameSb.append("," + gameOddsList.get(i));
+					}
+				}
+			}
+
+			// 保存本场比赛所有投注数据
+			if (!TextUtils.isEmpty(gameSb)) {
+				gameCheckList.add(gameSb.toString());
+			}
+		}
+
+		// 所有比赛投注拼接
+		if (gameCheckList.size() == 0) {
+			return null;
+		} else {
+			for (int i = 0; i < gameCheckList.size(); i++) {
+				if (i == 0) {
+					sb.append(gameCheckList.get(i));
+				} else {
+					sb.append("_" + gameCheckList.get(i));
+				}
+			}
+		}
+
+		// 串关
+		sb.append("@");
+		sb.append("2*1");
+
+		// 倍数
+		sb.append("@");
+		sb.append("1");
+		LogUtil.log("refreshData:" + sb.toString());
+		return sb.toString();
+	}
 
 }
