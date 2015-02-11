@@ -70,7 +70,7 @@
                 <!-- android:textColor="#7a7c7f" /> -->
 
                 <com.xmtq.lottery.widget.MarqueeText
-                    android:id="@+id/tv_name"
+                    android:id="@+id/win_record"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -84,7 +84,7 @@
                     android:gravity="center_vertical"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:singleLine="true"
-                    android:text="刘某某竞彩足球混合过关2串1  7690元           吴某某竞彩足球混合过关3串1  12500元"
+                    android:text=" "
                     android:textColor="#7a7c7f" />
             </LinearLayout>
 

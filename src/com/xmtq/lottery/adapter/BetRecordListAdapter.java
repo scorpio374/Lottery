@@ -3,6 +3,7 @@ package com.xmtq.lottery.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +12,18 @@ import android.widget.TextView;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.bean.PurchaseRecordsBean;
+import com.xmtq.lottery.utils.OddsUtil;
 
 public class BetRecordListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<PurchaseRecordsBean> mRecordsBeansList;
+	private int state;
 
 	public BetRecordListAdapter(Context c,
-			List<PurchaseRecordsBean> RecordsBeansList) {
+			List<PurchaseRecordsBean> RecordsBeansList, int state) {
 		this.mContext = c;
 		this.mRecordsBeansList = RecordsBeansList;
+		this.state = state;
 	}
 
 	@Override
@@ -62,11 +66,28 @@ public class BetRecordListAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-		holder.bet_date.setText(mRecordsBeansList.get(arg0).getAddtime());
-		holder.bet_time.setText(mRecordsBeansList.get(arg0).getAddtime());
-		holder.bet_state.setText(mRecordsBeansList.get(arg0).getGuoguan());
-		holder.bet_style.setText(mRecordsBeansList.get(arg0).getPlaytype());
-		holder.bet_money.setText(mRecordsBeansList.get(arg0).getBonusAfterfax());
+		String data = OddsUtil.getGameData((mRecordsBeansList.get(arg0)
+				.getAddtime()));
+		String time = OddsUtil.getGameTime((mRecordsBeansList.get(arg0)
+				.getAddtime()));
+
+		if (arg0 > 0) {
+			if (OddsUtil
+					.getGameData((mRecordsBeansList.get(arg0).getAddtime()))
+					.equals(OddsUtil.getGameData((mRecordsBeansList
+							.get(arg0 - 1).getAddtime())))) {
+				holder.bet_date.setVisibility(View.INVISIBLE);
+			}
+		}
+
+		holder.bet_date.setText(data);
+		holder.bet_time.setText(time);
+		holder.bet_state.setText(getAfterMoney(mRecordsBeansList.get(arg0)
+				.getBonusAfterfax(), mRecordsBeansList.get(arg0).getState()));
+		holder.bet_style.setText(playStyle(mRecordsBeansList.get(arg0)
+				.getPlaytype()));
+		holder.bet_money.setText("");
+
 		// holder.tv_program_name.setText(childList.get(position).getTitle());
 
 		return convertView;
@@ -81,4 +102,41 @@ public class BetRecordListAdapter extends BaseAdapter {
 		TextView bet_state;
 	}
 
+	private String playStyle(String type) {
+		String playType = "";
+		if (type.equals("1")) {
+			playType = "胜平负";
+		} else if (type.equals("2")) {
+			playType = "比分";
+		} else if (type.equals("3")) {
+			playType = "总进球";
+		} else if (type.equals("4")) {
+			playType = "半全场";
+		} else if (type.equals("5")) {
+			playType = "胜平负";
+		} else if (type.equals("6")) {
+			playType = "混投";
+		}
+		return playType;
+
+	}
+
+	private String getAfterMoney(String money, String state) {
+
+		String result = "";
+		if (!TextUtils.isEmpty(state)) {
+			if (state.equals("已结算")) {
+				if (Float.parseFloat(money) > 0) {
+					result = "已中奖" + money + "元";
+				} else {
+					result = "未中奖";
+				}
+			} else if (state.equals("出票中")) {
+				result = "等待开奖";
+			}
+		} else {
+			result = "";
+		}
+		return result;
+	}
 }

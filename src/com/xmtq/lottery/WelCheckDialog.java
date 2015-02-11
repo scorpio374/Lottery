@@ -67,7 +67,6 @@ public class WelCheckDialog extends BaseDialog {
 				setAutoDismiss1(true);
 			} else {
 				ToastUtil.showCenterToast(ctx, "没有下载地址");
-
 			}
 
 			// handler.sendEmptyMessage(Integer.MIN_VALUE);

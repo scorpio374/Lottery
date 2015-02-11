@@ -73,6 +73,25 @@ public class OddsUtil {
 	}
 
 	/**
+	 * 获取比赛日期
+	 * 
+	 * @param data
+	 * @return
+	 */
+	public static String getGameData(String data) {
+		String time = null;
+		if (TextUtils.isEmpty(data)) {
+			return time;
+		}
+		String[] str = data.split(" ");
+		if (str.length > 0) {
+			String[] hsm = str[0].split("-");
+			time = hsm[1] + "/" + hsm[2];
+		}
+		return time;
+	}
+
+	/**
 	 * 获取比赛时间
 	 * 
 	 * @param data
@@ -91,6 +110,7 @@ public class OddsUtil {
 		return time;
 	}
 
+ 
 	/**
 	 * 胜负平拼接
 	 * 

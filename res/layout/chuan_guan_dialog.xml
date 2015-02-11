@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:padding="5dp"
+                android:padding="8dp"
                 android:text="更多方式过关"
                 android:textColor="@color/white"
                 android:textSize="@dimen/main_textsize3" />
