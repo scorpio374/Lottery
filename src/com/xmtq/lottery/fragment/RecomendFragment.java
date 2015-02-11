@@ -16,11 +16,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.universe.lottery.util.SplitLotteryJCZC;
 import com.xmtq.lottery.activity.OddsDetailActivity;
 import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.adapter.RecomendListAdapter;
@@ -33,6 +35,7 @@ import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
 import com.xmtq.lottery.utils.LogUtil;
 import com.xmtq.lottery.utils.OddsUtil;
+import com.xmtq.lottery.utils.OnRefreshListener;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.widget.CheckChuanGuanDialog;
 import com.xmtq.lottery.widget.ChuanGuanDialog;
@@ -48,9 +51,19 @@ import com.xmtq.lottery.widget.CustomPullListView.OnLoadMoreListener;
 public class RecomendFragment extends BaseFragment {
 
 	/**
-	 * 更多赔率玩法
+	 * 更多竞猜玩法
 	 */
 	private final static int ODDS_REQUEST_CODE = 1;
+
+	/**
+	 * 拼接投注串
+	 */
+	private final static int TYPE_BETTING = 0;
+
+	/**
+	 * 计算注数
+	 */
+	private final static int TYPE_VOTENUMS = 1;
 
 	private ImageButton imgBtnLeft, imgBtnRight;
 	private ImageButton recomend_refresh;
@@ -59,6 +72,10 @@ public class RecomendFragment extends BaseFragment {
 	private TextView recomend_date;
 	private TextView recomend_week;
 	private TextView recomend_commit;
+	private LinearLayout betting_info;
+	private TextView betting_votenums;
+	private TextView betting_multiple;
+	private TextView betting_buymoney;
 
 	private Toast toast;
 	private int currentPageNum = 1;
@@ -113,20 +130,21 @@ public class RecomendFragment extends BaseFragment {
 	 * 投注
 	 */
 	private void requestBetting() {
-		getOddsData();
-
 		String uid = SharedPrefHelper.getInstance(getActivity()).getUid();
 		String lotteryid = "136";
 		String votetype = "2";
 		String votenums = "1";
 		String multiple = "1";
-		String voteinfo = "HT@62959|RQ=3/1/0,SP=3/1/0&62960|RQ=3/1/0,SP=3/1/0@2*1,3*1@1";
 		String totalmoney = "2";
 		String playtype = "6";
-		String passtype = "2_1";
+		String passtype = "2*1";
 		String buymoney = "2";
 		String protype = "1";
-		// LogUtil.log("votenums:" + SplitLotteryJCZC.exeNum(voteinfo));
+		// String voteinfo = "HT@62959|RQ=3&62960|RQ=3@2*1@1";
+		String voteinfo = getOddsData(TYPE_BETTING, passtype, multiple);
+		LogUtil.log("voteinfo:" + voteinfo);
+		// LogUtil.log("votenums:"
+		// + SplitLotteryJCZC.exeNum(getOddsData(TYPE_VOTENUMS)));
 
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getBettingBusiness(uid,
@@ -157,6 +175,10 @@ public class RecomendFragment extends BaseFragment {
 		recomend_week = (TextView) v.findViewById(R.id.recomend_week);
 		recomend_commit = (TextView) v.findViewById(R.id.recomend_commit);
 		recomend_commit.setOnClickListener(this);
+		betting_info = (LinearLayout) v.findViewById(R.id.betting_info);
+		betting_votenums = (TextView) v.findViewById(R.id.betting_votenums);
+		betting_multiple = (TextView) v.findViewById(R.id.betting_multiple);
+		betting_buymoney = (TextView) v.findViewById(R.id.betting_buymoney);
 
 		dealLogicAfterInitView();
 	}
@@ -196,6 +218,7 @@ public class RecomendFragment extends BaseFragment {
 							// TODO Auto-generated method stub
 							if (resultString != null) {
 								check_chuan_guan.setText(resultString + "倍");
+								onRefreshListener.onRefresh();
 							}
 						}
 					});
@@ -291,6 +314,7 @@ public class RecomendFragment extends BaseFragment {
 			gameCanBetBeans = gameCanBetResponse.gameCanBetBeans;
 			mAdapter = new RecomendListAdapter(getActivity(), gameCanBetBeans);
 			mAdapter.setOnMoreListener(onMoreListener);
+			mAdapter.setOnRefreshListener(onRefreshListener);
 			recomend_list.setAdapter(mAdapter);
 
 			// // 下拉刷新
@@ -373,6 +397,7 @@ public class RecomendFragment extends BaseFragment {
 			int position = data.getIntExtra("position", 0);
 			gameCanBetBeans.set(position, gameCanBetBean);
 			mAdapter.notifyDataSetChanged();
+			onRefreshListener.onRefresh();
 		}
 	}
 
@@ -393,9 +418,56 @@ public class RecomendFragment extends BaseFragment {
 	};
 
 	/**
-	 * 竞猜数据
+	 * 刷新界面投注信息
 	 */
-	private String getOddsData() {
+	private OnRefreshListener onRefreshListener = new OnRefreshListener() {
+
+		@Override
+		public void onRefresh() {
+			// TODO Auto-generated method stub
+			int votenums = 0;
+			int multiple = getMultiple(check_chuan_guan.getText().toString());
+			String passType = "1*1";
+			String voteinfo = getOddsData(TYPE_VOTENUMS, passType,
+					String.valueOf(multiple));
+			if (!TextUtils.isEmpty(voteinfo)) {
+				votenums = SplitLotteryJCZC.exeNum(voteinfo);
+			}
+			int buymoney = votenums * multiple * 2;
+
+			betting_votenums.setText(votenums + "注");
+			betting_multiple.setText(multiple + "倍");
+			betting_buymoney.setText(buymoney + "");
+		}
+	};
+
+	/**
+	 * 解决倍数
+	 * 
+	 * @param multiple
+	 * @return
+	 */
+	private int getMultiple(String multiple) {
+		int num = 1;
+		if (multiple.equals("倍数")) {
+			num = 1;
+		} else {
+			multiple = multiple.replace("倍", "");
+			try {
+				num = Integer.parseInt(multiple);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+
+		}
+		return num;
+	}
+
+	/**
+	 * 竞猜数据拼接 type 0：投注串(每场比赛之间用"_"连接) 1：计算注数(每场比赛之间用"&"连接)
+	 */
+	private String getOddsData(int type, String passType, String multiple) {
 		if (gameCanBetBeans == null || gameCanBetBeans.size() == 0) {
 			return null;
 		}
@@ -468,18 +540,23 @@ public class RecomendFragment extends BaseFragment {
 				if (i == 0) {
 					sb.append(gameCheckList.get(i));
 				} else {
-					sb.append("_" + gameCheckList.get(i));
+					if (type == 0) {
+						sb.append("_" + gameCheckList.get(i));
+					} else if (type == 1) {
+						sb.append("&" + gameCheckList.get(i));
+					}
 				}
 			}
 		}
 
 		// 串关
 		sb.append("@");
-		sb.append("2*1");
+		sb.append(passType);
 
 		// 倍数
 		sb.append("@");
-		sb.append("1");
+		sb.append(multiple);
+		
 		LogUtil.log("refreshData:" + sb.toString());
 		return sb.toString();
 	}

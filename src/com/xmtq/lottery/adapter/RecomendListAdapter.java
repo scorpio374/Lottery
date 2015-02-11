@@ -20,6 +20,7 @@ import com.example.lottery.R;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.Odds;
 import com.xmtq.lottery.utils.OddsUtil;
+import com.xmtq.lottery.utils.OnRefreshListener;
 import com.xmtq.lottery.widget.AnalyzeDialog;
 import com.xmtq.lottery.widget.DisagreeDialog;
 
@@ -29,6 +30,7 @@ public class RecomendListAdapter extends BaseAdapter {
 	private DisagreeDialog disagreeDialog;
 	private AnalyzeDialog analyzeDialog;
 	private OnClickListener onMoreListener;
+	private OnRefreshListener onRefreshListener;
 
 	public RecomendListAdapter(Context c, List<GameCanBetBean> gameCanBetBeans) {
 		this.mContext = c;
@@ -197,6 +199,7 @@ public class RecomendListAdapter extends BaseAdapter {
 				} else {
 					odds.setChecked(false);
 				}
+				onRefreshListener.onRefresh();
 			}
 		});
 
@@ -214,5 +217,12 @@ public class RecomendListAdapter extends BaseAdapter {
 	 */
 	public void setOnMoreListener(OnClickListener onMoreListener) {
 		this.onMoreListener = onMoreListener;
+	}
+	
+	/**
+	 * 设置刷新Listener
+	 */
+	public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
+		this.onRefreshListener = onRefreshListener;
 	}
 }

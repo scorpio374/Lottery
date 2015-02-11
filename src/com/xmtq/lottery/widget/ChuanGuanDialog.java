@@ -28,6 +28,7 @@ public class ChuanGuanDialog {
 	private LinearLayout tv_more_style;
 
 	private GridView chuanguan_more;
+	private GridView chuanguan_gridview;
 	private Button btn_cancel;
 	private Button btn_commit;
 	private OnClickListener myCancelListener;
@@ -48,18 +49,28 @@ public class ChuanGuanDialog {
 		btn_commit = (Button) layout.findViewById(R.id.btn_commit);
 
 		tv_more_style = (LinearLayout) layout.findViewById(R.id.tv_more_style);
+		chuanguan_gridview = (GridView) layout.findViewById(R.id.chuanguan);
 		chuanguan_more = (GridView) layout.findViewById(R.id.chuanguan_more);
-		String chuanguan[] = { "3串3", "3串4", "4串4", "4串5", "4串6", "4串11",
+		String chuanguan_more_array[] = { "3串3", "3串4", "4串4", "4串5", "4串6", "4串11",
 				"5串5", "5串6", "5串10", "5串16", "5串20", "5串26", "6串6", "6串7",
 				"6串15", "6串20", "6串22", "6串35", "6串42", "6串50", "6串57" };
 		List<String> oddsList = new ArrayList<String>();
-		for (int i = 0; i < chuanguan.length; i++) {
-			oddsList.add(chuanguan[i]);
+		for (int i = 0; i < chuanguan_more_array.length; i++) {
+			oddsList.add(chuanguan_more_array[i]);
 		}
-
 		ChuanGuanMoreAdapter adapter = new ChuanGuanMoreAdapter(context,
 				oddsList);
 		chuanguan_more.setAdapter(adapter);
+		
+		String chuanguan_array[] = { "单关", "2串1", "3串1", "4串1", "5串1"};
+		List<String> chuanguanList = new ArrayList<String>();
+		for (int i = 0; i < chuanguan_array.length; i++) {
+			chuanguanList.add(chuanguan_array[i]);
+		}
+		ChuanGuanMoreAdapter adapter1 = new ChuanGuanMoreAdapter(context,
+				chuanguanList);
+		chuanguan_gridview.setAdapter(adapter1);
+		
 		tv_more_style.setOnClickListener(new OnClickListener() {
 
 			@Override

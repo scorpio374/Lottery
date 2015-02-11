@@ -100,25 +100,25 @@ public class OddsUtil {
 	public static String getSpOddsData(List<Odds> oddsList) {
 		StringBuilder sb = new StringBuilder();
 		if (oddsList.size() > 0) {
-			List<String> spCheckList = new ArrayList<String>();
+			List<String> checkList = new ArrayList<String>();
 			for (Odds odds : oddsList) {
 				if (odds.isChecked()) {
 					if (odds.getResult().equals("胜")) {
-						spCheckList.add("3");
+						checkList.add("3");
 					} else if (odds.getResult().equals("平")) {
-						spCheckList.add("1");
+						checkList.add("1");
 					} else if (odds.getResult().equals("负")) {
-						spCheckList.add("0");
+						checkList.add("0");
 					}
 				}
 			}
-			if (spCheckList.size() > 0) {
+			if (checkList.size() > 0) {
 				sb.append("SP=");
-				for (int i = 0; i < spCheckList.size(); i++) {
+				for (int i = 0; i < checkList.size(); i++) {
 					if (i == 0) {
-						sb.append(spCheckList.get(i));
+						sb.append(checkList.get(i));
 					} else {
-						sb.append("/" + spCheckList.get(i));
+						sb.append("/" + checkList.get(i));
 					}
 				}
 			}
@@ -136,25 +136,25 @@ public class OddsUtil {
 	public static String getRqOddsData(List<Odds> oddsList) {
 		StringBuilder sb = new StringBuilder();
 		if (oddsList.size() > 0) {
-			List<String> spCheckList = new ArrayList<String>();
+			List<String> checkList = new ArrayList<String>();
 			for (Odds odds : oddsList) {
 				if (odds.isChecked()) {
 					if (odds.getResult().equals("胜")) {
-						spCheckList.add("3");
+						checkList.add("3");
 					} else if (odds.getResult().equals("平")) {
-						spCheckList.add("1");
+						checkList.add("1");
 					} else if (odds.getResult().equals("负")) {
-						spCheckList.add("0");
+						checkList.add("0");
 					}
 				}
 			}
-			if (spCheckList.size() > 0) {
+			if (checkList.size() > 0) {
 				sb.append("RQ=");
-				for (int i = 0; i < spCheckList.size(); i++) {
+				for (int i = 0; i < checkList.size(); i++) {
 					if (i == 0) {
-						sb.append(spCheckList.get(i));
+						sb.append(checkList.get(i));
 					} else {
-						sb.append("/" + spCheckList.get(i));
+						sb.append("/" + checkList.get(i));
 					}
 				}
 			}
@@ -172,27 +172,27 @@ public class OddsUtil {
 	public static String getBfOddsData(List<Odds> oddsList) {
 		StringBuilder sb = new StringBuilder();
 		if (oddsList.size() > 0) {
-			List<String> spCheckList = new ArrayList<String>();
+			List<String> checkList = new ArrayList<String>();
 			for (Odds odds : oddsList) {
 				if (odds.isChecked()) {
 					if (odds.getResult().equals("胜其它")) {
-						spCheckList.add("9:0");
+						checkList.add("9:0");
 					} else if (odds.getResult().equals("平其它")) {
-						spCheckList.add("9:9");
+						checkList.add("9:9");
 					} else if (odds.getResult().equals("负其它")) {
-						spCheckList.add("0:9");
+						checkList.add("0:9");
 					} else {
-						spCheckList.add(odds.getResult());
+						checkList.add(odds.getResult());
 					}
 				}
 			}
-			if (spCheckList.size() > 0) {
+			if (checkList.size() > 0) {
 				sb.append("BF=");
-				for (int i = 0; i < spCheckList.size(); i++) {
+				for (int i = 0; i < checkList.size(); i++) {
 					if (i == 0) {
-						sb.append(spCheckList.get(i));
+						sb.append(checkList.get(i));
 					} else {
-						sb.append("/" + spCheckList.get(i));
+						sb.append("/" + checkList.get(i));
 					}
 				}
 			}
@@ -210,23 +210,23 @@ public class OddsUtil {
 	public static String getJqOddsData(List<Odds> oddsList) {
 		StringBuilder sb = new StringBuilder();
 		if (oddsList.size() > 0) {
-			List<String> spCheckList = new ArrayList<String>();
+			List<String> checkList = new ArrayList<String>();
 			for (Odds odds : oddsList) {
 				if (odds.isChecked()) {
 					if (odds.getResult().equals("7+")) {
-						spCheckList.add("7");
+						checkList.add("7");
 					} else {
-						spCheckList.add(odds.getResult());
+						checkList.add(odds.getResult());
 					}
 				}
 			}
-			if (spCheckList.size() > 0) {
+			if (checkList.size() > 0) {
 				sb.append("JQ=");
-				for (int i = 0; i < spCheckList.size(); i++) {
+				for (int i = 0; i < checkList.size(); i++) {
 					if (i == 0) {
-						sb.append(spCheckList.get(i));
+						sb.append(checkList.get(i));
 					} else {
-						sb.append("/" + spCheckList.get(i));
+						sb.append("/" + checkList.get(i));
 					}
 				}
 			}
@@ -243,23 +243,23 @@ public class OddsUtil {
 	public static String getBqOddsData(List<Odds> oddsList) {
 		StringBuilder sb = new StringBuilder();
 		if (oddsList.size() > 0) {
-			List<String> spCheckList = new ArrayList<String>();
+			List<String> checkList = new ArrayList<String>();
 			for (Odds odds : oddsList) {
 				if (odds.isChecked()) {
 					for (int i = 0; i < bqOddsMap.length; i++) {
 						if (odds.getResult().equals(bqOddsMap[i][0])) {
-							spCheckList.add(bqOddsMap[i][1]);
+							checkList.add(bqOddsMap[i][1]);
 						}
 					}
 				}
 			}
-			if (spCheckList.size() > 0) {
+			if (checkList.size() > 0) {
 				sb.append("BQ=");
-				for (int i = 0; i < spCheckList.size(); i++) {
+				for (int i = 0; i < checkList.size(); i++) {
 					if (i == 0) {
-						sb.append(spCheckList.get(i));
+						sb.append(checkList.get(i));
 					} else {
-						sb.append("/" + spCheckList.get(i));
+						sb.append("/" + checkList.get(i));
 					}
 				}
 			}
