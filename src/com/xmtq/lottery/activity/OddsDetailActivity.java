@@ -194,7 +194,7 @@ public class OddsDetailActivity extends BaseActivity {
 	 * @param text
 	 */
 	private void setText(ToggleButton toggleButton, Odds odds) {
-		String text = odds.getOdds() + " " + odds.getResult();
+		String text = odds.getResult() + " " + odds.getOdds();
 		toggleButton.setText(text);
 		toggleButton.setTextOn(text);
 		toggleButton.setTextOff(text);

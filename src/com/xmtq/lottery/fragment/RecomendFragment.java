@@ -1,5 +1,6 @@
 package com.xmtq.lottery.fragment;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +16,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.universe.lottery.util.SplitLotteryJCZC;
 import com.xmtq.lottery.activity.OddsDetailActivity;
 import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.adapter.RecomendListAdapter;
@@ -31,6 +35,9 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
+import com.xmtq.lottery.utils.LogUtil;
+import com.xmtq.lottery.utils.OddsUtil;
+import com.xmtq.lottery.utils.OnRefreshListener;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.ToastUtil;
 import com.xmtq.lottery.widget.CheckChuanGuanDialog;
@@ -47,9 +54,19 @@ import com.xmtq.lottery.widget.CustomPullListView.OnLoadMoreListener;
 public class RecomendFragment extends BaseFragment {
 
 	/**
-	 * 更多赔率玩法
+	 * 更多竞猜玩法
 	 */
 	private final static int ODDS_REQUEST_CODE = 1;
+
+	/**
+	 * 拼接投注串
+	 */
+	private final static int TYPE_BETTING = 0;
+
+	/**
+	 * 计算注数
+	 */
+	private final static int TYPE_VOTENUMS = 1;
 
 	private ImageButton imgBtnLeft, imgBtnRight;
 	private ImageButton recomend_refresh;
@@ -58,6 +75,10 @@ public class RecomendFragment extends BaseFragment {
 	private TextView recomend_date;
 	private TextView recomend_week;
 	private TextView recomend_commit;
+	private LinearLayout betting_info;
+	private TextView betting_votenums;
+	private TextView betting_multiple;
+	private TextView betting_buymoney;
 
 	private Toast toast;
 	private int currentPageNum = 1;
@@ -120,13 +141,16 @@ public class RecomendFragment extends BaseFragment {
 		String votetype = "2";
 		String votenums = "1";
 		String multiple = "1";
-		String voteinfo = "HT@63356|SP=0&63357|SP=0@1_1@1";
 		String totalmoney = "2";
 		String playtype = "6";
-		String passtype = "2_1";
+		String passtype = "2*1";
 		String buymoney = "2";
 		String protype = "1";
-		// LogUtil.log("votenums:" + SplitLotteryJCZC.exeNum(voteinfo));
+		// String voteinfo = "HT@62959|RQ=3&62960|RQ=3@2*1@1";
+		String voteinfo = getOddsData(TYPE_BETTING, passtype, multiple);
+		LogUtil.log("voteinfo:" + voteinfo);
+		// LogUtil.log("votenums:"
+		// + SplitLotteryJCZC.exeNum(getOddsData(TYPE_VOTENUMS)));
 
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getBettingBusiness(uid,
@@ -166,6 +190,10 @@ public class RecomendFragment extends BaseFragment {
 		recomend_week = (TextView) v.findViewById(R.id.recomend_week);
 		recomend_commit = (TextView) v.findViewById(R.id.recomend_commit);
 		recomend_commit.setOnClickListener(this);
+		betting_info = (LinearLayout) v.findViewById(R.id.betting_info);
+		betting_votenums = (TextView) v.findViewById(R.id.betting_votenums);
+		betting_multiple = (TextView) v.findViewById(R.id.betting_multiple);
+		betting_buymoney = (TextView) v.findViewById(R.id.betting_buymoney);
 
 		dealLogicAfterInitView();
 	}
@@ -205,6 +233,7 @@ public class RecomendFragment extends BaseFragment {
 							// TODO Auto-generated method stub
 							if (resultString != null) {
 								check_chuan_guan.setText(resultString + "倍");
+								onRefreshListener.onRefresh();
 							}
 						}
 					});
@@ -334,6 +363,7 @@ public class RecomendFragment extends BaseFragment {
 			gameCanBetBeans = gameCanBetResponse.gameCanBetBeans;
 			mAdapter = new RecomendListAdapter(getActivity(), gameCanBetBeans);
 			mAdapter.setOnMoreListener(onMoreListener);
+			mAdapter.setOnRefreshListener(onRefreshListener);
 			recomend_list.setAdapter(mAdapter);
 
 			// // 下拉刷新
@@ -415,6 +445,7 @@ public class RecomendFragment extends BaseFragment {
 			int position = data.getIntExtra("position", 0);
 			gameCanBetBeans.set(position, gameCanBetBean);
 			mAdapter.notifyDataSetChanged();
+			onRefreshListener.onRefresh();
 		}
 	}
 
@@ -433,5 +464,149 @@ public class RecomendFragment extends BaseFragment {
 			getActivity().startActivityForResult(intent, ODDS_REQUEST_CODE);
 		}
 	};
+
+	/**
+	 * 刷新界面投注信息
+	 */
+	private OnRefreshListener onRefreshListener = new OnRefreshListener() {
+
+		@Override
+		public void onRefresh() {
+			// TODO Auto-generated method stub
+			int votenums = 0;
+			int multiple = getMultiple(check_chuan_guan.getText().toString());
+			String passType = "1*1";
+			String voteinfo = getOddsData(TYPE_VOTENUMS, passType,
+					String.valueOf(multiple));
+			if (!TextUtils.isEmpty(voteinfo)) {
+				votenums = SplitLotteryJCZC.exeNum(voteinfo);
+			}
+			int buymoney = votenums * multiple * 2;
+
+			betting_votenums.setText(votenums + "注");
+			betting_multiple.setText(multiple + "倍");
+			betting_buymoney.setText(buymoney + "");
+		}
+	};
+
+	/**
+	 * 解决倍数
+	 * 
+	 * @param multiple
+	 * @return
+	 */
+	private int getMultiple(String multiple) {
+		int num = 1;
+		if (multiple.equals("倍数")) {
+			num = 1;
+		} else {
+			multiple = multiple.replace("倍", "");
+			try {
+				num = Integer.parseInt(multiple);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+
+		}
+		return num;
+	}
+
+	/**
+	 * 竞猜数据拼接 type 0：投注串(每场比赛之间用"_"连接) 1：计算注数(每场比赛之间用"&"连接)
+	 */
+	private String getOddsData(int type, String passType, String multiple) {
+		if (gameCanBetBeans == null || gameCanBetBeans.size() == 0) {
+			return null;
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("HT");
+		sb.append("@");
+		List<String> gameCheckList = new ArrayList<String>();
+		for (GameCanBetBean gameCanBetBean : gameCanBetBeans) {
+			List<String> gameOddsList = new ArrayList<String>();
+			StringBuilder gameSb = new StringBuilder();
+
+			// 胜负平拼接
+			String spOddsData = OddsUtil.getSpOddsData(gameCanBetBean
+					.getSpOddsList());
+			if (!TextUtils.isEmpty(spOddsData)) {
+				gameOddsList.add(spOddsData);
+			}
+
+			// 让球胜负平拼接
+			String rqOddsData = OddsUtil.getRqOddsData(gameCanBetBean
+					.getRqOddsList());
+			if (!TextUtils.isEmpty(rqOddsData)) {
+				gameOddsList.add(rqOddsData);
+			}
+
+			// 比分拼接
+			String bfOddsData = OddsUtil.getBfOddsData(gameCanBetBean
+					.getBfOddsList());
+			if (!TextUtils.isEmpty(bfOddsData)) {
+				gameOddsList.add(bfOddsData);
+			}
+
+			// 进球拼接
+			String jqOddsData = OddsUtil.getJqOddsData(gameCanBetBean
+					.getJqOddsList());
+			if (!TextUtils.isEmpty(jqOddsData)) {
+				gameOddsList.add(jqOddsData);
+			}
+
+			// 半全场拼接
+			String bqOddsData = OddsUtil.getBqOddsData(gameCanBetBean
+					.getBqOddsList());
+			if (!TextUtils.isEmpty(bqOddsData)) {
+				gameOddsList.add(bqOddsData);
+			}
+
+			// 本场比赛所有玩法拼接
+			if (gameOddsList.size() > 0) {
+				gameSb.append(gameCanBetBean.getMatchId() + "|");
+				for (int i = 0; i < gameOddsList.size(); i++) {
+					if (i == 0) {
+						gameSb.append(gameOddsList.get(i));
+					} else {
+						gameSb.append("," + gameOddsList.get(i));
+					}
+				}
+			}
+
+			// 保存本场比赛所有投注数据
+			if (!TextUtils.isEmpty(gameSb)) {
+				gameCheckList.add(gameSb.toString());
+			}
+		}
+
+		// 所有比赛投注拼接
+		if (gameCheckList.size() == 0) {
+			return null;
+		} else {
+			for (int i = 0; i < gameCheckList.size(); i++) {
+				if (i == 0) {
+					sb.append(gameCheckList.get(i));
+				} else {
+					if (type == 0) {
+						sb.append("_" + gameCheckList.get(i));
+					} else if (type == 1) {
+						sb.append("&" + gameCheckList.get(i));
+					}
+				}
+			}
+		}
+
+		// 串关
+		sb.append("@");
+		sb.append(passType);
+
+		// 倍数
+		sb.append("@");
+		sb.append(multiple);
+		
+		LogUtil.log("refreshData:" + sb.toString());
+		return sb.toString();
+	}
 
 }

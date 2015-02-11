@@ -62,7 +62,6 @@ public class GameCanBetBean extends EntityBase {
 	private List<Odds> bqOddsList = new ArrayList<Odds>();
 	private List<Odds> jqOddsList = new ArrayList<Odds>();
 	
-
 	public String getCompanyId() {
 		return companyId;
 	}
@@ -342,5 +341,5 @@ public class GameCanBetBean extends EntityBase {
 	public void setJqOddsList(List<Odds> jqOddsList) {
 		this.jqOddsList = jqOddsList;
 	}
-
+	
 }

@@ -27,61 +27,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
-            <ToggleButton
-                android:layout_width="0dip"
+            <GridView
+                android:id="@+id/chuanguan"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/chuanguan_togglebtn_selector"
-                android:button="@null"
-                android:textColor="@color/white"
-                android:textOff="单关"
-                android:textOn="单关 " />
-
-            <ToggleButton
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/chuanguan_togglebtn_selector"
-                android:button="@null"
-                android:textColor="@color/white"
-                android:textOff="3串1"
-                android:textOn="3串1" />
-
-            <ToggleButton
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/chuanguan_togglebtn_selector"
-                android:button="@null"
-                android:textColor="@color/white"
-                android:textOff="4串1"
-                android:textOn="4串1" />
-
-            <ToggleButton
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/chuanguan_togglebtn_selector"
-                android:button="@null"
-                android:textColor="@color/white"
-                android:textOff="5串1"
-                android:textOn="5串1" />
-
-            <ToggleButton
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/chuanguan_togglebtn_selector"
-                android:button="@null"
-                android:textColor="@color/white"
-                android:textOff="2串1"
-                android:textOn="2串1" />
+                android:numColumns="5"
+                android:scrollbars="none"
+                android:visibility="visible" >
+            </GridView>
         </LinearLayout>
 
         <LinearLayout
