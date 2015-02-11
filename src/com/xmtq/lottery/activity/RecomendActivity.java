@@ -43,6 +43,8 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		spfs = SharedPrefHelper.getInstance(this);
+		// 开户APP默认不登陆
+		spfs.setIsLogin(false);
 		initView();
 		// test();
 	}

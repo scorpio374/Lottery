@@ -32,8 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numColumns="5"
-                android:scrollbars="none"
-                android:visibility="visible" >
+                android:scrollbars="none" >
             </GridView>
         </LinearLayout>
 
@@ -61,7 +60,7 @@
 
         <GridView
             android:id="@+id/chuanguan_more"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:numColumns="5"
             android:scrollbars="none"
