@@ -69,14 +69,15 @@ public class QuickPaymentActivity extends BaseActivity {
 
 		quick_pay_bank = (TextView) findViewById(R.id.quick_payment_bank);
 		recharge_money = (TextView) findViewById(R.id.recharge_money);
+		if (mUserBankBean != null) {
+			String bankCount = mUserBankBean.getBankAccount().substring(
+					mUserBankBean.getBankAccount().length() - 4,
+					mUserBankBean.getBankAccount().length());
 
-		String bankCount = mUserBankBean.getBankAccount().substring(
-				mUserBankBean.getBankAccount().length() - 4,
-				mUserBankBean.getBankAccount().length());
-
-		quick_pay_bank.setText("使用尾号为  " + bankCount + " 的"
-				+ checkBankType(mUserBankBean));
-		recharge_money.setText("充值 " + rechargeMoney + " 元");
+			quick_pay_bank.setText("使用尾号为  " + bankCount + " 的"
+					+ checkBankType(mUserBankBean));
+			recharge_money.setText("充值 " + rechargeMoney + " 元");
+		}
 
 		send_verification = (TextView) findViewById(R.id.send_verification);
 

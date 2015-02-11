@@ -145,6 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dip"
+            android:padding="8dp"
             android:text="注册"
             android:textColor="#747B90"
             android:textSize="@dimen/main_textsize" />

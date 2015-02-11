@@ -211,7 +211,7 @@
                     android:layout_weight="1"
                     android:paddingLeft="10dip"
                     android:paddingTop="10dip"
-                    android:text="手机号码：136*****0971"
+                    android:text="手机号码："
                     android:textColor="@color/white" />
 
                 <TextView
@@ -267,7 +267,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dip"
-                    android:text="一不小心中奖了"
+                    android:text=" "
                     android:textColor="@color/white"
                     android:textSize="@dimen/main_textsize" />
             </LinearLayout>
@@ -295,7 +295,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dip"
-                    android:text="4123123**********"
+                    android:text=" "
                     android:textColor="@color/white"
                     android:textSize="@dimen/main_textsize" />
             </LinearLayout>
@@ -323,7 +323,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dip"
-                    android:text="严**"
+                    android:text=" "
                     android:textColor="@color/white"
                     android:textSize="@dimen/main_textsize" />
             </LinearLayout>
@@ -408,7 +408,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:cursorVisible="true"
-                    android:hint="严**"
+                    android:hint="请输入用户名"
                     android:singleLine="true"
                     android:textColor="@color/white"
                     android:textColorHint="@color/edit_color"
@@ -442,7 +442,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:cursorVisible="true"
-                    android:hint="4221312****772176"
+                    android:hint="请输入身份证号"
                     android:singleLine="true"
                     android:textColor="@color/white"
                     android:textColorHint="@color/edit_color"

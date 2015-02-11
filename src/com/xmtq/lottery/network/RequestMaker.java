@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import com.dvt.lottery.util.MD5;
 import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.parser.AccountDetailParser;
+import com.xmtq.lottery.parser.BetDetailRecordParser;
 import com.xmtq.lottery.parser.BettingBusinessParser;
 import com.xmtq.lottery.parser.CheckUserParser;
 import com.xmtq.lottery.parser.CreateOrderParser;
@@ -24,11 +25,13 @@ import com.xmtq.lottery.parser.PhonePayFirstParser;
 import com.xmtq.lottery.parser.PhonePayNotFirstParser;
 import com.xmtq.lottery.parser.PurchaseRecordsParser;
 import com.xmtq.lottery.parser.RecomendHistoryParser;
+import com.xmtq.lottery.parser.RecomendWinRecordParser;
 import com.xmtq.lottery.parser.RepasswordParser;
 import com.xmtq.lottery.parser.UserInfoParser;
 import com.xmtq.lottery.parser.UserRegisterParser;
 import com.xmtq.lottery.parser.VerificationCodeParser;
 import com.xmtq.lottery.parser.VersionParser;
+import com.xmtq.lottery.utils.JsonUtil;
 import com.xmtq.lottery.utils.LogUtil;
 
 public class RequestMaker {
@@ -122,7 +125,7 @@ public class RequestMaker {
 		String body = createUserRegister(username, mail, actpassword, mobile,
 				serialuid, type, code);
 		String xmlBody = makeXml(body, "10001_1.1");
-		
+
 		Request request = new Request(
 				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
@@ -286,9 +289,9 @@ public class RequestMaker {
 	/**
 	 * 检测用户名/手机/邮箱是否存在
 	 */
-	public Request getCheckUser(String parameter) {
+	public Request getCheckUser(String parameter, String phone, String email) {
 		CheckUserParser parser = new CheckUserParser();
-		String body = createCheckUser(parameter);
+		String body = createCheckUser(parameter, phone, email);
 		String xmlBody = makeXml(body, "10010");
 
 		Request request = new Request(
@@ -296,13 +299,15 @@ public class RequestMaker {
 		return request;
 	}
 
-	private String createCheckUser(String parameter) {
+	private String createCheckUser(String parameter, String phone, String email) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element>");
 		sb.append(makeTag("parameter", parameter));
+		sb.append(makeTag("phone", phone));
+		sb.append(makeTag("email", email));
 		sb.append("</element>");
 		sb.append("</elements>");
 		sb.append("</body>");
@@ -596,12 +601,12 @@ public class RequestMaker {
 	 * @return
 	 */
 	public Request getPurchaseRecordsDetail(String serialid) {
-
+		BetDetailRecordParser parser = new BetDetailRecordParser();
 		String body = createPurchaseRecordsDetail(serialid);
 		String xmlBody = makeXml(body, "12022_1.1");
 
 		Request request = new Request(
-				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 
@@ -738,11 +743,12 @@ public class RequestMaker {
 	 * @return
 	 */
 	public Request getGameWinRecord(String size) {
+		RecomendWinRecordParser parser = new RecomendWinRecordParser();
 		String body = createGameWinRecord(size);
 		String xmlBody = makeXml(body, "12029");
 
 		Request request = new Request(
-				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, parser);
 		return request;
 	}
 

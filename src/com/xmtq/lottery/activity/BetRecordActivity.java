@@ -5,6 +5,8 @@ import java.util.List;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -13,6 +15,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.BetRecordListAdapter;
+import com.xmtq.lottery.bean.CheckUserResponse;
 import com.xmtq.lottery.bean.ExtractCashResponse;
 import com.xmtq.lottery.bean.PurchaseRecordsBean;
 import com.xmtq.lottery.bean.PurchaseRecordsResponse;
@@ -20,6 +23,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.utils.SharedPrefHelper;
+import com.xmtq.lottery.utils.ToastUtil;
 
 /**
  * 投注记录
@@ -31,6 +35,7 @@ public class BetRecordActivity extends BaseActivity {
 
 	private ListView bet_record_all, bet_record_win, bet_record_wait;
 	private ImageButton btn_back;
+	private List<PurchaseRecordsBean> mRecordsBeansList;
 
 	@Override
 	public void setContentLayout() {
@@ -40,10 +45,48 @@ public class BetRecordActivity extends BaseActivity {
 
 	@Override
 	public void dealLogicBeforeInitView() {
-		//
+		// 测试检查用户名是否存在
+		// RequestMaker mRequestMaker = RequestMaker.getInstance();
+		// HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		// mAsyncTask.execute(mRequestMaker.getCheckUser("xmwd", "", ""));
+		// mAsyncTask.setOnCompleteListener(mtestOnCompleteListener);
 
-		request("130", "", "", "", "0");
+		request("130", "", "", "1", "0");
 	}
+
+	// 测试检查用户名是否存在
+	private OnCompleteListener<CheckUserResponse> mtestOnCompleteListener = new OnCompleteListener<CheckUserResponse>() {
+
+		@Override
+		public void onComplete(CheckUserResponse result, String resultString) {
+
+			if (result != null) {
+				if (result.errorcode.equals("0")) {
+					// PurchaseRecordsResponse mResponse = result;
+					// Toast.makeText(BetRecordActivity.this, "查询成功",
+					// 2000).show();
+					//
+					// List<PurchaseRecordsBean> mRecordsBeansList =
+					// mResponse.purchaseRecordsBeans;
+					// // List<String> mList = new ArrayList<String>();
+					// // for (int i = 0; i < 10; i++) {
+					// // mList.add(i + "");
+					// // }
+					// BetRecordListAdapter mAdapter = new BetRecordListAdapter(
+					// BetRecordActivity.this, mRecordsBeansList);
+					// bet_record_all.setAdapter(mAdapter);
+					// bet_record_wait.setAdapter(mAdapter);
+					// bet_record_win.setAdapter(mAdapter);
+
+				} else {
+					Toast.makeText(BetRecordActivity.this, result.errormsg,
+							2000).show();
+				}
+			} else {
+				Toast.makeText(BetRecordActivity.this, "请求错误", 2000).show();
+			}
+		}
+	};
 
 	@Override
 	public void initView() {
@@ -79,12 +122,34 @@ public class BetRecordActivity extends BaseActivity {
 						}
 					}
 				});
+
+		bet_record_all.setOnItemClickListener(betDetailListener);
 	}
 
 	@Override
 	public void dealLogicAfterInitView() {
 
 	}
+
+	private OnItemClickListener betDetailListener = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+				long arg3) {
+
+			Intent intent = new Intent(BetRecordActivity.this,
+					BetDetailActivity.class);
+			intent.putExtra("serialid", mRecordsBeansList.get(arg2)
+					.getSerialid());
+			if (mRecordsBeansList.get(arg2).getBonusAfterfax() != null) {
+
+				intent.putExtra("winMoney", mRecordsBeansList.get(arg2)
+						.getBonusAfterfax());
+			}
+			startActivity(intent);
+
+		}
+	};
 
 	@Override
 	public void onClickEvent(View view) {
@@ -104,10 +169,11 @@ public class BetRecordActivity extends BaseActivity {
 		String userid = SharedPrefHelper.getInstance(getApplicationContext())
 				.getUid();
 
+		mLoadingDialog.show("数据加载中...");
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		mAsyncTask.execute(mRequestMaker.getPurchaseRecords(userid, lotteryid,
-				startdate, enddate, investtype, "1", "10", statue));
+		mAsyncTask.execute(mRequestMaker.getPurchaseRecords("14138", lotteryid,
+				startdate, enddate, investtype, "1", "5", statue));
 		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
 	}
 
@@ -122,13 +188,14 @@ public class BetRecordActivity extends BaseActivity {
 					PurchaseRecordsResponse mResponse = result;
 					Toast.makeText(BetRecordActivity.this, "查询成功", 2000).show();
 
-					List<PurchaseRecordsBean> mRecordsBeansList = mResponse.purchaseRecordsBeans;
-					// List<String> mList = new ArrayList<String>();
-					// for (int i = 0; i < 10; i++) {
-					// mList.add(i + "");
-					// }
+					mRecordsBeansList = mResponse.purchaseRecordsBeans;
+
+					if (mRecordsBeansList.size() == 0) {
+						ToastUtil.showCenterToast(BetRecordActivity.this,
+								"没有投注记录");
+					}
 					BetRecordListAdapter mAdapter = new BetRecordListAdapter(
-							BetRecordActivity.this, mRecordsBeansList);
+							BetRecordActivity.this, mRecordsBeansList, 0);
 					bet_record_all.setAdapter(mAdapter);
 					bet_record_wait.setAdapter(mAdapter);
 					bet_record_win.setAdapter(mAdapter);
@@ -140,6 +207,7 @@ public class BetRecordActivity extends BaseActivity {
 			} else {
 				Toast.makeText(BetRecordActivity.this, "请求错误", 2000).show();
 			}
+			mLoadingDialog.dismiss();
 		}
 	};
 

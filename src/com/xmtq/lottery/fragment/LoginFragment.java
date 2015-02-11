@@ -125,10 +125,10 @@ public class LoginFragment extends BaseFragment {
 			// toast.show();
 			// return;
 		}
-
+		mLoadingDialog.show("登录中，请稍候...");
 		// toast.setText("登陆中，请稍候...");
 		// toast.show();
-		mLoadingDialog.show("登录中，请稍候...");
+
 		if (spfs.getIsRememberPwd()) {
 			spfs.setUserPassward(password);
 			spfs.setUserName(userName);

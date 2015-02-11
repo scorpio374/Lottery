@@ -25,11 +25,14 @@ import com.xmtq.lottery.adapter.RecomendListAdapter;
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.GameCanBetResponse;
+import com.xmtq.lottery.bean.RecomendWinRecordBean;
+import com.xmtq.lottery.bean.RecomendWinRecordResponse;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
 import com.xmtq.lottery.utils.SharedPrefHelper;
+import com.xmtq.lottery.utils.ToastUtil;
 import com.xmtq.lottery.widget.CheckChuanGuanDialog;
 import com.xmtq.lottery.widget.ChuanGuanDialog;
 import com.xmtq.lottery.widget.CustomPullListView;
@@ -71,12 +74,15 @@ public class RecomendFragment extends BaseFragment {
 	private boolean isShowMore = false;
 	private ChuanGuanDialog mChuanGuanDialog;
 	private RadioButton check_chuan_guan;
+	private CheckChuanGuanDialog mCheckChuanGuanDialog;
+	private TextView win_record;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);
+		requestWinRecord("10");
 	}
 
 	@Override
@@ -129,7 +135,16 @@ public class RecomendFragment extends BaseFragment {
 		mAsyncTask.setOnCompleteListener(mOnBettingCompleteListener);
 	}
 
+	private void requestWinRecord(String size) {
+
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(RequestMaker.getInstance().getGameWinRecord(size));
+		mAsyncTask.setOnCompleteListener(mWinRecordCompleteListener);
+
+	}
+
 	public void initView(View v) {
+		win_record = (TextView) v.findViewById(R.id.win_record);
 		imgBtnLeft = (ImageButton) v.findViewById(R.id.recomend_left);
 		imgBtnRight = (ImageButton) v.findViewById(R.id.recomend_right);
 		recomend_refresh = (ImageButton) v.findViewById(R.id.recomend_refresh);
@@ -274,6 +289,40 @@ public class RecomendFragment extends BaseFragment {
 	};
 
 	/**
+	 * 获奖记录回调
+	 */
+	private OnCompleteListener<RecomendWinRecordResponse> mWinRecordCompleteListener = new OnCompleteListener<RecomendWinRecordResponse>() {
+		@Override
+		public void onComplete(RecomendWinRecordResponse result,
+				String resultString) {
+			// TODO Auto-generated method stub
+			if (result != null) {
+				if (result.errorcode.equals("0")) {
+					RecomendWinRecordResponse mWinRecordResponse = result;
+					List<RecomendWinRecordBean> mRecordBeans = mWinRecordResponse.mWinRecordBeans;
+					StringBuffer sb = new StringBuffer();
+					String record = "";
+					for (int i = 0; i < mRecordBeans.size(); i++) {
+						record = mRecordBeans.get(i).getUsername()
+								+ mRecordBeans.get(i).getLotteryname()
+								+ mRecordBeans.get(i).getGuoguan() + "   "
+								+ mRecordBeans.get(i).getBonus()
+								+ "元            ";
+						sb.append(record);
+					}
+
+					win_record.setText(sb.toString());
+
+				} else {
+					onFailure(result.errormsg);
+				}
+			} else {
+				onFailure("请求错误");
+			}
+		}
+	};
+
+	/**
 	 * 请求成功
 	 */
 	private void onSuccess(BaseResponse result) {
@@ -351,7 +400,6 @@ public class RecomendFragment extends BaseFragment {
 			super.handleMessage(msg);
 		}
 	};
-	private CheckChuanGuanDialog mCheckChuanGuanDialog;
 
 	/**
 	 * 处理回传数据
@@ -371,8 +419,7 @@ public class RecomendFragment extends BaseFragment {
 	}
 
 	/**
-	 * 更多玩法点击Listener
-	 * 说明：Adapter的context没有startActivityForResult方法
+	 * 更多玩法点击Listener 说明：Adapter的context没有startActivityForResult方法
 	 */
 	private OnClickListener onMoreListener = new OnClickListener() {
 

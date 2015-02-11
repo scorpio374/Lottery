@@ -105,16 +105,13 @@ public class RechargeMoneyActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				if (checkedId == R.id.rec_ten) {
 					search_edit.setText("10");
-					rechargeMoney = "10";
 				} else if (checkedId == R.id.rec_fifty) {
 					search_edit.setText("50");
-					rechargeMoney = "50";
 				} else if (checkedId == R.id.rec_hundred) {
 					search_edit.setText("100");
-					rechargeMoney = "100";
 				} else if (checkedId == R.id.rec_five_hundred) {
 					search_edit.setText("500");
-					rechargeMoney = "500";
+
 				}
 			}
 		});
@@ -140,23 +137,25 @@ public class RechargeMoneyActivity extends BaseActivity {
 			break;
 		// 选择银行卡
 		case R.id.check_bank:
-			if (StringUtil.isNullOrEmpty(search_edit.getText().toString()
-					.trim())) {
+
+			rechargeMoney = search_edit.getText().toString().trim();
+
+			if (StringUtil.isNullOrEmpty(rechargeMoney)) {
 				Toast.makeText(RechargeMoneyActivity.this, "请输入充值金额", 2000)
 						.show();
 				return;
 			}
-			if (Integer.parseInt(search_edit.getText().toString()) < 5) {
+			if (!isNumeric(rechargeMoney)) {
+				Toast.makeText(RechargeMoneyActivity.this, "充值金额必须为整数", 2000)
+						.show();
+				return;
+			}
+			if (Integer.parseInt(rechargeMoney) < 5) {
 				Toast.makeText(RechargeMoneyActivity.this, "充值金额不小于五元", 2000)
 						.show();
 				return;
 			}
 
-			if (isNumeric(search_edit.getText().toString())) {
-				Toast.makeText(RechargeMoneyActivity.this, "充值金额必须为整数", 2000)
-						.show();
-				return;
-			}
 			intent = new Intent(RechargeMoneyActivity.this,
 					CheckBankFirstActivity.class);
 			intent.putExtra("requestId", requestId);
@@ -165,8 +164,20 @@ public class RechargeMoneyActivity extends BaseActivity {
 
 			break;
 		case R.id.recharge_commit:
-			if (StringUtil.isNullOrEmpty(search_edit.getText().toString())) {
+			rechargeMoney = search_edit.getText().toString().trim();
+
+			if (StringUtil.isNullOrEmpty(rechargeMoney)) {
 				Toast.makeText(RechargeMoneyActivity.this, "请输入充值金额", 2000)
+						.show();
+				return;
+			}
+			if (!isNumeric(rechargeMoney)) {
+				Toast.makeText(RechargeMoneyActivity.this, "充值金额必须为整数", 2000)
+						.show();
+				return;
+			}
+			if (Integer.parseInt(rechargeMoney) < 5) {
+				Toast.makeText(RechargeMoneyActivity.this, "充值金额不小于五元", 2000)
 						.show();
 				return;
 			}
