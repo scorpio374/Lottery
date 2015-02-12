@@ -7,32 +7,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.ToggleButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.bean.Odds;
+import com.xmtq.lottery.bean.PassType;
 
 public class ChuanGuanMoreAdapter extends BaseAdapter {
 
 	private Context context;
-	private List<String> oddsList;
+	private List<PassType> simplePassList;
 
-	public ChuanGuanMoreAdapter(Context context, List<String> oddsList) {
+	public ChuanGuanMoreAdapter(Context context, List<PassType> simplePassList) {
 		this.context = context;
-		this.oddsList = oddsList;
+		this.simplePassList = simplePassList;
 
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return oddsList.size();
+		return simplePassList.size();
 	}
 
 	@Override
-	public Odds getItem(int arg0) {
+	public Object getItem(int arg0) {
 		// TODO Auto-generated method stub
-		return null;
+		return simplePassList.get(arg0);
 	}
 
 	@Override
@@ -48,10 +51,7 @@ public class ChuanGuanMoreAdapter extends BaseAdapter {
 				R.layout.chuanguan_gridview_item, null);
 		ToggleButton toggleButton = (ToggleButton) convertView
 				.findViewById(R.id.toggle_chuanguan_more);
-		// String odds = oddsList.get(position).getResult() + "\n"
-		// + oddsList.get(position).getOdds();
-		// setText(toggleButton, odds);
-		setText(toggleButton, oddsList.get(position));
+		setText(toggleButton, simplePassList.get(position));
 		return convertView;
 	}
 
@@ -61,10 +61,31 @@ public class ChuanGuanMoreAdapter extends BaseAdapter {
 	 * @param toggleButton
 	 * @param text
 	 */
-	private void setText(ToggleButton toggleButton, String text) {
+	private void setText(ToggleButton toggleButton, PassType passType) {
+		String text = passType.getName();
 		toggleButton.setText(text);
 		toggleButton.setTextOn(text);
 		toggleButton.setTextOff(text);
+
+		toggleButton.setTag(passType);
+		toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+				// TODO Auto-generated method stub
+				PassType passType = (PassType) arg0.getTag();
+				if (arg1) {
+					passType.setChecked(true);
+				} else {
+					passType.setChecked(false);
+				}
+			}
+		});
+
+		if (passType.isChecked()) {
+			toggleButton.setChecked(true);
+		} else {
+			toggleButton.setChecked(false);
+		}
 	}
 
 }

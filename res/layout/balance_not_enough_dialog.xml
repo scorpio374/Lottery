@@ -27,6 +27,7 @@
                 android:textSize="@dimen/main_textsize" />
 
             <TextView
+                 android:id="@+id/bug_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -56,6 +57,7 @@
                 android:textSize="@dimen/main_textsize3" />
 
             <TextView
+                android:id="@+id/account_balance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"

@@ -380,8 +380,13 @@ public class CheckBankFirstActivity extends BaseActivity {
 					Log.d("xm", "tradeId" + tradeId + "++++"
 							+ "randomValidateId" + randomValidateId);
 				} else {
-					ToastUtil.showCenterToast(CheckBankFirstActivity.this,
-							result.errormsg);
+					if (result.errormsg.equals("9999")) {
+						ToastUtil.showCenterToast(CheckBankFirstActivity.this,
+								"系统异常");
+					} else {
+						ToastUtil.showCenterToast(CheckBankFirstActivity.this,
+								result.errormsg);
+					}
 				}
 			} else {
 				ToastUtil.showCenterToast(CheckBankFirstActivity.this, "请求失败");

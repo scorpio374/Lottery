@@ -4,40 +4,39 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.activity.BetRecordActivity;
 
 public class BetSuccessDialog {
 
 	private Context context;
 	private Dialog mdialog;
 	private LinearLayout layout;
-	private Button tv_shure;
-	private Button tv_cancel;
-	private OnClickListener myShureListener;
 
-	public BetSuccessDialog(Context context, OnClickListener myShureListener) {
+	public BetSuccessDialog(Context context) {
 		this.context = context;
-		this.myShureListener = myShureListener;
 		// this.myCancelListener = myCancelListener;
 	}
 
 	private void initview() {
 		layout = (LinearLayout) LayoutInflater.from(context).inflate(
 				R.layout.bet_success_dialog, null);
-
+		TextView check_order = (TextView)layout.findViewById(R.id.check_order);
+		TextView return_home = (TextView)layout.findViewById(R.id.return_home);
+		
+		check_order.setOnClickListener(onClickListener);
+		return_home.setOnClickListener(onClickListener);
 	}
 
 	private void setListener() {
-//		ImageView dialog_commit = (ImageView) layout
-//				.findViewById(R.id.dialog_commit);
-//		dialog_commit.setOnClickListener(myShureListener);
 	}
 
 	private void createDialog() {
@@ -66,4 +65,25 @@ public class BetSuccessDialog {
 			mdialog.dismiss();
 		}
 	}
+	
+	private OnClickListener onClickListener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			switch (arg0.getId()) {
+			case R.id.check_order:
+				Intent intent = new Intent(context, BetRecordActivity.class);
+				context.startActivity(intent);
+				break;
+				
+			case R.id.return_home:
+				mdialog.dismiss();
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
 }

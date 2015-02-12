@@ -14,36 +14,40 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.universe.lottery.util.SplitLotteryJCZC;
+import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.activity.OddsDetailActivity;
 import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.adapter.RecomendListAdapter;
 import com.xmtq.lottery.bean.BaseResponse;
+import com.xmtq.lottery.bean.BetInfoBean;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.GameCanBetResponse;
+import com.xmtq.lottery.bean.PassType;
 import com.xmtq.lottery.bean.RecomendWinRecordBean;
 import com.xmtq.lottery.bean.RecomendWinRecordResponse;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
-import com.xmtq.lottery.utils.LogUtil;
 import com.xmtq.lottery.utils.OddsUtil;
 import com.xmtq.lottery.utils.OnRefreshListener;
+import com.xmtq.lottery.utils.PassTypeUtil;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.ToastUtil;
+import com.xmtq.lottery.widget.BalanceNotEnoughDialog;
+import com.xmtq.lottery.widget.BetConfirmDialog;
 import com.xmtq.lottery.widget.CheckChuanGuanDialog;
 import com.xmtq.lottery.widget.ChuanGuanDialog;
 import com.xmtq.lottery.widget.CustomPullListView;
 import com.xmtq.lottery.widget.CustomPullListView.OnLoadMoreListener;
+import com.xmtq.lottery.widget.LoadingDialog;
 
 /**
  * 首页推荐
@@ -75,10 +79,10 @@ public class RecomendFragment extends BaseFragment {
 	private TextView recomend_date;
 	private TextView recomend_week;
 	private TextView recomend_commit;
-	private LinearLayout betting_info;
 	private TextView betting_votenums;
 	private TextView betting_multiple;
 	private TextView betting_buymoney;
+	private TextView betting_info;
 
 	private Toast toast;
 	private int currentPageNum = 1;
@@ -91,10 +95,11 @@ public class RecomendFragment extends BaseFragment {
 	private static final int REFRESH_DATA_FINISH = 11;// 下拉刷新
 	private RadioButton chuan_guan;
 
-	private GridView chuanguan_more;
-	private boolean isShowMore = false;
 	private ChuanGuanDialog mChuanGuanDialog;
 	private RadioButton check_chuan_guan;
+	private List<PassType> simplePassList;
+	private List<PassType> morePassList;
+	private LoadingDialog mLoadingDialog;
 	private CheckChuanGuanDialog mCheckChuanGuanDialog;
 	private TextView win_record;
 
@@ -103,6 +108,7 @@ public class RecomendFragment extends BaseFragment {
 		super.onCreate(savedInstanceState);
 		toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);
+		mLoadingDialog = new LoadingDialog(getActivity());
 		requestWinRecord("10");
 	}
 
@@ -118,6 +124,7 @@ public class RecomendFragment extends BaseFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		request();
+		
 		super.onActivityCreated(savedInstanceState);
 	}
 
@@ -130,33 +137,66 @@ public class RecomendFragment extends BaseFragment {
 		mAsyncTask.execute(RequestMaker.getInstance().getGameCanBet(
 				"" + currentPageNum, "" + pageSize));
 		mAsyncTask.setOnCompleteListener(mOnGameCompleteListener);
+		
+		mLoadingDialog.show("加载数据");
 	}
 
 	/**
 	 * 投注
 	 */
 	private void requestBetting() {
+		// 判断是否登录
+		if (!SharedPrefHelper.getInstance(getActivity()).getIsLogin()) {
+			((RecomendActivity) getActivity()).openLeftDrawer();
+			ToastUtil.showCenterToast(getActivity(), "请先登录");
+			return;
+		}
 		String uid = SharedPrefHelper.getInstance(getActivity()).getUid();
-		String lotteryid = "136";
-		String votetype = "2";
-		String votenums = "1";
-		String multiple = "1";
-		String totalmoney = "2";
-		String playtype = "6";
-		String passtype = "2*1";
-		String buymoney = "2";
-		String protype = "1";
-		// String voteinfo = "HT@62959|RQ=3&62960|RQ=3@2*1@1";
-		String voteinfo = getOddsData(TYPE_BETTING, passtype, multiple);
-		LogUtil.log("voteinfo:" + voteinfo);
-		// LogUtil.log("votenums:"
-		// + SplitLotteryJCZC.exeNum(getOddsData(TYPE_VOTENUMS)));
+		String lotteryid = Consts.Lottery_ID;
+		String votetype = Consts.VOTE_TYPE;
+		String playtype = Consts.PLAY_TYPE;
+		String protype = Consts.PRO_TYPE;
+		int multiple = getMultiple();
+		String passtype = getPassType();
+		String voteinfo = getOddsData(TYPE_BETTING, passtype,
+				String.valueOf(multiple));
+		if (TextUtils.isEmpty(voteinfo)) {
+			ToastUtil.showCenterToast(getActivity(), "请选择投注场次");
+			return;
+		}
 
-		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		mAsyncTask.execute(RequestMaker.getInstance().getBettingBusiness(uid,
-				lotteryid, votetype, votenums, multiple, voteinfo, totalmoney,
-				playtype, passtype, buymoney, protype));
-		mAsyncTask.setOnCompleteListener(mOnBettingCompleteListener);
+		// 仅用于计算注数
+		String sVoteinfo = getOddsData(TYPE_VOTENUMS, passtype,
+				String.valueOf(multiple));
+		int votenums = getVoteNums(sVoteinfo);
+		int buymoney = multiple * votenums * 2;
+		int totalmoney = buymoney;
+		
+		BetInfoBean betInfoBean = new BetInfoBean();
+		betInfoBean.setUid(uid);
+		betInfoBean.setLotteryid(lotteryid);
+		betInfoBean.setVotetype(votetype);
+		betInfoBean.setVotenums(String.valueOf(votenums));
+		betInfoBean.setMultiple(String.valueOf(multiple));
+		betInfoBean.setVoteinfo(voteinfo);
+		betInfoBean.setTotalmoney(String.valueOf(totalmoney));
+		betInfoBean.setPlaytype(playtype);
+		betInfoBean.setPasstype(passtype);
+		betInfoBean.setBuymoney(String.valueOf(buymoney));
+		betInfoBean.setProtype(protype);
+		
+		// 判断用户余额
+		String sAccountBalance = SharedPrefHelper.getInstance(getActivity()).getAccountBalance();
+		betInfoBean.setAccountBalance(sAccountBalance);
+		double accountBalance = Double.valueOf(sAccountBalance);
+		if(accountBalance >= buymoney){
+			BetConfirmDialog betConfirmDialog = new BetConfirmDialog(getActivity(),betInfoBean);
+			betConfirmDialog.show();
+		}else{
+			BalanceNotEnoughDialog balanceNotEnoughDialog = new BalanceNotEnoughDialog(getActivity(),betInfoBean);
+			balanceNotEnoughDialog.show();
+		}
+
 	}
 
 	private void requestWinRecord(String size) {
@@ -173,7 +213,6 @@ public class RecomendFragment extends BaseFragment {
 		imgBtnRight = (ImageButton) v.findViewById(R.id.recomend_right);
 		recomend_refresh = (ImageButton) v.findViewById(R.id.recomend_refresh);
 		chuan_guan = (RadioButton) v.findViewById(R.id.chuan_guan);
-		chuanguan_more = (GridView) v.findViewById(R.id.chuanguan_more);
 		check_chuan_guan = (RadioButton) v.findViewById(R.id.check_chuan_guan);
 		check_chuan_guan.setOnClickListener(this);
 		chuan_guan.setOnClickListener(this);
@@ -190,10 +229,10 @@ public class RecomendFragment extends BaseFragment {
 		recomend_week = (TextView) v.findViewById(R.id.recomend_week);
 		recomend_commit = (TextView) v.findViewById(R.id.recomend_commit);
 		recomend_commit.setOnClickListener(this);
-		betting_info = (LinearLayout) v.findViewById(R.id.betting_info);
 		betting_votenums = (TextView) v.findViewById(R.id.betting_votenums);
 		betting_multiple = (TextView) v.findViewById(R.id.betting_multiple);
 		betting_buymoney = (TextView) v.findViewById(R.id.betting_buymoney);
+		betting_info = (TextView) v.findViewById(R.id.betting_info);
 
 		dealLogicAfterInitView();
 	}
@@ -204,6 +243,9 @@ public class RecomendFragment extends BaseFragment {
 		String week = DateUtil.getWeek(date);
 		recomend_date.setText(time);
 		recomend_week.setText(week);
+
+		simplePassList = PassTypeUtil.getSimplePassList();
+		morePassList = PassTypeUtil.getMorePassList();
 	}
 
 	@Override
@@ -219,7 +261,8 @@ public class RecomendFragment extends BaseFragment {
 
 		case R.id.chuan_guan:
 			mChuanGuanDialog = new ChuanGuanDialog(getActivity(),
-					mCancelListener, mCommitListener);
+					mCancelListener, mCommitListener, simplePassList,
+					morePassList);
 			mChuanGuanDialog.show();
 			break;
 
@@ -241,9 +284,12 @@ public class RecomendFragment extends BaseFragment {
 			break;
 
 		case R.id.recomend_commit:
-			toast.setText("正在投注...");
-			toast.show();
 			requestBetting();
+			break;
+			
+		case R.id.recomend_refresh:
+			currentPageNum = 1;
+			request();
 			break;
 
 		default:
@@ -251,31 +297,33 @@ public class RecomendFragment extends BaseFragment {
 		}
 	}
 
-	// 弹窗选择监听
+	/**
+	 * 串关选择取消
+	 */
 	private OnClickListener mCancelListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
 			mChuanGuanDialog.dismiss();
+
+			// 点击串关取消后，初始化过关数据
+			simplePassList = PassTypeUtil.getSimplePassList();
+			morePassList = PassTypeUtil.getMorePassList();
+			onRefreshListener.onRefresh();
 		}
 	};
+
+	/**
+	 * 串关选择确定
+	 */
 	private OnClickListener mCommitListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
 			mChuanGuanDialog.dismiss();
-		}
-	};
-
-	// 输入选择dialog点击监听
-	private OnClickListener mSureListener = new OnClickListener() {
-
-		@Override
-		public void onClick(View arg0) {
-			// TODO Auto-generated method stub
-			mCheckChuanGuanDialog.dismiss();
+			onRefreshListener.onRefresh();
 		}
 	};
 
@@ -295,25 +343,7 @@ public class RecomendFragment extends BaseFragment {
 			} else {
 				onFailure("请求错误");
 			}
-		}
-	};
-
-	/**
-	 * 投注回调处理
-	 */
-	private OnCompleteListener<BaseResponse> mOnBettingCompleteListener = new OnCompleteListener<BaseResponse>() {
-		@Override
-		public void onComplete(BaseResponse result, String resultString) {
-			// TODO Auto-generated method stub
-			if (result != null) {
-				if (result.errorcode.equals("0")) {
-
-				} else {
-					onFailure(result.errormsg);
-				}
-			} else {
-				onFailure("请求错误");
-			}
+			mLoadingDialog.dismiss();
 		}
 	};
 
@@ -473,30 +503,44 @@ public class RecomendFragment extends BaseFragment {
 		@Override
 		public void onRefresh() {
 			// TODO Auto-generated method stub
-			int votenums = 0;
-			int multiple = getMultiple(check_chuan_guan.getText().toString());
-			String passType = "1*1";
+			int multiple = getMultiple();
+			String passType = getPassType();
 			String voteinfo = getOddsData(TYPE_VOTENUMS, passType,
 					String.valueOf(multiple));
-			if (!TextUtils.isEmpty(voteinfo)) {
-				votenums = SplitLotteryJCZC.exeNum(voteinfo);
-			}
+			int votenums = getVoteNums(voteinfo);
 			int buymoney = votenums * multiple * 2;
 
-			betting_votenums.setText(votenums + "注");
-			betting_multiple.setText(multiple + "倍");
-			betting_buymoney.setText(buymoney + "");
+			// betting_votenums.setText(votenums + "注");
+			// betting_multiple.setText(multiple + "倍");
+			// betting_buymoney.setText(buymoney + "");
+			betting_info.setText(votenums + "注" + multiple + "倍" + "  共"
+					+ buymoney + "元");
 		}
 	};
 
 	/**
-	 * 解决倍数
+	 * 获取注数
+	 * 
+	 * @param voteinfo
+	 * @return
+	 */
+	private int getVoteNums(String voteinfo) {
+		int votenums = 0;
+		if (!TextUtils.isEmpty(voteinfo)) {
+			votenums = SplitLotteryJCZC.exeNum(voteinfo);
+		}
+		return votenums;
+	}
+
+	/**
+	 * 获取倍数
 	 * 
 	 * @param multiple
 	 * @return
 	 */
-	private int getMultiple(String multiple) {
+	private int getMultiple() {
 		int num = 1;
+		String multiple = check_chuan_guan.getText().toString();
 		if (multiple.equals("倍数")) {
 			num = 1;
 		} else {
@@ -507,9 +551,44 @@ public class RecomendFragment extends BaseFragment {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
-
 		}
 		return num;
+	}
+
+	/**
+	 * 获取过关类型
+	 * 
+	 * @return
+	 */
+	private String getPassType() {
+		StringBuilder sb = new StringBuilder();
+		List<String> checkList = new ArrayList<String>();
+		for (PassType passType : simplePassList) {
+			if (passType.isChecked()) {
+				checkList.add(passType.getValue());
+			}
+		}
+
+		for (PassType passType : morePassList) {
+			if (passType.isChecked()) {
+				checkList.add(passType.getValue());
+			}
+		}
+
+		if (checkList.size() > 0) {
+			for (int i = 0; i < checkList.size(); i++) {
+				if (i == 0) {
+					sb.append(checkList.get(i));
+				} else {
+					sb.append("," + checkList.get(i));
+				}
+			}
+		} else {
+			// 默认过关类型
+			sb.append("1*1");
+		}
+
+		return sb.toString();
 	}
 
 	/**
@@ -589,7 +668,7 @@ public class RecomendFragment extends BaseFragment {
 					sb.append(gameCheckList.get(i));
 				} else {
 					if (type == 0) {
-						sb.append("_" + gameCheckList.get(i));
+						sb.append("&" + gameCheckList.get(i));
 					} else if (type == 1) {
 						sb.append("&" + gameCheckList.get(i));
 					}
@@ -604,8 +683,8 @@ public class RecomendFragment extends BaseFragment {
 		// 倍数
 		sb.append("@");
 		sb.append(multiple);
-		
-		LogUtil.log("refreshData:" + sb.toString());
+
+		// LogUtil.log("refreshData:" + sb.toString());
 		return sb.toString();
 	}
 
