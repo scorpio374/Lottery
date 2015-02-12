@@ -67,12 +67,19 @@ public class AccountDetailListAdapter extends BaseAdapter {
 		String style = "";
 		String money = "";
 		if (mList.size() > 0) {
+			// 这里根据Mflag判断money是+还是-，style可直接取返回的字段
 			if (mList.get(arg0).getMflag().equals("5")) {
-				style = "银行提款";
-				money = "- " + mList.get(arg0).getMoney() + ".00 元";
+				style = "提现";
+				money = "- " + mList.get(arg0).getMoney() + "元";
 			} else if (mList.get(arg0).getMflag().equals("93")) {
 				style = "快捷支付";
-				money = "+ " + mList.get(arg0).getMoney() + ".00 元";
+				money = "+ " + mList.get(arg0).getMoney() + "元";
+			} else if (mList.get(arg0).getMflag().equals("1")) {
+				style = "充值";
+				money = "+ " + mList.get(arg0).getMoney() + "元";
+			} else {
+				style = mList.get(arg0).getRemark();
+				money = "- " + mList.get(arg0).getMoney() + "元";
 			}
 			holder.bet_count.setText(money);
 			holder.bet_date.setText(date);

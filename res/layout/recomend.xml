@@ -286,7 +286,7 @@
 
         <TextView
             android:id="@+id/recomend_commit"
-            android:layout_width="60dip"
+            android:layout_width="70dip"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dip"
             android:layout_marginRight="10dip"

@@ -2,6 +2,7 @@ package com.xmtq.lottery.activity;
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,7 +22,6 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
-import com.xmtq.lottery.utils.ToastUtil;
 
 /**
  * 投注记录
@@ -34,6 +34,9 @@ public class BetRecordActivity extends BaseActivity {
 	private ListView bet_record_all, bet_record_win, bet_record_wait;
 	private ImageButton btn_back;
 	private List<PurchaseRecordsBean> mRecordsBeansList;
+	private String pageNum = "1";
+	private String pageSize = "10";
+	private String statue = "0";
 
 	@Override
 	public void setContentLayout() {
@@ -49,7 +52,7 @@ public class BetRecordActivity extends BaseActivity {
 		// mAsyncTask.execute(mRequestMaker.getCheckUser("xmwd", "", ""));
 		// mAsyncTask.setOnCompleteListener(mtestOnCompleteListener);
 
-		request("130", "", "", "1", "0");
+		request("130", "", "", "1", statue);
 	}
 
 	// // 测试检查用户名是否存在
@@ -93,8 +96,8 @@ public class BetRecordActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 
 		bet_record_all = (ListView) findViewById(R.id.record_all_list);
-		// bet_record_win = (ListView) findViewById(R.id.record_win_list);
-		// bet_record_wait = (ListView) findViewById(R.id.record_wait_list);
+		bet_record_win = (ListView) findViewById(R.id.record_win_list);
+		bet_record_wait = (ListView) findViewById(R.id.record_wait_list);
 
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
@@ -107,18 +110,30 @@ public class BetRecordActivity extends BaseActivity {
 					@Override
 					public void onCheckedChanged(RadioGroup group, int checkedId) {
 						if (checkedId == R.id.bet_record_all) {
-
-							request("130", "", "", "1", "0");
-
+							statue = "0";
+							bet_record_all.setVisibility(View.VISIBLE);
+							bet_record_win.setVisibility(View.GONE);
+							bet_record_wait.setVisibility(View.GONE);
 						} else if (checkedId == R.id.bet_record_win) {
-							request("130", "", "", "1", "1");
+							statue = "1";
+							bet_record_all.setVisibility(View.GONE);
+							bet_record_win.setVisibility(View.VISIBLE);
+							bet_record_wait.setVisibility(View.GONE);
 						} else if (checkedId == R.id.bet_record_wait) {
-							request("130", "", "", "1", "2");
+							statue = "2";
+							bet_record_all.setVisibility(View.GONE);
+							bet_record_win.setVisibility(View.GONE);
+							bet_record_wait.setVisibility(View.VISIBLE);
 						}
+						
+						// 这里每次切换都会去请求，逻辑需要修改
+						request("130", "", "", "1", statue);
 					}
 				});
 
 		bet_record_all.setOnItemClickListener(betDetailListener);
+		bet_record_win.setOnItemClickListener(betDetailListener);
+		bet_record_wait.setOnItemClickListener(betDetailListener);
 	}
 
 	@Override
@@ -168,12 +183,13 @@ public class BetRecordActivity extends BaseActivity {
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(mRequestMaker.getPurchaseRecords(userid, lotteryid,
-				startdate, enddate, investtype, "1", "5", statue));
+				startdate, enddate, investtype, pageNum, pageSize, statue));
 		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
 	}
 
 	private OnCompleteListener<PurchaseRecordsResponse> mOnCompleteListener = new OnCompleteListener<PurchaseRecordsResponse>() {
 
+		@SuppressLint("ShowToast")
 		@Override
 		public void onComplete(PurchaseRecordsResponse result,
 				String resultString) {
@@ -181,26 +197,36 @@ public class BetRecordActivity extends BaseActivity {
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
 					PurchaseRecordsResponse mResponse = result;
-					Toast.makeText(BetRecordActivity.this, "查询成功", 2000).show();
+					Toast.makeText(BetRecordActivity.this, "查询成功",
+							Toast.LENGTH_SHORT).show();
 
 					mRecordsBeansList = mResponse.purchaseRecordsBeans;
 
 					if (mRecordsBeansList.size() == 0) {
-						Toast.makeText(BetRecordActivity.this, "没有投注记录", 2000)
-								.show();
+						Toast.makeText(BetRecordActivity.this, "没有投注记录",
+								Toast.LENGTH_SHORT).show();
 					}
-					BetRecordListAdapter mAdapter = new BetRecordListAdapter(
-							BetRecordActivity.this, mRecordsBeansList);
-					bet_record_all.setAdapter(mAdapter);
-					// bet_record_wait.setAdapter(mAdapter);
-					// bet_record_win.setAdapter(mAdapter);
+					if (statue.equals("0")) {
+						BetRecordListAdapter mAdapter = new BetRecordListAdapter(
+								BetRecordActivity.this, mRecordsBeansList);
+						bet_record_all.setAdapter(mAdapter);
+					} else if (statue.equals("1")) {
+						BetRecordListAdapter mAdapter = new BetRecordListAdapter(
+								BetRecordActivity.this, mRecordsBeansList);
+						bet_record_win.setAdapter(mAdapter);
+					} else if (statue.equals("2")) {
+						BetRecordListAdapter mAdapter = new BetRecordListAdapter(
+								BetRecordActivity.this, mRecordsBeansList);
+						bet_record_wait.setAdapter(mAdapter);
+					}
 
 				} else {
 					Toast.makeText(BetRecordActivity.this, result.errormsg,
-							2000).show();
+							Toast.LENGTH_SHORT).show();
 				}
 			} else {
-				Toast.makeText(BetRecordActivity.this, Consts.REQUEST_ERROR, 2000).show();
+				Toast.makeText(BetRecordActivity.this, Consts.REQUEST_ERROR,
+						Toast.LENGTH_SHORT).show();
 			}
 			mLoadingDialog.dismiss();
 		}

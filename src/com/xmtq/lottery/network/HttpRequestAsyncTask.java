@@ -37,7 +37,6 @@ public class HttpRequestAsyncTask extends
 			 * 获取BaseUrl
 			 */
 			String urlString = Consts.host;
-			LogUtil.log(urlString);
 			if (urlString == null) {
 				resultString = "NoUrl";
 				return null;
