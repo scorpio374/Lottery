@@ -207,7 +207,7 @@
                 android:id="@+id/betting_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0注1倍    共0元"
+                android:text="0注1倍  共0元"
                 android:textColor="#878eb4"
                 android:padding="5dip"
                 android:visibility="visible" />

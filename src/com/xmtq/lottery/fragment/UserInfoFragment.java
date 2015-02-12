@@ -1,8 +1,8 @@
 package com.xmtq.lottery.fragment;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnKeyListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -112,6 +112,8 @@ public class UserInfoFragment extends BaseFragment {
 
 				SharedPrefHelper.getInstance(getActivity()).setUserName(
 						newUserLoginBean.getUsername());
+				SharedPrefHelper.getInstance(getActivity()).setAccountBalance(
+						newUserLoginBean.getMoney());
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

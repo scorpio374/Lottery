@@ -31,7 +31,6 @@ import com.xmtq.lottery.parser.UserInfoParser;
 import com.xmtq.lottery.parser.UserRegisterParser;
 import com.xmtq.lottery.parser.VerificationCodeParser;
 import com.xmtq.lottery.parser.VersionParser;
-import com.xmtq.lottery.utils.JsonUtil;
 import com.xmtq.lottery.utils.LogUtil;
 
 public class RequestMaker {

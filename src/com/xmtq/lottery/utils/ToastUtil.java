@@ -21,12 +21,16 @@ public class ToastUtil {
 			final String message) {
 		toastMessage(activity, message, null);
 	}
-
+	
 	public static final void showCenterToast(final Context ctx,
 			final String message) {
-		Toast toast = Toast.makeText(ctx, message, Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, 0, 0);
-		toast.show();
+		if (mToast != null) {
+			mToast.cancel();
+			mToast = null;
+		}
+		mToast = Toast.makeText(ctx, message, Toast.LENGTH_SHORT);
+		mToast.setGravity(Gravity.CENTER, 0, 0);
+		mToast.show();
 	}
 
 	/**

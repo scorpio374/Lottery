@@ -217,6 +217,22 @@ public class SharedPrefHelper {
 	public void cleanUserName() {
 		sharedPreferences.edit().putString("userName", "").commit();
 	}
+	
+	/**
+	 * 记住余额
+	 * 
+	 */
+	public void setAccountBalance(String accountBalance) {
+		sharedPreferences.edit().putString("accountBalance", accountBalance).commit();
+	}
+
+	public String getAccountBalance() {
+		return sharedPreferences.getString("accountBalance", "");
+	}
+
+	public void cleanAccountBalance() {
+		sharedPreferences.edit().putString("accountBalance", "").commit();
+	}
 
 	/**
 	 * 记住密码

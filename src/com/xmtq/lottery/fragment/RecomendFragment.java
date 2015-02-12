@@ -26,6 +26,7 @@ import com.xmtq.lottery.activity.OddsDetailActivity;
 import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.adapter.RecomendListAdapter;
 import com.xmtq.lottery.bean.BaseResponse;
+import com.xmtq.lottery.bean.BetInfoBean;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.GameCanBetResponse;
 import com.xmtq.lottery.bean.PassType;
@@ -35,17 +36,18 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
-import com.xmtq.lottery.utils.LogUtil;
 import com.xmtq.lottery.utils.OddsUtil;
 import com.xmtq.lottery.utils.OnRefreshListener;
 import com.xmtq.lottery.utils.PassTypeUtil;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.ToastUtil;
+import com.xmtq.lottery.widget.BalanceNotEnoughDialog;
+import com.xmtq.lottery.widget.BetConfirmDialog;
 import com.xmtq.lottery.widget.CheckChuanGuanDialog;
 import com.xmtq.lottery.widget.ChuanGuanDialog;
 import com.xmtq.lottery.widget.CustomPullListView;
-import com.xmtq.lottery.widget.LoadingDialog;
 import com.xmtq.lottery.widget.CustomPullListView.OnLoadMoreListener;
+import com.xmtq.lottery.widget.LoadingDialog;
 
 /**
  * 首页推荐
@@ -95,25 +97,19 @@ public class RecomendFragment extends BaseFragment {
 
 	private ChuanGuanDialog mChuanGuanDialog;
 	private RadioButton check_chuan_guan;
-<<<<<<< HEAD
 	private List<PassType> simplePassList;
 	private List<PassType> morePassList;
 	private LoadingDialog mLoadingDialog;
-=======
 	private CheckChuanGuanDialog mCheckChuanGuanDialog;
 	private TextView win_record;
->>>>>>> origin/master
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);
-<<<<<<< HEAD
 		mLoadingDialog = new LoadingDialog(getActivity());
-=======
 		requestWinRecord("10");
->>>>>>> origin/master
 	}
 
 	@Override
@@ -128,6 +124,7 @@ public class RecomendFragment extends BaseFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		request();
+		
 		super.onActivityCreated(savedInstanceState);
 	}
 
@@ -140,12 +137,15 @@ public class RecomendFragment extends BaseFragment {
 		mAsyncTask.execute(RequestMaker.getInstance().getGameCanBet(
 				"" + currentPageNum, "" + pageSize));
 		mAsyncTask.setOnCompleteListener(mOnGameCompleteListener);
+		
+		mLoadingDialog.show("加载数据");
 	}
 
 	/**
 	 * 投注
 	 */
 	private void requestBetting() {
+		// 判断是否登录
 		if (!SharedPrefHelper.getInstance(getActivity()).getIsLogin()) {
 			((RecomendActivity) getActivity()).openLeftDrawer();
 			ToastUtil.showCenterToast(getActivity(), "请先登录");
@@ -166,20 +166,37 @@ public class RecomendFragment extends BaseFragment {
 		}
 
 		// 仅用于计算注数
-		String voteinfo1 = getOddsData(TYPE_VOTENUMS, passtype,
+		String sVoteinfo = getOddsData(TYPE_VOTENUMS, passtype,
 				String.valueOf(multiple));
-		int votenums = getVoteNums(voteinfo1);
+		int votenums = getVoteNums(sVoteinfo);
 		int buymoney = multiple * votenums * 2;
 		int totalmoney = buymoney;
+		
+		BetInfoBean betInfoBean = new BetInfoBean();
+		betInfoBean.setUid(uid);
+		betInfoBean.setLotteryid(lotteryid);
+		betInfoBean.setVotetype(votetype);
+		betInfoBean.setVotenums(String.valueOf(votenums));
+		betInfoBean.setMultiple(String.valueOf(multiple));
+		betInfoBean.setVoteinfo(voteinfo);
+		betInfoBean.setTotalmoney(String.valueOf(totalmoney));
+		betInfoBean.setPlaytype(playtype);
+		betInfoBean.setPasstype(passtype);
+		betInfoBean.setBuymoney(String.valueOf(buymoney));
+		betInfoBean.setProtype(protype);
+		
+		// 判断用户余额
+		String sAccountBalance = SharedPrefHelper.getInstance(getActivity()).getAccountBalance();
+		betInfoBean.setAccountBalance(sAccountBalance);
+		double accountBalance = Double.valueOf(sAccountBalance);
+		if(accountBalance >= buymoney){
+			BetConfirmDialog betConfirmDialog = new BetConfirmDialog(getActivity(),betInfoBean);
+			betConfirmDialog.show();
+		}else{
+			BalanceNotEnoughDialog balanceNotEnoughDialog = new BalanceNotEnoughDialog(getActivity(),betInfoBean);
+			balanceNotEnoughDialog.show();
+		}
 
-		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		mAsyncTask.execute(RequestMaker.getInstance().getBettingBusiness(uid,
-				lotteryid, votetype, String.valueOf(votenums),
-				String.valueOf(multiple), voteinfo, String.valueOf(totalmoney),
-				playtype, passtype, String.valueOf(buymoney), protype));
-		mAsyncTask.setOnCompleteListener(mOnBettingCompleteListener);
-
-		mLoadingDialog.show("正在投注");
 	}
 
 	private void requestWinRecord(String size) {
@@ -269,6 +286,11 @@ public class RecomendFragment extends BaseFragment {
 		case R.id.recomend_commit:
 			requestBetting();
 			break;
+			
+		case R.id.recomend_refresh:
+			currentPageNum = 1;
+			request();
+			break;
 
 		default:
 			break;
@@ -315,25 +337,6 @@ public class RecomendFragment extends BaseFragment {
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
 					onSuccess(result);
-				} else {
-					onFailure(result.errormsg);
-				}
-			} else {
-				onFailure("请求错误");
-			}
-		}
-	};
-
-	/**
-	 * 投注回调处理
-	 */
-	private OnCompleteListener<BaseResponse> mOnBettingCompleteListener = new OnCompleteListener<BaseResponse>() {
-		@Override
-		public void onComplete(BaseResponse result, String resultString) {
-			// TODO Auto-generated method stub
-			if (result != null) {
-				if (result.errorcode.equals("0")) {
-
 				} else {
 					onFailure(result.errormsg);
 				}
@@ -510,7 +513,7 @@ public class RecomendFragment extends BaseFragment {
 			// betting_votenums.setText(votenums + "注");
 			// betting_multiple.setText(multiple + "倍");
 			// betting_buymoney.setText(buymoney + "");
-			betting_info.setText(votenums + "注" + multiple + "倍" + " 共"
+			betting_info.setText(votenums + "注" + multiple + "倍" + "  共"
 					+ buymoney + "元");
 		}
 	};
@@ -665,7 +668,7 @@ public class RecomendFragment extends BaseFragment {
 					sb.append(gameCheckList.get(i));
 				} else {
 					if (type == 0) {
-						sb.append("_" + gameCheckList.get(i));
+						sb.append("&" + gameCheckList.get(i));
 					} else if (type == 1) {
 						sb.append("&" + gameCheckList.get(i));
 					}
