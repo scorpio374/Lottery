@@ -93,8 +93,8 @@ public class BetRecordActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 
 		bet_record_all = (ListView) findViewById(R.id.record_all_list);
-		bet_record_win = (ListView) findViewById(R.id.record_win_list);
-		bet_record_wait = (ListView) findViewById(R.id.record_wait_list);
+		// bet_record_win = (ListView) findViewById(R.id.record_win_list);
+		// bet_record_wait = (ListView) findViewById(R.id.record_wait_list);
 
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
@@ -107,18 +107,13 @@ public class BetRecordActivity extends BaseActivity {
 					@Override
 					public void onCheckedChanged(RadioGroup group, int checkedId) {
 						if (checkedId == R.id.bet_record_all) {
-							bet_record_all.setVisibility(View.VISIBLE);
-							bet_record_win.setVisibility(View.GONE);
-							bet_record_wait.setVisibility(View.GONE);
+
+							request("130", "", "", "1", "0");
 
 						} else if (checkedId == R.id.bet_record_win) {
-							bet_record_all.setVisibility(View.GONE);
-							bet_record_win.setVisibility(View.VISIBLE);
-							bet_record_wait.setVisibility(View.GONE);
+							request("130", "", "", "1", "1");
 						} else if (checkedId == R.id.bet_record_wait) {
-							bet_record_all.setVisibility(View.GONE);
-							bet_record_win.setVisibility(View.GONE);
-							bet_record_wait.setVisibility(View.VISIBLE);
+							request("130", "", "", "1", "2");
 						}
 					}
 				});
@@ -191,14 +186,14 @@ public class BetRecordActivity extends BaseActivity {
 					mRecordsBeansList = mResponse.purchaseRecordsBeans;
 
 					if (mRecordsBeansList.size() == 0) {
-						ToastUtil.showCenterToast(BetRecordActivity.this,
-								"没有投注记录");
+						Toast.makeText(BetRecordActivity.this, "没有投注记录", 2000)
+								.show();
 					}
 					BetRecordListAdapter mAdapter = new BetRecordListAdapter(
 							BetRecordActivity.this, mRecordsBeansList);
 					bet_record_all.setAdapter(mAdapter);
-					bet_record_wait.setAdapter(mAdapter);
-					bet_record_win.setAdapter(mAdapter);
+					// bet_record_wait.setAdapter(mAdapter);
+					// bet_record_win.setAdapter(mAdapter);
 
 				} else {
 					Toast.makeText(BetRecordActivity.this, result.errormsg,

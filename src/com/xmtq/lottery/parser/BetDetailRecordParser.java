@@ -29,64 +29,79 @@ public class BetDetailRecordParser extends BaseParser<BetDetailAllResponse> {
 			JSONObject elementsObj = bodyObj.getJSONObject("elements");
 
 			// BetDetailAllBean mBetDetailAllBean = new BetDetailAllBean();
-			try {
-				JSONArray elementObj = elementsObj.getJSONArray("element");
-				// JSONArray usedbank = usedList.getJSONArray("usedbank");
-				if (elementObj != null) {
-					for (int i = 0; i < elementObj.size(); i++) {
-						JSONObject j = elementObj.getJSONObject(i);
-						BetDetailBean mBetDetailBean = new BetDetailBean();
-						mBetDetailBean.setMatchteam(j.getString("matchteam"));
-						mBetDetailBean.setNumber(j.getString("number"));
-						if (j.containsKey("odd")) {
-							JSONArray odds = j.getJSONArray("odd");
-							if (odds != null) {
-								for (int k = 0; k < odds.size(); k++) {
-									JSONObject odd = odds.getJSONObject(k);
-									BetOddBean mOddBean = new BetOddBean();
-									mOddBean.setBetinfo(odd
-											.getString("betinfo"));
-									mOddBean.setGameresult(odd
-											.getString("gameresult"));
-									mOddBean.setPlayname(odd
-											.getString("playname"));
-									mBetDetailBean.getmBetOddBeans().add(
-											mOddBean);
-								}
-							}
+			if (elementsObj.containsKey("element")) {
+				try {
+
+					JSONArray elementObj = elementsObj.getJSONArray("element");
+					// JSONArray usedbank = usedList.getJSONArray("usedbank");
+					if (elementObj != null) {
+						for (int i = 0; i < elementObj.size(); i++) {
+							JSONObject j = elementObj.getJSONObject(i);
+							saveBetDetailRecord(response, j);
 						}
-
-						response.mBetDetailAllBean.getmBetDetailBeans().add(
-								mBetDetailBean);
-
 					}
-
-					response.mBetDetailAllBean.setBonus(elementsObj
-							.getString("bonus"));
-					response.mBetDetailAllBean.setGuoguantype(elementsObj
-							.getString("guoguantype"));
-					response.mBetDetailAllBean.setMultiple(elementsObj
-							.getString("multiple"));
-					response.mBetDetailAllBean.setPlaytype(elementsObj
-							.getString("playtype"));
-
-					response.mBetDetailAllBean.setProjectno(elementsObj
-							.getString("projectno"));
-					response.mBetDetailAllBean.setProjectprize(elementsObj
-							.getString("projectprize"));
-					response.mBetDetailAllBean.setProjecttime(elementsObj
-							.getString("projecttime"));
-					response.mBetDetailAllBean.setState(elementsObj
-							.getString("state"));
-					response.mBetDetailAllBean.setUserballot(elementsObj
-							.getString("userballot"));
+				} catch (Exception e) {
+					JSONObject j = elementsObj.getJSONObject("element");
+					saveBetDetailRecord(response, j);
 
 				}
-			} catch (Exception e) {
-
 			}
+
+			response.mBetDetailAllBean.setBonus(elementsObj.getString("bonus"));
+			response.mBetDetailAllBean.setGuoguantype(elementsObj
+					.getString("guoguantype"));
+			response.mBetDetailAllBean.setMultiple(elementsObj
+					.getString("multiple"));
+			response.mBetDetailAllBean.setPlaytype(elementsObj
+					.getString("playtype"));
+
+			response.mBetDetailAllBean.setProjectno(elementsObj
+					.getString("projectno"));
+			response.mBetDetailAllBean.setProjectprize(elementsObj
+					.getString("projectprize"));
+			response.mBetDetailAllBean.setProjecttime(elementsObj
+					.getString("projecttime"));
+			response.mBetDetailAllBean.setState(elementsObj.getString("state"));
+			response.mBetDetailAllBean.setUserballot(elementsObj
+					.getString("userballot"));
 
 		}
 		return response;
 	}
+
+	private void saveBetDetailRecord(BetDetailAllResponse response, JSONObject j) {
+
+		BetDetailBean mBetDetailBean = new BetDetailBean();
+		mBetDetailBean.setMatchteam(j.getString("matchteam"));
+		mBetDetailBean.setNumber(j.getString("number"));
+		mBetDetailBean.setName(j.getString("name"));
+		mBetDetailBean.setHostteam(j.getString("hostteam"));
+		try {
+			if (j.containsKey("odd")) {
+				JSONArray odds = j.getJSONArray("odd");
+				if (odds != null) {
+					for (int k = 0; k < odds.size(); k++) {
+						JSONObject odd = odds.getJSONObject(k);
+						BetOddBean mOddBean = new BetOddBean();
+						mOddBean.setBetinfo(odd.getString("betinfo"));
+						mOddBean.setGameresult(odd.getString("gameresult"));
+						mOddBean.setPlayname(odd.getString("playname"));
+						mBetDetailBean.getmBetOddBeans().add(mOddBean);
+					}
+				}
+			}
+		} catch (Exception e) {
+			JSONObject odd = j.getJSONObject("odd");
+			if (odd != null) {
+				BetOddBean mOddBean = new BetOddBean();
+				mOddBean.setBetinfo(odd.getString("betinfo"));
+				mOddBean.setGameresult(odd.getString("gameresult"));
+				mOddBean.setPlayname(odd.getString("playname"));
+				mBetDetailBean.getmBetOddBeans().add(mOddBean);
+			}
+		}
+
+		response.mBetDetailAllBean.getmBetDetailBeans().add(mBetDetailBean);
+	}
+
 }

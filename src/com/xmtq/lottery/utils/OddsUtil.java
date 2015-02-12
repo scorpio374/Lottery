@@ -92,6 +92,25 @@ public class OddsUtil {
 	}
 
 	/**
+	 * 获取比赛日期
+	 * 
+	 * @param data
+	 * @return
+	 */
+	public static String getGameData2(String data) {
+		String time = null;
+		if (TextUtils.isEmpty(data)) {
+			return time;
+		}
+		String[] str = data.split(" ");
+		if (str.length > 0) {
+			String[] hsm = str[0].split("-");
+			time = hsm[0] + "-" + hsm[1] + "-" + hsm[2];
+		}
+		return time;
+	}
+
+	/**
 	 * 获取比赛时间
 	 * 
 	 * @param data
@@ -110,7 +129,6 @@ public class OddsUtil {
 		return time;
 	}
 
- 
 	/**
 	 * 胜负平拼接
 	 * 
@@ -285,5 +303,24 @@ public class OddsUtil {
 			}
 		}
 		return sb.toString();
+	}
+
+	public static String playStyle(String type) {
+		String playType = "";
+		if (type.equals("1")) {
+			playType = "胜平负";
+		} else if (type.equals("2")) {
+			playType = "比分";
+		} else if (type.equals("3")) {
+			playType = "总进球";
+		} else if (type.equals("4")) {
+			playType = "半全场";
+		} else if (type.equals("5")) {
+			playType = "胜平负";
+		} else if (type.equals("6")) {
+			playType = "混投";
+		}
+		return playType;
+
 	}
 }
