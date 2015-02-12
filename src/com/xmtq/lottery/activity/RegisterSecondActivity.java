@@ -1,12 +1,10 @@
 package com.xmtq.lottery.activity;
 
 import android.os.CountDownTimer;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.Consts;
@@ -16,6 +14,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.StringUtil;
+import com.xmtq.lottery.utils.ToastUtil;
 import com.xmtq.lottery.utils.Util;
 
 /**
@@ -32,7 +31,6 @@ public class RegisterSecondActivity extends BaseActivity {
 	private TextView register_commit;
 	private EditText mVeriCodeView;
 
-	private Toast toast;
 	private CountDown mCountDown;
 	private boolean isGetCoding = false;
 	private UserBean userBean;
@@ -48,8 +46,6 @@ public class RegisterSecondActivity extends BaseActivity {
 		userBean = (UserBean) getIntent().getSerializableExtra("userBean");
 
 		mRequestMaker = RequestMaker.getInstance();
-		toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, 0, 0);
 	}
 
 	@Override
@@ -116,11 +112,9 @@ public class RegisterSecondActivity extends BaseActivity {
 			mAsyncTask.execute(mRequestMaker.getMessageVerification(phoneNum,
 					Consts.PHONE_REGISTER_VERI));
 			mAsyncTask.setOnCompleteListener(mOnCodeCompleteListener);
-			toast.setText("验证码已发送，请注意查收");
-			toast.show();
+			ToastUtil.showCenterToast(this, "验证码已发送，请注意查收");
 		} else {
-			toast.setText("请输入正确的手机号码");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入正确的手机号码");
 			finish();
 		}
 	}
@@ -138,12 +132,10 @@ public class RegisterSecondActivity extends BaseActivity {
 					mCountDown = new CountDown(60000, 1000);
 					mCountDown.start();
 				} else {
-					toast.setText(result.errormsg);
-					toast.show();
+					ToastUtil.showCenterToast(RegisterSecondActivity.this, result.errormsg);
 				}
 			} else {
-				toast.setText("获取验证码失败！");
-				toast.show();
+				ToastUtil.showCenterToast(RegisterSecondActivity.this, "获取验证码失败！");
 			}
 		}
 	};
@@ -157,8 +149,7 @@ public class RegisterSecondActivity extends BaseActivity {
 		String veriCode = mVeriCodeView.getText().toString().trim();
 
 		if (StringUtil.isNullOrEmpty(veriCode)) {
-			toast.setText("请获取验证码");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请获取验证码");
 			return;
 		}
 
@@ -181,8 +172,7 @@ public class RegisterSecondActivity extends BaseActivity {
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
 					isGetCoding = true;
-					toast.setText("注册成功");
-					toast.show();
+					ToastUtil.showCenterToast(RegisterSecondActivity.this, "注册成功");
 
 					if (mCountDown != null) {
 						mCountDown.cancel();
@@ -191,12 +181,10 @@ public class RegisterSecondActivity extends BaseActivity {
 					// 注册成功，返回前一个页面
 					finish();
 				} else {
-					toast.setText(result.errormsg);
-					toast.show();
+					ToastUtil.showCenterToast(RegisterSecondActivity.this, result.errormsg);
 				}
 			} else {
-				toast.setText("请求错误");
-				toast.show();
+				ToastUtil.showCenterToast(RegisterSecondActivity.this, Consts.REQUEST_ERROR);
 			}
 
 			mLoadingDialog.dismiss();

@@ -61,4 +61,6 @@ public class Consts {
 	 * 方案类型（0：单式，1：复式，竞彩手机端只有复式）
 	 */
 	public static final String PRO_TYPE = "1";
+	
+	public static final String REQUEST_ERROR = "网络错误";
 }

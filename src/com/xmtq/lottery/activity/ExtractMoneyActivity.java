@@ -1,28 +1,21 @@
 package com.xmtq.lottery.activity;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.adapter.AccountDetailListAdapter;
-import com.xmtq.lottery.bean.AccountDetailBean;
-import com.xmtq.lottery.bean.AccountDetailResponse;
+import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.bean.ExtractCashResponse;
 import com.xmtq.lottery.bean.UserInfoBean;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
-import com.xmtq.lottery.utils.StringUtil;
 import com.xmtq.lottery.utils.ToastUtil;
 
 /**
@@ -96,7 +89,6 @@ public class ExtractMoneyActivity extends BaseActivity {
 
 	@Override
 	public void onClickEvent(View view) {
-		Intent intent;
 		switch (view.getId()) {
 		case R.id.back:
 			this.finish();
@@ -151,9 +143,9 @@ public class ExtractMoneyActivity extends BaseActivity {
 
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
-					ExtractCashResponse mResponse = result;
-					Toast.makeText(ExtractMoneyActivity.this, "提现成功", 2000)
-							.show();
+					// ExtractCashResponse mResponse = result;
+					ToastUtil
+							.showCenterToast(ExtractMoneyActivity.this, "提现成功");
 
 					Intent intent = new Intent(ExtractMoneyActivity.this,
 							ExtractMoneySuccessActivity.class);
@@ -161,11 +153,12 @@ public class ExtractMoneyActivity extends BaseActivity {
 					startActivity(intent);
 
 				} else {
-					Toast.makeText(ExtractMoneyActivity.this, result.errormsg,
-							2000).show();
+					ToastUtil.showCenterToast(ExtractMoneyActivity.this,
+							result.errormsg);
 				}
 			} else {
-				Toast.makeText(ExtractMoneyActivity.this, "请求错误", 2000).show();
+				ToastUtil.showCenterToast(ExtractMoneyActivity.this,
+						Consts.REQUEST_ERROR);
 			}
 
 			mLoadingDialog.dismiss();

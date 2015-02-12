@@ -4,12 +4,7 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xmtq.lottery.bean.ExtractCashResponse;
-import com.xmtq.lottery.bean.ImproveUserInfoResponse;
 import com.xmtq.lottery.bean.PhoneMessageResponse;
-import com.xmtq.lottery.bean.PhonePayFirstResponse;
-import com.xmtq.lottery.bean.RepasswordResponse;
-import com.xmtq.lottery.bean.UserRegisterResponse;
 import com.xmtq.lottery.utils.JsonUtil;
 
 /**

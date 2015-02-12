@@ -17,13 +17,11 @@ import com.xmtq.lottery.utils.OddsUtil;
 public class BetRecordListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<PurchaseRecordsBean> mRecordsBeansList;
-	private int state;
 
 	public BetRecordListAdapter(Context c,
-			List<PurchaseRecordsBean> RecordsBeansList, int state) {
+			List<PurchaseRecordsBean> RecordsBeansList) {
 		this.mContext = c;
 		this.mRecordsBeansList = RecordsBeansList;
-		this.state = state;
 	}
 
 	@Override
@@ -35,7 +33,7 @@ public class BetRecordListAdapter extends BaseAdapter {
 	@Override
 	public Object getItem(int arg0) {
 		// TODO Auto-generated method stub
-		return null;
+		return mRecordsBeansList.get(arg0);
 	}
 
 	@Override
@@ -86,9 +84,7 @@ public class BetRecordListAdapter extends BaseAdapter {
 				.getBonusAfterfax(), mRecordsBeansList.get(arg0).getState()));
 		holder.bet_style.setText(playStyle(mRecordsBeansList.get(arg0)
 				.getPlaytype()));
-		holder.bet_money.setText("");
-
-		// holder.tv_program_name.setText(childList.get(position).getTitle());
+		holder.bet_money.setText(mRecordsBeansList.get(arg0).getProjectPrize()+"元");
 
 		return convertView;
 	}
@@ -133,6 +129,8 @@ public class BetRecordListAdapter extends BaseAdapter {
 				}
 			} else if (state.equals("出票中")) {
 				result = "等待开奖";
+			} else {
+				result = state;
 			}
 		} else {
 			result = "";

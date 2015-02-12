@@ -9,23 +9,17 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.bean.BaseResponse;
-import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
-import com.xmtq.lottery.utils.ToastUtil;
 
 public class CheckChuanGuanDialog {
 
 	private Context context;
 	private Dialog mdialog;
 	private LinearLayout layout;
-	private Button tv_shure;
-	private Button tv_cancel;
 	private EditText dialog_edit;
 	public String edit_text;
 	private OnCompleteListener onCompleteListener;

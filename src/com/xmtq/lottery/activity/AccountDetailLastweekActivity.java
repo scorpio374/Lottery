@@ -1,6 +1,5 @@
 package com.xmtq.lottery.activity;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,13 +12,11 @@ import android.widget.TextView;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.AccountDetailListAdapter;
-import com.xmtq.lottery.adapter.BetOrderDetailListAdapter;
-import com.xmtq.lottery.adapter.BetRecordListAdapter;
 import com.xmtq.lottery.bean.AccountDetailBean;
 import com.xmtq.lottery.bean.AccountDetailResponse;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.ToastUtil;
@@ -45,7 +42,6 @@ public class AccountDetailLastweekActivity extends BaseActivity {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void dealLogicBeforeInitView() {
 		request(getDate(-7), getDate(0));

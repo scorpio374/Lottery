@@ -1,22 +1,15 @@
 package com.xmtq.lottery.activity;
 
 import android.content.Intent;
-import android.os.CountDownTimer;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.Consts;
-import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.UserBean;
-import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
-import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.StringUtil;
+import com.xmtq.lottery.utils.ToastUtil;
 import com.xmtq.lottery.utils.Util;
 
 /**
@@ -27,14 +20,11 @@ import com.xmtq.lottery.utils.Util;
  */
 public class RegisterActivity extends BaseActivity {
 
-	private RequestMaker mRequestMaker;
 	private ImageButton btn_back;
 	private TextView register_commit;
 	private EditText mPhoneView;
 	private EditText mPasswordView;
 	private EditText mUserNameView;
-
-	private Toast toast;
 
 	@Override
 	public void setContentLayout() {
@@ -45,9 +35,6 @@ public class RegisterActivity extends BaseActivity {
 	@Override
 	public void dealLogicBeforeInitView() {
 		// TODO Auto-generated method stub
-		mRequestMaker = RequestMaker.getInstance();
-		toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, 0, 0);
 	}
 
 	@Override
@@ -102,34 +89,27 @@ public class RegisterActivity extends BaseActivity {
 		String password = mPasswordView.getText().toString().trim();
 
 		if (StringUtil.isNullOrEmpty(userName)) {
-			toast.setText("请输入用户名");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入用户名");
 			return;
 		}
 
 		if (!Util.isMobileNO(phoneNum)) {
-			toast.setText("请输入正确的手机号码");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入正确的手机号码");
 			return;
 		}
 
-
 		if (StringUtil.isNullOrEmpty(password)) {
-			toast.setText("请输入密码");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入密码");
 			return;
-
 		} else if (!StringUtil.matchPwd(password)) {
-			toast.setText("请输入6-16位密码,密码必须包含数字和字母");
-			toast.show();
-			return;
+			// ToastUtil.showCenterToast(this, "请输入6-16位密码,密码必须包含数字和字母");
+			// return;
 		}
 		
 		UserBean userBean=new UserBean();
 		userBean.setPassword(password);
 		userBean.setPhoneNum(phoneNum);
 		userBean.setUsername(userName);
-		
 		
 		Intent intent=new Intent(RegisterActivity.this, RegisterSecondActivity.class);
 		intent.putExtra("userBean", userBean);

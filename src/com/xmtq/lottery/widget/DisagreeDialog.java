@@ -7,7 +7,6 @@ import android.content.DialogInterface.OnDismissListener;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -18,14 +17,11 @@ public class DisagreeDialog {
 	private Context context;
 	private Dialog mdialog;
 	private LinearLayout layout;
-	private Button tv_shure;
-	private Button tv_cancel;
 	private OnClickListener myShureListener;
 
 	public DisagreeDialog(Context context, OnClickListener myShureListener) {
 		this.context = context;
 		this.myShureListener = myShureListener;
-		// this.myCancelListener = myCancelListener;
 	}
 
 	private void initview() {

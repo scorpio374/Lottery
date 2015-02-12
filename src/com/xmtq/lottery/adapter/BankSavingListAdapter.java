@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.bean.BankBean;
-import com.xmtq.lottery.bean.BankCBean;
 
 /**
  * 储蓄卡adapter

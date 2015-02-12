@@ -8,20 +8,16 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.dvt.lottery.util.MD5;
 import com.example.lottery.R;
+import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.adapter.BetOrderDetailListAdapter;
-import com.xmtq.lottery.adapter.BetRecordListAdapter;
 import com.xmtq.lottery.bean.BetDetailAllBean;
 import com.xmtq.lottery.bean.BetDetailAllResponse;
-import com.xmtq.lottery.bean.PurchaseRecordsResponse;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.OddsUtil;
-import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.ToastUtil;
 
 /**
@@ -112,9 +108,6 @@ public class BetDetailActivity extends BaseActivity {
 	}
 
 	private void request(String serialid) {
-		String userid = SharedPrefHelper.getInstance(getApplicationContext())
-				.getUid();
-
 		mLoadingDialog.show("数据加载中...");
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
@@ -172,11 +165,10 @@ public class BetDetailActivity extends BaseActivity {
 					}
 
 				} else {
-					Toast.makeText(BetDetailActivity.this, result.errormsg,
-							2000).show();
+					ToastUtil.showCenterToast(BetDetailActivity.this, result.errormsg);
 				}
 			} else {
-				Toast.makeText(BetDetailActivity.this, "请求错误", 2000).show();
+				ToastUtil.showCenterToast(BetDetailActivity.this, Consts.REQUEST_ERROR);
 			}
 			mLoadingDialog.dismiss();
 		}

@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.activity.RechargeMoneyActivity;
-import com.xmtq.lottery.bean.CreateOrderBean;
-import com.xmtq.lottery.bean.GameHistoryDateBean;
 import com.xmtq.lottery.bean.UserBankBean;
 
 public class RechargeBindingListAdapter extends BaseAdapter {

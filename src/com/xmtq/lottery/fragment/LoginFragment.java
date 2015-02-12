@@ -2,7 +2,6 @@ package com.xmtq.lottery.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,9 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.activity.FindPasswordActivity;
 import com.xmtq.lottery.activity.RegisterActivity;
 import com.xmtq.lottery.bean.BaseResponse;
@@ -24,7 +23,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.StringUtil;
-import com.xmtq.lottery.widget.LoadingDialog;
+import com.xmtq.lottery.utils.ToastUtil;
 
 /**
  * 登录
@@ -41,7 +40,6 @@ public class LoginFragment extends BaseFragment {
 	private CheckBox remember_passwod;
 	private EditText user_name;
 	private EditText user_password;
-	private Toast toast;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,8 +57,6 @@ public class LoginFragment extends BaseFragment {
 
 	public void dealLogicBeforeInitView() {
 		spfs = SharedPrefHelper.getInstance(getActivity());
-		toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, 0, 0);
 	}
 
 	public void initView(View v) {
@@ -110,24 +106,18 @@ public class LoginFragment extends BaseFragment {
 		String password = user_password.getText().toString().trim();
 
 		if (StringUtil.isNullOrEmpty(userName)) {
-			toast.setText("请输入用户名");
-			toast.show();
+			ToastUtil.showCenterToast(getActivity(), "请输入用户名");
 			return;
 		}
 
 		if (StringUtil.isNullOrEmpty(password)) {
-			toast.setText("请输入密码");
-			toast.show();
+			ToastUtil.showCenterToast(getActivity(), "请输入密码");
 			return;
-
 		} else if (!StringUtil.matchPwd(password)) {
-			// toast.setText("请输入6-16位密码,密码必须包含数字和字母");
-			// toast.show();
+			//ToastUtil.showCenterToast(getActivity(), "请输入6-16位密码,密码必须包含数字和字母");
 			// return;
 		}
 		mLoadingDialog.show("登录中，请稍候...");
-		// toast.setText("登陆中，请稍候...");
-		// toast.show();
 
 		if (spfs.getIsRememberPwd()) {
 			spfs.setUserPassward(password);
@@ -154,7 +144,7 @@ public class LoginFragment extends BaseFragment {
 					onFailure(result.errormsg);
 				}
 			} else {
-				onFailure("请求错误");
+				onFailure(Consts.REQUEST_ERROR);
 			}
 			mLoadingDialog.dismiss();
 		}
@@ -186,8 +176,7 @@ public class LoginFragment extends BaseFragment {
 	 * @param msg
 	 */
 	private void onFailure(String msg) {
-		toast.setText(msg);
-		toast.show();
+		ToastUtil.showCenterToast(getActivity(), msg);
 	}
 
 	/**

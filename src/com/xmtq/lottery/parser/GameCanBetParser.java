@@ -10,7 +10,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.GameCanBetResponse;
 import com.xmtq.lottery.bean.Odds;
-import com.xmtq.lottery.bean.SpOdds;
 import com.xmtq.lottery.utils.JsonUtil;
 import com.xmtq.lottery.utils.OddsUtil;
 

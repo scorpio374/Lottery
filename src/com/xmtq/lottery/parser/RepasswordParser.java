@@ -4,9 +4,7 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xmtq.lottery.bean.ImproveUserInfoResponse;
 import com.xmtq.lottery.bean.RepasswordResponse;
-import com.xmtq.lottery.bean.UserRegisterResponse;
 import com.xmtq.lottery.utils.JsonUtil;
 
 public class RepasswordParser extends BaseParser<RepasswordResponse> {

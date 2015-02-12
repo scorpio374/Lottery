@@ -65,6 +65,7 @@ public class PurchaseRecordsParser extends BaseParser<PurchaseRecordsResponse> {
 		bean.setState(j.getString("state"));
 		bean.setBonusAfterfax(j.getString("bonus_after_fax"));
 		bean.setBonusBeforeFax(j.getString("bonus_before_fax"));
+		bean.setProjectPrize(j.getString("project_prize"));
 		response.purchaseRecordsBeans.add(bean);
 	}
 }

@@ -1,7 +1,5 @@
 package com.xmtq.lottery.fragment;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import android.content.Intent;
@@ -13,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.activity.GameResultActivity;
@@ -69,9 +66,6 @@ public class RecomendHistoryFragment extends BaseFragment {
 	}
 
 	private void request() {
-
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String date = formatter.format(new Date());
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(mRequestMaker.getGameHistoryDateList("", "", "1",

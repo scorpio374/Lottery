@@ -1,19 +1,19 @@
 package com.xmtq.lottery.activity;
 
-import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.StringUtil;
+import com.xmtq.lottery.utils.ToastUtil;
 
 public class ModifiPasswordActivity extends BaseActivity {
 	private ImageButton btn_back;
@@ -21,8 +21,6 @@ public class ModifiPasswordActivity extends BaseActivity {
 	private EditText old_password;
 	private EditText new_password;
 	private EditText confirm_password;
-
-	private Toast toast;
 
 	@Override
 	public void setContentLayout() {
@@ -32,8 +30,6 @@ public class ModifiPasswordActivity extends BaseActivity {
 	@Override
 	public void dealLogicBeforeInitView() {
 		// TODO Auto-generated method stub
-		toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, 0, 0);
 	}
 
 	@Override
@@ -68,7 +64,7 @@ public class ModifiPasswordActivity extends BaseActivity {
 		}
 
 	}
-	
+
 	/**
 	 * 修改密码
 	 */
@@ -80,33 +76,30 @@ public class ModifiPasswordActivity extends BaseActivity {
 		String confirmPassword = confirm_password.getText().toString().trim();
 
 		if (StringUtil.isNullOrEmpty(oldPassword)) {
-			toast.setText("请输入原密码");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入原密码");
 			return;
 		}
 
 		if (StringUtil.isNullOrEmpty(newPassword)) {
-			toast.setText("请输入新密码");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入新密码");
 			return;
 		} else if (!StringUtil.matchPwd(newPassword)) {
-			// toast.setText("请输入6-16位密码,新密码必须包含数字和字母");
-			// toast.show();
+			// ToastUtil.showCenterToast(this, "请输入6-16位密码,新密码必须包含数字和字母");
 			// return;
 		}
 
 		if (StringUtil.isNullOrEmpty(confirmPassword)
 				|| !confirmPassword.equals(newPassword)) {
-			toast.setText("两次输入新密码不一致，请重新输入确认");
-			toast.show();
+			ToastUtil.showCenterToast(this, "两次输入新密码不一致，请重新输入");
 			return;
 		}
-		
+
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		mAsyncTask.execute(RequestMaker.getInstance().getModifyPassword(uid, oldPassword, newPassword));
+		mAsyncTask.execute(RequestMaker.getInstance().getModifyPassword(uid,
+				oldPassword, newPassword));
 		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
 	}
-	
+
 	/**
 	 * 修改密码回调处理
 	 */
@@ -116,18 +109,15 @@ public class ModifiPasswordActivity extends BaseActivity {
 			// TODO Auto-generated method stub
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
-					toast.setText("密码修改成功");
-					toast.show();
+					ToastUtil.showCenterToast(ModifiPasswordActivity.this, "密码修改成功");
 
 					// 修改成功，返回前一个页面
 					finish();
 				} else {
-					toast.setText(result.errormsg);
-					toast.show();
+					ToastUtil.showCenterToast(ModifiPasswordActivity.this, result.errormsg);
 				}
 			} else {
-				toast.setText("请求错误");
-				toast.show();
+				ToastUtil.showCenterToast(ModifiPasswordActivity.this, Consts.REQUEST_ERROR);
 			}
 		}
 	};

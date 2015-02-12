@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -12,13 +11,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.BankSavingCListAdapter;
 import com.xmtq.lottery.adapter.BankSavingListAdapter;
-import com.xmtq.lottery.adapter.BetOrderDetailListAdapter;
-import com.xmtq.lottery.adapter.BetRecordListAdapter;
 import com.xmtq.lottery.bean.BankBean;
 import com.xmtq.lottery.bean.BankCBean;
 import com.xmtq.lottery.bean.CreateOrderBean;

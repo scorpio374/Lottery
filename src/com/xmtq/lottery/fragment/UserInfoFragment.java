@@ -5,16 +5,15 @@ import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.WelCheckDialog;
 import com.xmtq.lottery.activity.AccountDetailActivity;
 import com.xmtq.lottery.activity.BetRecordActivity;
@@ -46,7 +45,6 @@ public class UserInfoFragment extends BaseFragment {
 	private RelativeLayout rl_repassword, rl_bet_record, rl_userinfo;
 	private RelativeLayout account_information;
 	private TextView tv_esc_login, user_name, account_balance;
-	private Toast toast;
 
 	private UserInfoBean userInfoBean;
 	private boolean isAddUserInfo = false;
@@ -125,9 +123,6 @@ public class UserInfoFragment extends BaseFragment {
 	 * 获取用户信息
 	 */
 	private void requestUserData() {
-		toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, 0, 0);
-
 		String uid = SharedPrefHelper.getInstance(getActivity()).getUid();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getUserInfo(uid));
@@ -143,15 +138,12 @@ public class UserInfoFragment extends BaseFragment {
 			// TODO Auto-generated method stub
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
-
 					onSuccess(result);
 				} else {
-					toast.setText(result.errormsg);
-					toast.show();
+					ToastUtil.showCenterToast(getActivity(), result.errormsg);
 				}
 			} else {
-				toast.setText("请求错误");
-				toast.show();
+				ToastUtil.showCenterToast(getActivity(), Consts.REQUEST_ERROR);
 			}
 		}
 	};
@@ -264,7 +256,7 @@ public class UserInfoFragment extends BaseFragment {
 		String bankName = userInfoBean.getBankname();
 		String bankAcount = userInfoBean.getBankaccount();
 		String bankAddress = userInfoBean.getBankaddress();
-		String acount = userInfoBean.getAccount(); // 帐户余额
+		// String acount = userInfoBean.getAccount(); // 帐户余额
 
 		if (isValidValue(bankName) && isValidValue(bankAcount)
 				&& isValidValue(bankAddress)) {
@@ -322,7 +314,7 @@ public class UserInfoFragment extends BaseFragment {
 					}
 
 				} else {
-					Toast.makeText(getActivity(), result.errormsg, 2000).show();
+					ToastUtil.showCenterToast(getActivity(), result.errormsg);
 				}
 
 			} else {
@@ -338,7 +330,7 @@ public class UserInfoFragment extends BaseFragment {
 		public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 			if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0
 					&& update.equals("1")) {
-				Toast.makeText(getActivity(), "升级后才可以正常使用", 2000).show();
+				ToastUtil.showCenterToast(getActivity(), "升级后才可以正常使用");
 				return true;
 			} else {
 				return false;

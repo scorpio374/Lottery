@@ -14,6 +14,7 @@ public class PurchaseRecordsBean extends EntityBase {
 	private String state;
 	private String bonusAfterfax;
 	private String bonusBeforeFax;
+	private String projectPrize;
 
 	public String getGuoguan() {
 		return guoguan;
@@ -69,6 +70,14 @@ public class PurchaseRecordsBean extends EntityBase {
 
 	public void setBonusBeforeFax(String bonusBeforeFax) {
 		this.bonusBeforeFax = bonusBeforeFax;
+	}
+
+	public void setProjectPrize(String projectPrize) {
+		this.projectPrize = projectPrize;
+	}
+
+	public String getProjectPrize() {
+		return projectPrize;
 	}
 
 }

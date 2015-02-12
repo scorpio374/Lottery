@@ -7,8 +7,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xmtq.lottery.bean.AccountDetailBean;
 import com.xmtq.lottery.bean.AccountDetailResponse;
-import com.xmtq.lottery.bean.UserRegisterResponse;
-import com.xmtq.lottery.bean.VersionResponse;
 import com.xmtq.lottery.utils.JsonUtil;
 
 public class AccountDetailParser extends BaseParser<AccountDetailResponse> {

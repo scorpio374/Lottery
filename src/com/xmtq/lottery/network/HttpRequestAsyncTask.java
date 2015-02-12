@@ -14,7 +14,6 @@ import android.os.AsyncTask;
 
 import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.bean.BaseResponse;
-import com.xmtq.lottery.utils.JsonUtil;
 import com.xmtq.lottery.utils.LogUtil;
 
 public class HttpRequestAsyncTask extends
@@ -68,7 +67,6 @@ public class HttpRequestAsyncTask extends
 						"UTF-8");
 
 				LogUtil.log("resultString:" + resultString);
-				// JsonUtil.xml2JSON(resultString);
 				object = request.getXmlParser().parse(resultString);
 			}
 		} catch (ClientProtocolException e) {

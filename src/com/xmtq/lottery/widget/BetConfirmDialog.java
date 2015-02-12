@@ -13,11 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.BetInfoBean;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.ToastUtil;
 
 public class BetConfirmDialog {
@@ -124,7 +125,7 @@ public class BetConfirmDialog {
 					ToastUtil.showCenterToast(context, result.errormsg);
 				}
 			} else {
-				ToastUtil.showCenterToast(context, "请求错误");
+				ToastUtil.showCenterToast(context, Consts.REQUEST_ERROR);
 			}
 			
 		}

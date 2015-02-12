@@ -1,17 +1,12 @@
 package com.xmtq.lottery.activity;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.GameResuleDetailListAdapter;
@@ -128,10 +123,8 @@ public class GameResultActivity extends BaseActivity {
 
 					}
 				} else {
-					Toast.makeText(GameResultActivity.this, result.errormsg,
-							2000).show();
+					ToastUtil.showCenterToast(GameResultActivity.this, result.errormsg);
 				}
-
 			} else {
 				ToastUtil.showCenterToast(GameResultActivity.this, "数据请求失败");
 			}

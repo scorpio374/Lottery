@@ -1,32 +1,23 @@
 package com.xmtq.lottery.activity;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.content.Intent;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.AccountDetailListAdapter;
-import com.xmtq.lottery.adapter.BetOrderDetailListAdapter;
-import com.xmtq.lottery.adapter.BetRecordListAdapter;
-import com.xmtq.lottery.adapter.RecomendHistoryListAdapter;
 import com.xmtq.lottery.bean.AccountDetailBean;
 import com.xmtq.lottery.bean.AccountDetailResponse;
-import com.xmtq.lottery.bean.GameHistoryDateResponse;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.ToastUtil;
 import com.xmtq.lottery.widget.LoadingDialog;
@@ -44,7 +35,7 @@ public class AccountDetailActivity extends BaseActivity {
 	private TextView head_right;
 	private List<AccountDetailBean> mHistoryBeansList;
 
-	private String count;
+	// private String count;
 	private String pay;
 	private String income;
 

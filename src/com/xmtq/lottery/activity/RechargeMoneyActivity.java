@@ -24,8 +24,8 @@ import com.xmtq.lottery.bean.CreateOrderBean;
 import com.xmtq.lottery.bean.CreateOrderResponse;
 import com.xmtq.lottery.bean.UserBankBean;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.StringUtil;
 import com.xmtq.lottery.utils.ToastUtil;
@@ -41,7 +41,6 @@ public class RechargeMoneyActivity extends BaseActivity {
 
 	private LinearLayout check_bank;
 	private EditText search_edit;
-	private SharedPrefHelper spfs;
 	// private LinearLayout recharge_bank;
 	private CreateOrderBean mCreateOrderBean;
 	// 订单号
@@ -73,8 +72,6 @@ public class RechargeMoneyActivity extends BaseActivity {
 	public void dealLogicBeforeInitView() {
 		mDialog = new LoadingDialog(this);
 		request("10");
-
-		spfs = SharedPrefHelper.getInstance(this);
 	}
 
 	@Override
@@ -141,17 +138,17 @@ public class RechargeMoneyActivity extends BaseActivity {
 			rechargeMoney = search_edit.getText().toString().trim();
 
 			if (StringUtil.isNullOrEmpty(rechargeMoney)) {
-				Toast.makeText(RechargeMoneyActivity.this, "请输入充值金额", 2000)
+				Toast.makeText(RechargeMoneyActivity.this, "请输入充值金额", Toast.LENGTH_SHORT)
 						.show();
 				return;
 			}
 			if (!isNumeric(rechargeMoney)) {
-				Toast.makeText(RechargeMoneyActivity.this, "充值金额必须为整数", 2000)
+				Toast.makeText(RechargeMoneyActivity.this, "充值金额必须为整数", Toast.LENGTH_SHORT)
 						.show();
 				return;
 			}
 			if (Integer.parseInt(rechargeMoney) < 5) {
-				Toast.makeText(RechargeMoneyActivity.this, "充值金额不小于五元", 2000)
+				Toast.makeText(RechargeMoneyActivity.this, "充值金额不小于五元", Toast.LENGTH_SHORT)
 						.show();
 				return;
 			}
@@ -167,23 +164,23 @@ public class RechargeMoneyActivity extends BaseActivity {
 			rechargeMoney = search_edit.getText().toString().trim();
 
 			if (StringUtil.isNullOrEmpty(rechargeMoney)) {
-				Toast.makeText(RechargeMoneyActivity.this, "请输入充值金额", 2000)
+				Toast.makeText(RechargeMoneyActivity.this, "请输入充值金额", Toast.LENGTH_SHORT)
 						.show();
 				return;
 			}
 			if (!isNumeric(rechargeMoney)) {
-				Toast.makeText(RechargeMoneyActivity.this, "充值金额必须为整数", 2000)
+				Toast.makeText(RechargeMoneyActivity.this, "充值金额必须为整数", Toast.LENGTH_SHORT)
 						.show();
 				return;
 			}
 			if (Integer.parseInt(rechargeMoney) < 5) {
-				Toast.makeText(RechargeMoneyActivity.this, "充值金额不小于五元", 2000)
+				Toast.makeText(RechargeMoneyActivity.this, "充值金额不小于五元", Toast.LENGTH_SHORT)
 						.show();
 				return;
 			}
 
 			if (!isCheckedBank) {
-				Toast.makeText(RechargeMoneyActivity.this, "请选择银行卡", 2000)
+				Toast.makeText(RechargeMoneyActivity.this, "请选择银行卡", Toast.LENGTH_SHORT)
 						.show();
 				return;
 			}

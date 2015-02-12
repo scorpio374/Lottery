@@ -89,10 +89,4 @@ public class BetDetailRecordParser extends BaseParser<BetDetailAllResponse> {
 		}
 		return response;
 	}
-
-	private void saveBetDetailRecord(BetDetailAllResponse response, JSONObject j) {
-
-		// response.mWinRecordBeans.add(mWinRecordBean);
-	}
-
 }

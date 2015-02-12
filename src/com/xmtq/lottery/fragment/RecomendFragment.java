@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.universe.lottery.util.SplitLotteryJCZC;
@@ -55,6 +55,7 @@ import com.xmtq.lottery.widget.LoadingDialog;
  * @author mwz123
  * 
  */
+@SuppressLint("HandlerLeak")
 public class RecomendFragment extends BaseFragment {
 
 	/**
@@ -79,12 +80,11 @@ public class RecomendFragment extends BaseFragment {
 	private TextView recomend_date;
 	private TextView recomend_week;
 	private TextView recomend_commit;
-	private TextView betting_votenums;
-	private TextView betting_multiple;
-	private TextView betting_buymoney;
+	// private TextView betting_votenums;
+	// private TextView betting_multiple;
+	// private TextView betting_buymoney;
 	private TextView betting_info;
 
-	private Toast toast;
 	private int currentPageNum = 1;
 	private int pageSize = 10;
 	private int count = 0;
@@ -106,8 +106,6 @@ public class RecomendFragment extends BaseFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, 0, 0);
 		mLoadingDialog = new LoadingDialog(getActivity());
 		requestWinRecord("10");
 	}
@@ -123,8 +121,8 @@ public class RecomendFragment extends BaseFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		mLoadingDialog.show("加载数据");
 		request();
-		
 		super.onActivityCreated(savedInstanceState);
 	}
 
@@ -137,8 +135,6 @@ public class RecomendFragment extends BaseFragment {
 		mAsyncTask.execute(RequestMaker.getInstance().getGameCanBet(
 				"" + currentPageNum, "" + pageSize));
 		mAsyncTask.setOnCompleteListener(mOnGameCompleteListener);
-		
-		mLoadingDialog.show("加载数据");
 	}
 
 	/**
@@ -229,9 +225,9 @@ public class RecomendFragment extends BaseFragment {
 		recomend_week = (TextView) v.findViewById(R.id.recomend_week);
 		recomend_commit = (TextView) v.findViewById(R.id.recomend_commit);
 		recomend_commit.setOnClickListener(this);
-		betting_votenums = (TextView) v.findViewById(R.id.betting_votenums);
-		betting_multiple = (TextView) v.findViewById(R.id.betting_multiple);
-		betting_buymoney = (TextView) v.findViewById(R.id.betting_buymoney);
+		// betting_votenums = (TextView) v.findViewById(R.id.betting_votenums);
+		// betting_multiple = (TextView) v.findViewById(R.id.betting_multiple);
+		// betting_buymoney = (TextView) v.findViewById(R.id.betting_buymoney);
 		betting_info = (TextView) v.findViewById(R.id.betting_info);
 
 		dealLogicAfterInitView();
@@ -289,6 +285,7 @@ public class RecomendFragment extends BaseFragment {
 			
 		case R.id.recomend_refresh:
 			currentPageNum = 1;
+			mLoadingDialog.show("加载数据");
 			request();
 			break;
 
@@ -341,7 +338,7 @@ public class RecomendFragment extends BaseFragment {
 					onFailure(result.errormsg);
 				}
 			} else {
-				onFailure("请求错误");
+				onFailure(Consts.REQUEST_ERROR);
 			}
 			mLoadingDialog.dismiss();
 		}
@@ -376,7 +373,7 @@ public class RecomendFragment extends BaseFragment {
 					onFailure(result.errormsg);
 				}
 			} else {
-				onFailure("请求错误");
+				onFailure(Consts.REQUEST_ERROR);
 			}
 		}
 	};
@@ -413,8 +410,7 @@ public class RecomendFragment extends BaseFragment {
 				public void onLoadMore() {
 					// TODO Auto-generated method stub
 					if (currentPageNum * pageSize > count) {
-						toast.setText("已获取全部数据");
-						toast.show();
+						ToastUtil.showCenterToast(getActivity(), "已获取全部数据");
 						mHandler.sendEmptyMessage(LOAD_DATA_FINISH);
 						return;
 					}
@@ -434,8 +430,7 @@ public class RecomendFragment extends BaseFragment {
 	 * @param msg
 	 */
 	private void onFailure(String msg) {
-		toast.setText(msg);
-		toast.show();
+		ToastUtil.showCenterToast(getActivity(), msg);
 		mHandler.sendEmptyMessage(LOAD_DATA_FINISH);
 	}
 
@@ -469,7 +464,7 @@ public class RecomendFragment extends BaseFragment {
 	 * @param data
 	 */
 	public void setIntentResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == getActivity().RESULT_OK) {
+		if (resultCode == FragmentActivity.RESULT_OK) {
 			GameCanBetBean gameCanBetBean = (GameCanBetBean) data
 					.getSerializableExtra("GameCanBetBean");
 			int position = data.getIntExtra("position", 0);
