@@ -71,7 +71,8 @@
             android:layout_marginLeft="5dip"
             android:text="第20141223期"
             android:textColor="@color/white"
-            android:textSize="@dimen/main_textsize3" />
+            android:textSize="@dimen/main_textsize3"
+            android:visibility="gone" />
     </LinearLayout>
 
     <ImageView
@@ -104,7 +105,7 @@
                 android:id="@+id/bet_detail_pay_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2.00元"
+                android:text="  "
                 android:textColor="@color/white" />
         </LinearLayout>
 
@@ -132,7 +133,7 @@
                 android:id="@+id/bet_detail_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="已开奖"
+                android:text=" "
                 android:textColor="#55ca52" />
         </LinearLayout>
 
@@ -160,7 +161,7 @@
                 android:id="@+id/bet_detail_win_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4.89元"
+                android:text="  "
                 android:textColor="#55ca52" />
         </LinearLayout>
     </LinearLayout>
@@ -211,7 +212,7 @@
                 android:id="@+id/bet_detail_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="明天（12-26）"
+                android:text=" "
                 android:textColor="#848baf" />
 
             <TextView
@@ -219,7 +220,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
-                android:text="2串1    1注"
+                android:text=""
                 android:textColor="#848baf" />
         </LinearLayout>
 
@@ -234,7 +235,7 @@
                 android:id="@+id/bet_detail_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="16:29"
+                android:text=" "
                 android:textColor="#848baf" />
 
             <TextView
@@ -242,7 +243,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
-                android:text="1倍"
+                android:text=" "
                 android:textColor="#848baf" />
         </LinearLayout>
     </LinearLayout>
@@ -381,7 +382,7 @@
                 android:id="@+id/bet_detail_pay_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2014-12-27"
+                android:text="  "
                 android:textColor="#848baf" />
 
             <TextView
@@ -389,7 +390,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
-                android:text="5466367281"
+                android:text=" "
                 android:textColor="#848baf" />
         </LinearLayout>
 
@@ -404,8 +405,9 @@
                 android:id="@+id/bet_detail_pay_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="16:29"
-                android:textColor="#848baf" />
+                android:text=" "
+                android:textColor="#848baf"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 

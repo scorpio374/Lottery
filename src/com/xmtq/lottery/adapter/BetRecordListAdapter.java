@@ -17,13 +17,11 @@ import com.xmtq.lottery.utils.OddsUtil;
 public class BetRecordListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<PurchaseRecordsBean> mRecordsBeansList;
-	private int state;
 
 	public BetRecordListAdapter(Context c,
-			List<PurchaseRecordsBean> RecordsBeansList, int state) {
+			List<PurchaseRecordsBean> RecordsBeansList) {
 		this.mContext = c;
 		this.mRecordsBeansList = RecordsBeansList;
-		this.state = state;
 	}
 
 	@Override
