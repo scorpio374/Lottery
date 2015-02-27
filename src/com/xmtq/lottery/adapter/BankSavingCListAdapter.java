@@ -2,6 +2,7 @@ package com.xmtq.lottery.adapter;
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.bean.BankBean;
 import com.xmtq.lottery.bean.BankCBean;
 
 /**
@@ -51,6 +51,7 @@ public class BankSavingCListAdapter extends BaseAdapter {
 		return arg0;
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public View getView(int arg0, View convertView, ViewGroup arg2) {
 		Holder holder = null;

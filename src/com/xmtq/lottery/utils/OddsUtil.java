@@ -79,7 +79,7 @@ public class OddsUtil {
 	 * @return
 	 */
 	public static String getGameData(String data) {
-		String time = null;
+		String time = "";
 		if (TextUtils.isEmpty(data)) {
 			return time;
 		}

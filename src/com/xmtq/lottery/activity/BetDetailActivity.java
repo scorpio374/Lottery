@@ -1,8 +1,5 @@
 package com.xmtq.lottery.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;

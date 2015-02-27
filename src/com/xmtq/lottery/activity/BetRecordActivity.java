@@ -1,27 +1,13 @@
 package com.xmtq.lottery.activity;
 
-import java.util.List;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.Toast;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.Consts;
-import com.xmtq.lottery.adapter.BetRecordListAdapter;
-import com.xmtq.lottery.bean.PurchaseRecordsBean;
-import com.xmtq.lottery.bean.PurchaseRecordsResponse;
-import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
-import com.xmtq.lottery.network.RequestMaker;
-import com.xmtq.lottery.utils.SharedPrefHelper;
+import com.xmtq.lottery.fragment.BetRecordFragment;
 
 /**
  * 投注记录
@@ -31,12 +17,14 @@ import com.xmtq.lottery.utils.SharedPrefHelper;
  */
 public class BetRecordActivity extends BaseActivity {
 
-	private ListView bet_record_all, bet_record_win, bet_record_wait;
 	private ImageButton btn_back;
-	private List<PurchaseRecordsBean> mRecordsBeansList;
-	private String pageNum = "1";
-	private String pageSize = "10";
-	private String statue = "0";
+	private String mFormerTag;
+	private final static String ALL_TAG = "0";
+	private final static String WIN_TAG = "1";
+	private final static String WAIT_TAG = "2";
+	private BetRecordFragment recordAllFragment;
+	private BetRecordFragment recordWinFragment;
+	private BetRecordFragment recordWaitFragment;
 
 	@Override
 	public void setContentLayout() {
@@ -52,7 +40,11 @@ public class BetRecordActivity extends BaseActivity {
 		// mAsyncTask.execute(mRequestMaker.getCheckUser("xmwd", "", ""));
 		// mAsyncTask.setOnCompleteListener(mtestOnCompleteListener);
 
-		request("130", "", "", "1", statue);
+		// request("130", "", "", "1", statue);
+		recordAllFragment = new BetRecordFragment(ALL_TAG);
+		recordWinFragment = new BetRecordFragment(WIN_TAG);
+		recordWaitFragment = new BetRecordFragment(WAIT_TAG);
+
 	}
 
 	// // 测试检查用户名是否存在
@@ -94,72 +86,60 @@ public class BetRecordActivity extends BaseActivity {
 	@Override
 	public void initView() {
 		// TODO Auto-generated method stub
-
-		bet_record_all = (ListView) findViewById(R.id.record_all_list);
-		bet_record_win = (ListView) findViewById(R.id.record_win_list);
-		bet_record_wait = (ListView) findViewById(R.id.record_wait_list);
-
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
 
 		RadioGroup bet_record_radiogroup = (RadioGroup) findViewById(R.id.bet_record_radiogroup);
 
 		bet_record_radiogroup
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-					@Override
-					public void onCheckedChanged(RadioGroup group, int checkedId) {
-						if (checkedId == R.id.bet_record_all) {
-							statue = "0";
-							bet_record_all.setVisibility(View.VISIBLE);
-							bet_record_win.setVisibility(View.GONE);
-							bet_record_wait.setVisibility(View.GONE);
-						} else if (checkedId == R.id.bet_record_win) {
-							statue = "1";
-							bet_record_all.setVisibility(View.GONE);
-							bet_record_win.setVisibility(View.VISIBLE);
-							bet_record_wait.setVisibility(View.GONE);
-						} else if (checkedId == R.id.bet_record_wait) {
-							statue = "2";
-							bet_record_all.setVisibility(View.GONE);
-							bet_record_win.setVisibility(View.GONE);
-							bet_record_wait.setVisibility(View.VISIBLE);
-						}
-						
-						// 这里每次切换都会去请求，逻辑需要修改
-						request("130", "", "", "1", statue);
-					}
-				});
-
-		bet_record_all.setOnItemClickListener(betDetailListener);
-		bet_record_win.setOnItemClickListener(betDetailListener);
-		bet_record_wait.setOnItemClickListener(betDetailListener);
+				.setOnCheckedChangeListener(mOnCheckedChangeListener);
+		mFormerTag = ALL_TAG;
+		getSupportFragmentManager().beginTransaction()
+				.add(R.id.content_frame, recordAllFragment, ALL_TAG).commit();
 	}
+
+	private OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
+
+		@Override
+		public void onCheckedChanged(RadioGroup arg0, int checkedId) {
+			// TODO Auto-generated method stub
+			FragmentTransaction mTransaction = getSupportFragmentManager()
+					.beginTransaction();
+			mTransaction.hide(getSupportFragmentManager().findFragmentByTag(
+					mFormerTag));
+
+			if (checkedId == R.id.bet_record_all) {
+				mFormerTag = ALL_TAG;
+				if (recordAllFragment.isAdded()) {
+					mTransaction.show(recordAllFragment).commit();
+				} else {
+					mTransaction.add(R.id.content_frame, recordAllFragment,
+							ALL_TAG).commit();
+				}
+			} else if (checkedId == R.id.bet_record_win) {
+				mFormerTag = WIN_TAG;
+				if (recordWinFragment.isAdded()) {
+					mTransaction.show(recordWinFragment).commit();
+				} else {
+					mTransaction.add(R.id.content_frame, recordWinFragment,
+							WIN_TAG).commit();
+				}
+			} else if (checkedId == R.id.bet_record_wait) {
+				mFormerTag = WAIT_TAG;
+				if (recordWaitFragment.isAdded()) {
+					mTransaction.show(recordWaitFragment).commit();
+				} else {
+					mTransaction.add(R.id.content_frame, recordWaitFragment,
+							WAIT_TAG).commit();
+				}
+			}
+		}
+	};
 
 	@Override
 	public void dealLogicAfterInitView() {
 
 	}
-
-	private OnItemClickListener betDetailListener = new OnItemClickListener() {
-
-		@Override
-		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-				long arg3) {
-
-			Intent intent = new Intent(BetRecordActivity.this,
-					BetDetailActivity.class);
-			intent.putExtra("serialid", mRecordsBeansList.get(arg2)
-					.getSerialid());
-			if (mRecordsBeansList.get(arg2).getBonusAfterfax() != null) {
-
-				intent.putExtra("winMoney", mRecordsBeansList.get(arg2)
-						.getBonusAfterfax());
-			}
-			startActivity(intent);
-
-		}
-	};
 
 	@Override
 	public void onClickEvent(View view) {
@@ -173,63 +153,4 @@ public class BetRecordActivity extends BaseActivity {
 		}
 
 	}
-
-	private void request(String lotteryid, String startdate, String enddate,
-			String investtype, String statue) {
-		String userid = SharedPrefHelper.getInstance(getApplicationContext())
-				.getUid();
-
-		mLoadingDialog.show("数据加载中...");
-		RequestMaker mRequestMaker = RequestMaker.getInstance();
-		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		mAsyncTask.execute(mRequestMaker.getPurchaseRecords(userid, lotteryid,
-				startdate, enddate, investtype, pageNum, pageSize, statue));
-		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
-	}
-
-	private OnCompleteListener<PurchaseRecordsResponse> mOnCompleteListener = new OnCompleteListener<PurchaseRecordsResponse>() {
-
-		@SuppressLint("ShowToast")
-		@Override
-		public void onComplete(PurchaseRecordsResponse result,
-				String resultString) {
-
-			if (result != null) {
-				if (result.errorcode.equals("0")) {
-					PurchaseRecordsResponse mResponse = result;
-					Toast.makeText(BetRecordActivity.this, "查询成功",
-							Toast.LENGTH_SHORT).show();
-
-					mRecordsBeansList = mResponse.purchaseRecordsBeans;
-
-					if (mRecordsBeansList.size() == 0) {
-						Toast.makeText(BetRecordActivity.this, "没有投注记录",
-								Toast.LENGTH_SHORT).show();
-					}
-					if (statue.equals("0")) {
-						BetRecordListAdapter mAdapter = new BetRecordListAdapter(
-								BetRecordActivity.this, mRecordsBeansList);
-						bet_record_all.setAdapter(mAdapter);
-					} else if (statue.equals("1")) {
-						BetRecordListAdapter mAdapter = new BetRecordListAdapter(
-								BetRecordActivity.this, mRecordsBeansList);
-						bet_record_win.setAdapter(mAdapter);
-					} else if (statue.equals("2")) {
-						BetRecordListAdapter mAdapter = new BetRecordListAdapter(
-								BetRecordActivity.this, mRecordsBeansList);
-						bet_record_wait.setAdapter(mAdapter);
-					}
-
-				} else {
-					Toast.makeText(BetRecordActivity.this, result.errormsg,
-							Toast.LENGTH_SHORT).show();
-				}
-			} else {
-				Toast.makeText(BetRecordActivity.this, Consts.REQUEST_ERROR,
-						Toast.LENGTH_SHORT).show();
-			}
-			mLoadingDialog.dismiss();
-		}
-	};
-
 }

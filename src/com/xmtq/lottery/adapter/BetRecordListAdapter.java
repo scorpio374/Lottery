@@ -69,6 +69,7 @@ public class BetRecordListAdapter extends BaseAdapter {
 		String time = OddsUtil.getGameTime((mRecordsBeansList.get(arg0)
 				.getAddtime()));
 
+		holder.bet_date.setVisibility(View.VISIBLE);
 		if (arg0 > 0) {
 			if (OddsUtil
 					.getGameData((mRecordsBeansList.get(arg0).getAddtime()))

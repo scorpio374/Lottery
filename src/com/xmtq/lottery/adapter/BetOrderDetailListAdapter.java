@@ -14,7 +14,6 @@ import com.xmtq.lottery.bean.BetDetailBean;
 
 public class BetOrderDetailListAdapter extends BaseAdapter {
 	private Context mContext;
-	private List<String> mList;
 	private List<BetDetailBean> mBetDetailBeans;
 
 	public BetOrderDetailListAdapter(Context c,

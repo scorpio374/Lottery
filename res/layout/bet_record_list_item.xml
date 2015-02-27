@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:gravity="center"
+            android:layout_gravity="center"
             android:text="13:12"
             android:textColor="#c0c2c1"
             android:textSize="@dimen/main_textsize" />
@@ -36,7 +37,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="15dip"
-        android:layout_marginTop="5dip"
         android:layout_toRightOf="@id/bet_ll_left"
         android:gravity="center_vertical"
         android:orientation="vertical" >

@@ -62,5 +62,18 @@ public class Consts {
 	 */
 	public static final String PRO_TYPE = "1";
 	
+	/**
+	 * 请求网络错误
+	 */
 	public static final String REQUEST_ERROR = "网络错误";
+	
+	/**
+	 * 上拉刷新
+	 */
+	public static final int LOAD_DATA_FINISH = 10;
+	
+	/**
+	 * 下拉加载
+	 */
+	public static final int REFRESH_DATA_FINISH = 11;
 }

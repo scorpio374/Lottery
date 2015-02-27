@@ -181,7 +181,7 @@ public class RecomendFragment extends BaseFragment {
 		betInfoBean.setBuymoney(String.valueOf(buymoney));
 		betInfoBean.setProtype(protype);
 		
-		// 判断用户余额
+		// 判断用户余额，用于投注跳转
 		String sAccountBalance = SharedPrefHelper.getInstance(getActivity()).getAccountBalance();
 		betInfoBean.setAccountBalance(sAccountBalance);
 		double accountBalance = Double.valueOf(sAccountBalance);
@@ -192,15 +192,12 @@ public class RecomendFragment extends BaseFragment {
 			BalanceNotEnoughDialog balanceNotEnoughDialog = new BalanceNotEnoughDialog(getActivity(),betInfoBean);
 			balanceNotEnoughDialog.show();
 		}
-
 	}
 
 	private void requestWinRecord(String size) {
-
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getGameWinRecord(size));
 		mAsyncTask.setOnCompleteListener(mWinRecordCompleteListener);
-
 	}
 
 	public void initView(View v) {
