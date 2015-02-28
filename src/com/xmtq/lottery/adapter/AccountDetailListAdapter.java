@@ -73,18 +73,19 @@ public class AccountDetailListAdapter extends BaseAdapter {
 				money = "- " + mList.get(arg0).getMoney() + "元";
 			} else if (mList.get(arg0).getMflag().equals("93")) {
 				style = "快捷支付";
-				money = "+ " + mList.get(arg0).getMoney() + "元";
+				money = mList.get(arg0).getMoney() + "元";
 			} else if (mList.get(arg0).getMflag().equals("1")) {
 				style = "充值";
-				money = "+ " + mList.get(arg0).getMoney() + "元";
+				money = mList.get(arg0).getMoney() + "元";
 			} else {
 				style = mList.get(arg0).getRemark();
-				money = "- " + mList.get(arg0).getMoney() + "元";
+				money = mList.get(arg0).getMoney() + "元";
 			}
 			holder.bet_count.setText(money);
 			holder.bet_date.setText(date);
 			holder.bet_style.setText(style);
 
+			holder.bet_date.setVisibility(View.VISIBLE);
 			if (arg0 > 0) {
 				if (mList.get(arg0).getEntertime()
 						.equals(mList.get(arg0 - 1).getEntertime())) {

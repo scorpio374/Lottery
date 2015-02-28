@@ -3,6 +3,7 @@ package com.xmtq.lottery.activity;
 import java.util.Date;
 import java.util.List;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -39,22 +40,21 @@ public class AccountDetailLastweekActivity extends BaseActivity {
 	@Override
 	public void setContentLayout() {
 		setContentView(R.layout.account_dedail_last_week);
-
 	}
 
 	@Override
 	public void dealLogicBeforeInitView() {
 		request(getDate(-7), getDate(0));
-		pay2 = getIntent().getStringExtra("pay");
-		income2 = getIntent().getStringExtra("income");
+		// pay2 = getIntent().getStringExtra("pay");
+		// income2 = getIntent().getStringExtra("income");
 	}
 
 	@Override
 	public void initView() {
 		pay = (TextView) findViewById(R.id.pay);
 		income = (TextView) findViewById(R.id.income);
-		pay.setText("收入：" + pay2);
-		income.setText("支出：" + income2);
+		// pay.setText("收入：" + pay2);
+		// income.setText("支出：" + income2);
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
 		account_detail_lastweek_list = (ListView) findViewById(R.id.account_detail_lastweek_list);
@@ -75,7 +75,6 @@ public class AccountDetailLastweekActivity extends BaseActivity {
 						} else if (checkedId == R.id.last_six_month) {
 							request(getDate(-180), getDate(0));
 						}
-
 						// account_detail_lastweek_list.setAdapter(adapter);
 					}
 				});
@@ -99,14 +98,26 @@ public class AccountDetailLastweekActivity extends BaseActivity {
 			if (result != null) {
 				AccountDetailResponse mResponse = result;
 				List<AccountDetailBean> mHistoryBeansList = mResponse.accountDetailList;
-				if (mHistoryBeansList != null) {
+				pay2 = mResponse.getPay();
+				if (!TextUtils.isEmpty(pay2)) {
+					pay.setText("支出：" + pay2);
+				} else {
+					pay.setText("");
+				}
 
+				income2 = mResponse.getIncome();
+				if (!TextUtils.isEmpty(pay2)) {
+					income.setText("收入：" + income2);
+				} else {
+					income.setText("");
+				}
+
+				if (mHistoryBeansList != null) {
 					AccountDetailListAdapter mAdapter = new AccountDetailListAdapter(
 							AccountDetailLastweekActivity.this,
 							mHistoryBeansList);
 					account_detail_lastweek_list.setAdapter(mAdapter);
 					mLoadingDialog.dismiss();
-
 				}
 			} else {
 				ToastUtil.showCenterToast(AccountDetailLastweekActivity.this,

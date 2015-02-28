@@ -15,7 +15,8 @@ import com.xmtq.lottery.fragment.BetRecordFragment;
  * @author Administrator
  * 
  */
-public class BetRecordActivity extends BaseActivity {
+public class BetRecordActivity extends BaseActivity implements
+		OnCheckedChangeListener {
 
 	private ImageButton btn_back;
 	private String mFormerTag;
@@ -91,50 +92,48 @@ public class BetRecordActivity extends BaseActivity {
 
 		RadioGroup bet_record_radiogroup = (RadioGroup) findViewById(R.id.bet_record_radiogroup);
 
-		bet_record_radiogroup
-				.setOnCheckedChangeListener(mOnCheckedChangeListener);
+		bet_record_radiogroup.setOnCheckedChangeListener(this);
 		mFormerTag = ALL_TAG;
 		getSupportFragmentManager().beginTransaction()
 				.add(R.id.content_frame, recordAllFragment, ALL_TAG).commit();
 	}
 
-	private OnCheckedChangeListener mOnCheckedChangeListener = new OnCheckedChangeListener() {
+	@Override
+	public void onCheckedChanged(RadioGroup arg0, int checkedId) {
+		// TODO Auto-generated method stub
+		FragmentTransaction mTransaction = getSupportFragmentManager()
+				.beginTransaction();
+		mTransaction.hide(getSupportFragmentManager().findFragmentByTag(
+				mFormerTag));
 
-		@Override
-		public void onCheckedChanged(RadioGroup arg0, int checkedId) {
-			// TODO Auto-generated method stub
-			FragmentTransaction mTransaction = getSupportFragmentManager()
-					.beginTransaction();
-			mTransaction.hide(getSupportFragmentManager().findFragmentByTag(
-					mFormerTag));
-
-			if (checkedId == R.id.bet_record_all) {
-				mFormerTag = ALL_TAG;
-				if (recordAllFragment.isAdded()) {
-					mTransaction.show(recordAllFragment).commit();
-				} else {
-					mTransaction.add(R.id.content_frame, recordAllFragment,
-							ALL_TAG).commit();
-				}
-			} else if (checkedId == R.id.bet_record_win) {
-				mFormerTag = WIN_TAG;
-				if (recordWinFragment.isAdded()) {
-					mTransaction.show(recordWinFragment).commit();
-				} else {
-					mTransaction.add(R.id.content_frame, recordWinFragment,
-							WIN_TAG).commit();
-				}
-			} else if (checkedId == R.id.bet_record_wait) {
-				mFormerTag = WAIT_TAG;
-				if (recordWaitFragment.isAdded()) {
-					mTransaction.show(recordWaitFragment).commit();
-				} else {
-					mTransaction.add(R.id.content_frame, recordWaitFragment,
-							WAIT_TAG).commit();
-				}
+		if (checkedId == R.id.bet_record_all) {
+			mFormerTag = ALL_TAG;
+			if (recordAllFragment.isAdded()) {
+				mTransaction.show(recordAllFragment).commit();
+			} else {
+				mTransaction
+						.add(R.id.content_frame, recordAllFragment, ALL_TAG)
+						.commit();
+			}
+		} else if (checkedId == R.id.bet_record_win) {
+			mFormerTag = WIN_TAG;
+			if (recordWinFragment.isAdded()) {
+				mTransaction.show(recordWinFragment).commit();
+			} else {
+				mTransaction
+						.add(R.id.content_frame, recordWinFragment, WIN_TAG)
+						.commit();
+			}
+		} else if (checkedId == R.id.bet_record_wait) {
+			mFormerTag = WAIT_TAG;
+			if (recordWaitFragment.isAdded()) {
+				mTransaction.show(recordWaitFragment).commit();
+			} else {
+				mTransaction.add(R.id.content_frame, recordWaitFragment,
+						WAIT_TAG).commit();
 			}
 		}
-	};
+	}
 
 	@Override
 	public void dealLogicAfterInitView() {

@@ -60,20 +60,14 @@ public class GameResultActivity extends BaseActivity {
 		tv_game_week = (TextView) findViewById(R.id.game_week);
 		tv_game_result = (TextView) findViewById(R.id.game_result);
 
-		// Date date = new Date();
-		// dateFm.format(date);
-		// Date date = new SimpleDateFormat("yyyy-MM-dd").parse(mDateBean
-		// .getDate());
-
-		// int dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
 		Date date = DateUtil.stringToDateFormat(mDateBean.getDate(),
 				"yyyy-MM-dd");
 		String dayOfWeek = DateUtil.getWeek(date);
 
 		tv_game_week.setText(dayOfWeek);
 		tv_gametime.setText(mDateBean.getDate());
-		tv_game_result.setText("猜对" + mDateBean.getHitcount() + "/"
-				+ mDateBean.getCount() + "场比赛");
+		tv_game_result.setText(mDateBean.getHitcount() + "/"
+				+ mDateBean.getCount());
 
 		game_result_detail_list = (ListView) findViewById(R.id.game_result_detail_list);
 		btn_back = (ImageButton) findViewById(R.id.back);
@@ -123,7 +117,8 @@ public class GameResultActivity extends BaseActivity {
 
 					}
 				} else {
-					ToastUtil.showCenterToast(GameResultActivity.this, result.errormsg);
+					ToastUtil.showCenterToast(GameResultActivity.this,
+							result.errormsg);
 				}
 			} else {
 				ToastUtil.showCenterToast(GameResultActivity.this, "数据请求失败");

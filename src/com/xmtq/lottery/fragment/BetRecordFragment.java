@@ -193,19 +193,20 @@ public class BetRecordFragment extends BaseFragment {
 
 	/**
 	 * 投注详情
+	 * <li><strong>注意：ListView包含HeaderView时，position要减1 </strong></li>
 	 */
 	private OnItemClickListener betDetailListener = new OnItemClickListener() {
 
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
-
+			int position = arg2 - 1;
 			Intent intent = new Intent(getActivity(), BetDetailActivity.class);
-			intent.putExtra("serialid", mRecordsBeansList.get(arg2)
+			intent.putExtra("serialid", mRecordsBeansList.get(position)
 					.getSerialid());
-			if (mRecordsBeansList.get(arg2).getBonusAfterfax() != null) {
+			if (mRecordsBeansList.get(position).getBonusAfterfax() != null) {
 
-				intent.putExtra("winMoney", mRecordsBeansList.get(arg2)
+				intent.putExtra("winMoney", mRecordsBeansList.get(position)
 						.getBonusAfterfax());
 			}
 			startActivity(intent);
@@ -232,12 +233,14 @@ public class BetRecordFragment extends BaseFragment {
 					mBetRecordListview.onRefreshComplete();
 				}
 				break;
+				
 			case Consts.LOAD_DATA_FINISH:
 				if (mAdapter != null) {
 					mAdapter.notifyDataSetChanged();
 					mBetRecordListview.onLoadMoreComplete();
 				}
 				break;
+				
 			default:
 				break;
 			}

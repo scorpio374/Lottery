@@ -64,10 +64,19 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
-            android:layout_marginRight="10dip"
+            android:layout_marginRight="5dip"
             android:layout_marginTop="5dip"
             android:layout_weight="1"
             android:text="周一"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:layout_marginRight="5dip"
+            android:layout_marginTop="5dip"
+            android:text="猜对"
             android:textColor="@color/white" />
 
         <TextView
@@ -75,9 +84,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dip"
+            android:layout_marginRight="5dip"
+            android:layout_marginTop="5dip"
+            android:text="3/6"
+            android:textColor="@color/text_gold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
             android:layout_marginRight="10dip"
             android:layout_marginTop="5dip"
-            android:text="猜对3/6场比赛"
+            android:text="场比赛"
             android:textColor="@color/white" />
     </LinearLayout>
 

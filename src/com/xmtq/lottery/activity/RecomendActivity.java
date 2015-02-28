@@ -38,7 +38,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	private ViewPager vp;
 	private FragmentPagerAdater fragmentPagerAdater;
 	private RecomendFragment recomendFragment;
-	private RecomendHistoryFragment mHistoryFragment;
+	private RecomendHistoryFragment historyFragment;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -108,10 +108,10 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		vp = new ViewPager(this);
 		vp.setId("VP".hashCode());
 		recomendFragment = new RecomendFragment();
-		mHistoryFragment = new RecomendHistoryFragment();
+		historyFragment = new RecomendHistoryFragment();
 		List<Fragment> fragments = new ArrayList<Fragment>();
 		fragments.add(recomendFragment);
-		fragments.add(mHistoryFragment);
+		fragments.add(historyFragment);
 		fragmentPagerAdater = new FragmentPagerAdater(
 				getSupportFragmentManager(), fragments);
 		vp.setAdapter(fragmentPagerAdater);

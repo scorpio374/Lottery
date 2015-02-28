@@ -138,7 +138,7 @@ public class RecomendFragment extends BaseFragment {
 	}
 
 	/**
-	 * 投注
+	 * 点击投注
 	 */
 	private void requestBetting() {
 		// 判断是否登录
@@ -168,6 +168,7 @@ public class RecomendFragment extends BaseFragment {
 		int buymoney = multiple * votenums * 2;
 		int totalmoney = buymoney;
 		
+		// 保存投注数据，传递到其他组件
 		BetInfoBean betInfoBean = new BetInfoBean();
 		betInfoBean.setUid(uid);
 		betInfoBean.setLotteryid(lotteryid);
@@ -194,6 +195,10 @@ public class RecomendFragment extends BaseFragment {
 		}
 	}
 
+	/**
+	 * 请求中奖用户信息
+	 * @param size
+	 */
 	private void requestWinRecord(String size) {
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getGameWinRecord(size));
@@ -383,7 +388,9 @@ public class RecomendFragment extends BaseFragment {
 
 		if (currentPageNum == 1) {
 			count = Integer.parseInt(gameCanBetResponse.count);
-			recomend_lottery_times.setText("推荐" + count + "场比赛");
+			if(count > 0){
+				recomend_lottery_times.setText("推荐" + count + "场比赛");
+			}
 			gameCanBetBeans = gameCanBetResponse.gameCanBetBeans;
 			mAdapter = new RecomendListAdapter(getActivity(), gameCanBetBeans);
 			mAdapter.setOnMoreListener(onMoreListener);

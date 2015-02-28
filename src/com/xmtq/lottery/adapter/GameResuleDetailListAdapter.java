@@ -2,6 +2,7 @@ package com.xmtq.lottery.adapter;
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.example.lottery.R;
 import com.xmtq.lottery.bean.RecomendHistoryBean;
 import com.xmtq.lottery.utils.OddsUtil;
 
+@SuppressLint("NewApi")
 public class GameResuleDetailListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<RecomendHistoryBean> mHistoryBeansList;
@@ -69,15 +71,10 @@ public class GameResuleDetailListAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-//		long time = DateUtil.getMillisecondsFromString(mHistoryBeansList.get(
-//				arg0).getGameTime());
-//		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-//		String gameTime = sdf.format(time);
-//		
-		String gameTime = OddsUtil.getGameTime(mHistoryBeansList.get(
-				arg0).getGameTime());
+		String gameTime = OddsUtil.getGameTime(mHistoryBeansList.get(arg0)
+				.getGameTime());
 		holder.tv_gameTime.setText(gameTime);
-		
+
 		holder.tv_league.setText(mHistoryBeansList.get(arg0).getLeague());
 		holder.tv_matchId.setText(mHistoryBeansList.get(arg0).getNum());
 		holder.tv_matchteam.setText(mHistoryBeansList.get(arg0).getMatchTeam());
@@ -86,26 +83,35 @@ public class GameResuleDetailListAdapter extends BaseAdapter {
 		if (mHistoryBeansList.get(arg0).getHit().equals("0")) {
 			holder.ll_gamedetail.setBackground(mContext.getResources()
 					.getDrawable(R.drawable.game_score_error));
+			holder.bfkj.setTextColor(mContext.getResources().getColor(
+					R.color.green));
+			holder.bfkjbj.setTextColor(mContext.getResources().getColor(
+					R.color.green));
 		}
 
 		if (mHistoryBeansList.get(arg0).getHit().equals("1")) {
 			holder.ll_gamedetail.setBackground(mContext.getResources()
 					.getDrawable(R.drawable.game_score_right));
+			holder.bfkj.setTextColor(mContext.getResources().getColor(
+					R.color.text_gold));
+			holder.bfkjbj.setTextColor(mContext.getResources().getColor(
+					R.color.text_gold));
 		}
 
 		if (!TextUtils.isEmpty(mHistoryBeansList.get(arg0).getBfkj())) {
-			holder.bfkj.setText("半 " + mHistoryBeansList.get(arg0).getBfkj());
+			holder.bfkj.setVisibility(View.VISIBLE);
+			holder.bfkj.setText("全 " + mHistoryBeansList.get(arg0).getBfkj());
 		} else {
-			holder.bfkj.setText("");
+			holder.bfkj.setVisibility(View.GONE);
 		}
 
 		if (!TextUtils.isEmpty(mHistoryBeansList.get(arg0).getBfkjBc())) {
-			holder.bfkjbj.setText("全 "
+			holder.bfkjbj.setVisibility(View.VISIBLE);
+			holder.bfkjbj.setText("半 "
 					+ mHistoryBeansList.get(arg0).getBfkjBc());
 		} else {
-			holder.bfkjbj.setText("");
+			holder.bfkjbj.setVisibility(View.GONE);
 		}
-		// holder.tv_program_name.setText(childList.get(position).getTitle());
 
 		return convertView;
 	}

@@ -41,6 +41,7 @@ public class GameHistoryDateParser extends BaseParser<GameHistoryDateResponse> {
 					}
 
 				}
+				response.count = elementsObj.getString("count");
 			}
 
 		}

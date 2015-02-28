@@ -126,7 +126,7 @@
                     android:layout_marginLeft="20dip"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="推荐场比赛"
+                    android:text="暂无推荐比赛"
                     android:textColor="@color/white_shallow"
                     android:textSize="@dimen/main_textsize4" />
 
