@@ -61,6 +61,7 @@
             android:background="@drawable/ym_constact_left"
             android:button="@null"
             android:gravity="center"
+            android:checked="true"
             android:text="全部"
             android:textColor="@drawable/radiobtn_textcolor_selector"
             android:textSize="@dimen/main_textsize" />
