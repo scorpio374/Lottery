@@ -36,16 +36,18 @@ public class ChuanGuanDialog {
 	private OnClickListener myCommitClickListener;
 	private List<PassType> simplePassList;
 	private List<PassType> morePassList;
+	private boolean isSupportDg;
 
 	public ChuanGuanDialog(Context context,
 			OnClickListener cancelClickListener,
 			OnClickListener commitClickListener, List<PassType> simplePassList,
-			List<PassType> morePassList) {
+			List<PassType> morePassList, boolean isSupportDg) {
 		this.context = context;
 		this.myCancelListener = cancelClickListener;
 		this.myCommitClickListener = commitClickListener;
 		this.simplePassList = simplePassList;
 		this.morePassList = morePassList;
+		this.isSupportDg = isSupportDg;
 	}
 
 	private void initview() {
@@ -59,11 +61,11 @@ public class ChuanGuanDialog {
 		chuanguan_more_gridview = (GridView) layout.findViewById(R.id.chuanguan_more);
 
 		ChuanGuanMoreAdapter simpleAdapter = new ChuanGuanMoreAdapter(context,
-				simplePassList);
+				simplePassList,isSupportDg);
 		chuanguan_gridview.setAdapter(simpleAdapter);
 		
 		ChuanGuanMoreAdapter moreAdapter = new ChuanGuanMoreAdapter(context,
-				morePassList);
+				morePassList,isSupportDg);
 		chuanguan_more_gridview.setAdapter(moreAdapter);
 
 		tv_more_style.setOnClickListener(new OnClickListener() {

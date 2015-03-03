@@ -29,6 +29,7 @@ import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.BetInfoBean;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.GameCanBetResponse;
+import com.xmtq.lottery.bean.Odds;
 import com.xmtq.lottery.bean.PassType;
 import com.xmtq.lottery.bean.RecomendWinRecordBean;
 import com.xmtq.lottery.bean.RecomendWinRecordResponse;
@@ -73,6 +74,11 @@ public class RecomendFragment extends BaseFragment {
 	 */
 	private final static int TYPE_VOTENUMS = 1;
 
+	/**
+	 * 没有选择串关
+	 */
+	private final static String NO_PASS_TYPE = "no_pass_type";
+
 	private ImageButton imgBtnLeft, imgBtnRight;
 	private ImageButton recomend_refresh;
 	private CustomPullListView recomend_list;
@@ -103,6 +109,7 @@ public class RecomendFragment extends BaseFragment {
 	private LoadingDialog mLoadingDialog;
 	private CheckChuanGuanDialog mCheckChuanGuanDialog;
 	private TextView win_record;
+	private boolean isSupportDg = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -122,7 +129,7 @@ public class RecomendFragment extends BaseFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		mLoadingDialog.show("加载数据");
+		mLoadingDialog.show("加载数据...");
 		request();
 		super.onActivityCreated(savedInstanceState);
 	}
@@ -154,21 +161,29 @@ public class RecomendFragment extends BaseFragment {
 		String playtype = Consts.PLAY_TYPE;
 		String protype = Consts.PRO_TYPE;
 		int multiple = getMultiple();
-		String passtype = getPassType();
-		String voteinfo = getOddsData(TYPE_BETTING, passtype,
-				String.valueOf(multiple));
+		String voteinfo = getOddsData(TYPE_BETTING, String.valueOf(multiple));
 		if (TextUtils.isEmpty(voteinfo)) {
 			ToastUtil.showCenterToast(getActivity(), "请选择投注场次");
 			return;
 		}
+		if (voteinfo.equals(NO_PASS_TYPE)) {
+			ToastUtil.showCenterToast(getActivity(), "请选择串关方式");
+			return;
+		}
+
+		// 过关类型转换，passtype为1_1
+		String passtype = getPassType();
+		passtype = passtype.replace("*", "_");
 
 		// 仅用于计算注数
-		String sVoteinfo = getOddsData(TYPE_VOTENUMS, passtype,
-				String.valueOf(multiple));
+		String sVoteinfo = getOddsData(TYPE_VOTENUMS, String.valueOf(multiple));
 		int votenums = getVoteNums(sVoteinfo);
+		if(votenums == 0){
+			ToastUtil.showCenterToast(getActivity(), "串关方式有误");
+			return;
+		}
 		int buymoney = multiple * votenums * 2;
 		int totalmoney = buymoney;
-		passtype = passtype.replace("*", "_");
 
 		// 保存投注数据，传递到其他组件
 		BetInfoBean betInfoBean = new BetInfoBean();
@@ -194,6 +209,7 @@ public class RecomendFragment extends BaseFragment {
 			BetConfirmDialog betConfirmDialog = new BetConfirmDialog(
 					getActivity(), betInfoBean);
 			betConfirmDialog.show();
+			betConfirmDialog.setOnRefreshListener(onRefreshDataListener);
 		} else {
 			// 余额不足
 			BalanceNotEnoughDialog balanceNotEnoughDialog = new BalanceNotEnoughDialog(
@@ -250,8 +266,7 @@ public class RecomendFragment extends BaseFragment {
 		recomend_date.setText(time);
 		recomend_week.setText(week);
 
-		simplePassList = PassTypeUtil.getSimplePassList();
-		morePassList = PassTypeUtil.getMorePassList();
+		initPassType();
 	}
 
 	@Override
@@ -268,7 +283,7 @@ public class RecomendFragment extends BaseFragment {
 		case R.id.chuan_guan:
 			mChuanGuanDialog = new ChuanGuanDialog(getActivity(),
 					mCancelListener, mCommitListener, simplePassList,
-					morePassList);
+					morePassList, isSupportDg);
 			mChuanGuanDialog.show();
 			break;
 
@@ -282,7 +297,7 @@ public class RecomendFragment extends BaseFragment {
 							// TODO Auto-generated method stub
 							if (resultString != null) {
 								check_chuan_guan.setText(resultString + "倍");
-								onRefreshListener.onRefresh();
+								onRefreshBetListener.onRefresh();
 							}
 						}
 					});
@@ -317,7 +332,7 @@ public class RecomendFragment extends BaseFragment {
 			// 点击串关取消后，初始化过关数据
 			simplePassList = PassTypeUtil.getSimplePassList();
 			morePassList = PassTypeUtil.getMorePassList();
-			onRefreshListener.onRefresh();
+			onRefreshBetListener.onRefresh();
 		}
 	};
 
@@ -330,7 +345,7 @@ public class RecomendFragment extends BaseFragment {
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
 			mChuanGuanDialog.dismiss();
-			onRefreshListener.onRefresh();
+			onRefreshBetListener.onRefresh();
 		}
 	};
 
@@ -402,7 +417,7 @@ public class RecomendFragment extends BaseFragment {
 			gameCanBetBeans = gameCanBetResponse.gameCanBetBeans;
 			mAdapter = new RecomendListAdapter(getActivity(), gameCanBetBeans);
 			mAdapter.setOnMoreListener(onMoreListener);
-			mAdapter.setOnRefreshListener(onRefreshListener);
+			mAdapter.setOnRefreshListener(onRefreshBetListener);
 			recomend_list.setAdapter(mAdapter);
 
 			// // 下拉刷新
@@ -455,18 +470,18 @@ public class RecomendFragment extends BaseFragment {
 				mAdapter.notifyDataSetChanged();
 				recomend_list.onRefreshComplete();
 				break;
-				
+
 			case LOAD_DATA_FINISH:
 				if (mAdapter != null) {
 					mAdapter.notifyDataSetChanged();
 					recomend_list.onLoadMoreComplete();
 				}
 				break;
-			
+
 			case REFRESH_BET_INFO:
 				refresh();
 				break;
-			
+
 			default:
 				break;
 			}
@@ -488,7 +503,7 @@ public class RecomendFragment extends BaseFragment {
 			int position = data.getIntExtra("position", 0);
 			gameCanBetBeans.set(position, gameCanBetBean);
 			mAdapter.notifyDataSetChanged();
-			onRefreshListener.onRefresh();
+			onRefreshBetListener.onRefresh();
 		}
 	}
 
@@ -509,9 +524,63 @@ public class RecomendFragment extends BaseFragment {
 	};
 
 	/**
+	 * 刷新比赛数据
+	 */
+	private OnRefreshListener onRefreshDataListener = new OnRefreshListener() {
+
+		@Override
+		public void onRefresh() {
+			// TODO Auto-generated method stub
+			initData();
+		}
+	};
+
+	/**
+	 * 初始化所有数据
+	 */
+	private void initData() {
+		initGameData();
+		initPassType();
+	}
+
+	/**
+	 * 初始化比赛数据
+	 */
+	private void initGameData() {
+		for (GameCanBetBean gameCanBetBean : gameCanBetBeans) {
+			List<Odds> spOddsList =  gameCanBetBean.getSpOddsList();
+			List<Odds> rqOddsList =  gameCanBetBean.getRqOddsList();
+			List<Odds> bfOddsList =  gameCanBetBean.getBfOddsList();
+			List<Odds> bqOddsList =  gameCanBetBean.getBqOddsList();
+			List<Odds> jqOddsList =  gameCanBetBean.getJqOddsList();
+			
+			initOddsList(spOddsList);
+			initOddsList(rqOddsList);
+			initOddsList(bfOddsList);
+			initOddsList(bqOddsList);
+			initOddsList(jqOddsList);
+		}
+		mAdapter.notifyDataSetChanged();
+	}
+	
+	private void initOddsList(List<Odds> oddsList){
+		for (Odds odds : oddsList) {
+			odds.setChecked(false);
+		}
+	}
+
+	/**
+	 * 初始化过关类型
+	 */
+	private void initPassType() {
+		simplePassList = PassTypeUtil.getSimplePassList();
+		morePassList = PassTypeUtil.getMorePassList();
+	}
+
+	/**
 	 * 刷新界面投注信息
 	 */
-	private OnRefreshListener onRefreshListener = new OnRefreshListener() {
+	private OnRefreshListener onRefreshBetListener = new OnRefreshListener() {
 
 		@Override
 		public void onRefresh() {
@@ -519,27 +588,31 @@ public class RecomendFragment extends BaseFragment {
 			sendEmptyMessage(REFRESH_BET_INFO);
 		}
 	};
-	
-	private void sendEmptyMessage(int what){
+
+	/**
+	 * 发送空消息
+	 * 
+	 * @param what
+	 */
+	private void sendEmptyMessage(int what) {
 		mHandler.removeMessages(what);
 		mHandler.sendEmptyMessage(what);
 	}
-	
-	private void refresh(){
-		int multiple = getMultiple();
-		String passType = getPassType();
-		String voteinfo = getOddsData(TYPE_VOTENUMS, passType,
-				String.valueOf(multiple));
 
-		// 计算注数的jar包和投注接口，处理的voteinfo不一致，这里做个简单替换
-		// if(!TextUtils.isEmpty(voteinfo)){
-		// voteinfo = voteinfo.replace("_", "*");
-		// }
+	/**
+	 * 刷新投注信息
+	 */
+	private void refresh() {
+		int multiple = getMultiple();
+		String voteinfo = getOddsData(TYPE_VOTENUMS, String.valueOf(multiple));
+		if (voteinfo != null && voteinfo.equals(NO_PASS_TYPE)) {
+			voteinfo = null;
+		}
 		int votenums = getVoteNums(voteinfo);
 		int buymoney = votenums * multiple * 2;
 
-		betting_info.setText(votenums + "注" + multiple + "倍" + "  共"
-				+ buymoney + "元");
+		betting_info.setText(votenums + "注" + multiple + "倍" + "  共" + buymoney
+				+ "元");
 	}
 
 	/**
@@ -609,7 +682,9 @@ public class RecomendFragment extends BaseFragment {
 			}
 		} else {
 			// 默认过关类型
-			sb.append("1*1");
+			if (isSupportDg) {
+				sb.append("1*1");
+			}
 		}
 
 		return sb.toString();
@@ -618,11 +693,12 @@ public class RecomendFragment extends BaseFragment {
 	/**
 	 * 竞猜数据拼接 type 0：投注串(每场比赛之间用"_"连接) 1：计算注数(每场比赛之间用"&"连接)
 	 */
-	private String getOddsData(int type, String passType, String multiple) {
+	private String getOddsData(int type, String multiple) {
 		if (gameCanBetBeans == null || gameCanBetBeans.size() == 0) {
 			return null;
 		}
 		StringBuilder sb = new StringBuilder();
+		isSupportDg = true;
 		sb.append("HT");
 		sb.append("@");
 		List<String> gameCheckList = new ArrayList<String>();
@@ -634,6 +710,9 @@ public class RecomendFragment extends BaseFragment {
 			String spOddsData = OddsUtil.getSpOddsData(gameCanBetBean
 					.getSpOddsList());
 			if (!TextUtils.isEmpty(spOddsData)) {
+				if (gameCanBetBean.getSpDg().equals("0")) {
+					isSupportDg = false;
+				}
 				gameOddsList.add(spOddsData);
 			}
 
@@ -641,6 +720,9 @@ public class RecomendFragment extends BaseFragment {
 			String rqOddsData = OddsUtil.getRqOddsData(gameCanBetBean
 					.getRqOddsList());
 			if (!TextUtils.isEmpty(rqOddsData)) {
+				if (gameCanBetBean.getRqDg().equals("0")) {
+					isSupportDg = false;
+				}
 				gameOddsList.add(rqOddsData);
 			}
 
@@ -648,6 +730,9 @@ public class RecomendFragment extends BaseFragment {
 			String bfOddsData = OddsUtil.getBfOddsData(gameCanBetBean
 					.getBfOddsList());
 			if (!TextUtils.isEmpty(bfOddsData)) {
+				if (gameCanBetBean.getRqDg().equals("0")) {
+					isSupportDg = false;
+				}
 				gameOddsList.add(bfOddsData);
 			}
 
@@ -655,6 +740,9 @@ public class RecomendFragment extends BaseFragment {
 			String jqOddsData = OddsUtil.getJqOddsData(gameCanBetBean
 					.getJqOddsList());
 			if (!TextUtils.isEmpty(jqOddsData)) {
+				if (gameCanBetBean.getJqDg().equals("0")) {
+					isSupportDg = false;
+				}
 				gameOddsList.add(jqOddsData);
 			}
 
@@ -662,6 +750,9 @@ public class RecomendFragment extends BaseFragment {
 			String bqOddsData = OddsUtil.getBqOddsData(gameCanBetBean
 					.getBqOddsList());
 			if (!TextUtils.isEmpty(bqOddsData)) {
+				if (gameCanBetBean.getBqDg().equals("0")) {
+					isSupportDg = false;
+				}
 				gameOddsList.add(bqOddsData);
 			}
 
@@ -701,6 +792,10 @@ public class RecomendFragment extends BaseFragment {
 		}
 
 		// 串关
+		String passType = getPassType();
+		if (TextUtils.isEmpty(passType)) {
+			return NO_PASS_TYPE;
+		}
 		sb.append("@");
 		sb.append(passType);
 

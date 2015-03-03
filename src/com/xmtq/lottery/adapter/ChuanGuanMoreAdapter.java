@@ -18,15 +18,21 @@ public class ChuanGuanMoreAdapter extends BaseAdapter {
 
 	private Context context;
 	private List<PassType> simplePassList;
+	private boolean isSupportDg;
 
-	public ChuanGuanMoreAdapter(Context context, List<PassType> simplePassList) {
+	public ChuanGuanMoreAdapter(Context context, List<PassType> simplePassList,
+			boolean isSupportDg) {
 		this.context = context;
 		this.simplePassList = simplePassList;
+		this.isSupportDg = isSupportDg;
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
+		if (!isSupportDg) {
+			return simplePassList.size() - 1;
+		}
 		return simplePassList.size();
 	}
 
@@ -45,12 +51,28 @@ public class ChuanGuanMoreAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup arg2) {
 		// TODO Auto-generated method stub
-		convertView = LayoutInflater.from(context).inflate(
-				R.layout.chuanguan_gridview_item, null);
-		ToggleButton toggleButton = (ToggleButton) convertView
-				.findViewById(R.id.toggle_chuanguan_more);
-		setText(toggleButton, simplePassList.get(position));
+		Holder holder;
+		if (convertView == null) {
+			convertView = LayoutInflater.from(context).inflate(
+					R.layout.chuanguan_gridview_item, null);
+			holder = new Holder();
+			holder.toggleButton = (ToggleButton) convertView
+					.findViewById(R.id.toggle_chuanguan_more);
+			convertView.setTag(holder);
+		} else {
+			holder = (Holder) convertView.getTag();
+		}
+
+		if (!isSupportDg) {
+			setText(holder.toggleButton, simplePassList.get(position + 1));
+		} else {
+			setText(holder.toggleButton, simplePassList.get(position));
+		}
 		return convertView;
+	}
+
+	private class Holder {
+		ToggleButton toggleButton;
 	}
 
 	/**

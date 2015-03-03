@@ -19,6 +19,7 @@ import com.xmtq.lottery.bean.BetInfoBean;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
+import com.xmtq.lottery.utils.OnRefreshListener;
 import com.xmtq.lottery.utils.ToastUtil;
 
 public class BetConfirmDialog {
@@ -27,6 +28,7 @@ public class BetConfirmDialog {
 	private Dialog mdialog;
 	private LinearLayout layout;
 	private BetInfoBean betInfoBean;
+	private OnRefreshListener onRefreshListener;
 
 	public BetConfirmDialog(Context context, BetInfoBean betInfoBean) {
 		this.context = context;
@@ -84,6 +86,7 @@ public class BetConfirmDialog {
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
 			bet();
+			onRefreshListener.onRefresh();
 		}
 	};
 
@@ -129,4 +132,11 @@ public class BetConfirmDialog {
 			dismiss();
 		}
 	};
+	
+	/**
+	 * 设置刷新Listener
+	 */
+	public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
+		this.onRefreshListener = onRefreshListener;
+	}
 }
