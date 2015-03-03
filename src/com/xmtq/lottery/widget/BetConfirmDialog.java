@@ -115,8 +115,6 @@ public class BetConfirmDialog {
 		@Override
 		public void onComplete(BaseResponse result, String resultString) {
 			// TODO Auto-generated method stub
-			mdialog.dismiss();
-			
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
 					BetSuccessDialog betSuccessDialog  = new BetSuccessDialog(context);
@@ -128,6 +126,7 @@ public class BetConfirmDialog {
 				ToastUtil.showCenterToast(context, Consts.REQUEST_ERROR);
 			}
 			
+			dismiss();
 		}
 	};
 }

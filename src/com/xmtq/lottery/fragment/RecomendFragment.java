@@ -93,6 +93,7 @@ public class RecomendFragment extends BaseFragment {
 
 	private static final int LOAD_DATA_FINISH = 10;// 上拉刷新
 	private static final int REFRESH_DATA_FINISH = 11;// 下拉刷新
+	private static final int REFRESH_BET_INFO = 12;// 投注信息刷新
 	private RadioButton chuan_guan;
 
 	private ChuanGuanDialog mChuanGuanDialog;
@@ -167,7 +168,8 @@ public class RecomendFragment extends BaseFragment {
 		int votenums = getVoteNums(sVoteinfo);
 		int buymoney = multiple * votenums * 2;
 		int totalmoney = buymoney;
-		
+		passtype = passtype.replace("*", "_");
+
 		// 保存投注数据，传递到其他组件
 		BetInfoBean betInfoBean = new BetInfoBean();
 		betInfoBean.setUid(uid);
@@ -181,22 +183,28 @@ public class RecomendFragment extends BaseFragment {
 		betInfoBean.setPasstype(passtype);
 		betInfoBean.setBuymoney(String.valueOf(buymoney));
 		betInfoBean.setProtype(protype);
-		
+
 		// 判断用户余额，用于投注跳转
-		String sAccountBalance = SharedPrefHelper.getInstance(getActivity()).getAccountBalance();
+		String sAccountBalance = SharedPrefHelper.getInstance(getActivity())
+				.getAccountBalance();
 		betInfoBean.setAccountBalance(sAccountBalance);
 		double accountBalance = Double.valueOf(sAccountBalance);
-		if(accountBalance >= buymoney){
-			BetConfirmDialog betConfirmDialog = new BetConfirmDialog(getActivity(),betInfoBean);
+		if (accountBalance >= buymoney) {
+			// 余额充足
+			BetConfirmDialog betConfirmDialog = new BetConfirmDialog(
+					getActivity(), betInfoBean);
 			betConfirmDialog.show();
-		}else{
-			BalanceNotEnoughDialog balanceNotEnoughDialog = new BalanceNotEnoughDialog(getActivity(),betInfoBean);
+		} else {
+			// 余额不足
+			BalanceNotEnoughDialog balanceNotEnoughDialog = new BalanceNotEnoughDialog(
+					getActivity(), betInfoBean);
 			balanceNotEnoughDialog.show();
 		}
 	}
 
 	/**
 	 * 请求中奖用户信息
+	 * 
 	 * @param size
 	 */
 	private void requestWinRecord(String size) {
@@ -284,7 +292,7 @@ public class RecomendFragment extends BaseFragment {
 		case R.id.recomend_commit:
 			requestBetting();
 			break;
-			
+
 		case R.id.recomend_refresh:
 			currentPageNum = 1;
 			mLoadingDialog.show("加载数据");
@@ -388,7 +396,7 @@ public class RecomendFragment extends BaseFragment {
 
 		if (currentPageNum == 1) {
 			count = Integer.parseInt(gameCanBetResponse.count);
-			if(count > 0){
+			if (count > 0) {
 				recomend_lottery_times.setText("推荐" + count + "场比赛");
 			}
 			gameCanBetBeans = gameCanBetResponse.gameCanBetBeans;
@@ -447,12 +455,18 @@ public class RecomendFragment extends BaseFragment {
 				mAdapter.notifyDataSetChanged();
 				recomend_list.onRefreshComplete();
 				break;
+				
 			case LOAD_DATA_FINISH:
 				if (mAdapter != null) {
 					mAdapter.notifyDataSetChanged();
 					recomend_list.onLoadMoreComplete();
 				}
 				break;
+			
+			case REFRESH_BET_INFO:
+				refresh();
+				break;
+			
 			default:
 				break;
 			}
@@ -502,20 +516,31 @@ public class RecomendFragment extends BaseFragment {
 		@Override
 		public void onRefresh() {
 			// TODO Auto-generated method stub
-			int multiple = getMultiple();
-			String passType = getPassType();
-			String voteinfo = getOddsData(TYPE_VOTENUMS, passType,
-					String.valueOf(multiple));
-			int votenums = getVoteNums(voteinfo);
-			int buymoney = votenums * multiple * 2;
-
-			// betting_votenums.setText(votenums + "注");
-			// betting_multiple.setText(multiple + "倍");
-			// betting_buymoney.setText(buymoney + "");
-			betting_info.setText(votenums + "注" + multiple + "倍" + "  共"
-					+ buymoney + "元");
+			sendEmptyMessage(REFRESH_BET_INFO);
 		}
 	};
+	
+	private void sendEmptyMessage(int what){
+		mHandler.removeMessages(what);
+		mHandler.sendEmptyMessage(what);
+	}
+	
+	private void refresh(){
+		int multiple = getMultiple();
+		String passType = getPassType();
+		String voteinfo = getOddsData(TYPE_VOTENUMS, passType,
+				String.valueOf(multiple));
+
+		// 计算注数的jar包和投注接口，处理的voteinfo不一致，这里做个简单替换
+		// if(!TextUtils.isEmpty(voteinfo)){
+		// voteinfo = voteinfo.replace("_", "*");
+		// }
+		int votenums = getVoteNums(voteinfo);
+		int buymoney = votenums * multiple * 2;
+
+		betting_info.setText(votenums + "注" + multiple + "倍" + "  共"
+				+ buymoney + "元");
+	}
 
 	/**
 	 * 获取注数
@@ -667,7 +692,7 @@ public class RecomendFragment extends BaseFragment {
 					sb.append(gameCheckList.get(i));
 				} else {
 					if (type == 0) {
-						sb.append("&" + gameCheckList.get(i));
+						sb.append("_" + gameCheckList.get(i));
 					} else if (type == 1) {
 						sb.append("&" + gameCheckList.get(i));
 					}

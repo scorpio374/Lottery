@@ -75,6 +75,7 @@ public class BetSuccessDialog {
 			case R.id.check_order:
 				Intent intent = new Intent(context, BetRecordActivity.class);
 				context.startActivity(intent);
+				mdialog.dismiss();
 				break;
 				
 			case R.id.return_home:

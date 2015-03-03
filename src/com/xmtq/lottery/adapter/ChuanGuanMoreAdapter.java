@@ -22,7 +22,6 @@ public class ChuanGuanMoreAdapter extends BaseAdapter {
 	public ChuanGuanMoreAdapter(Context context, List<PassType> simplePassList) {
 		this.context = context;
 		this.simplePassList = simplePassList;
-
 	}
 
 	@Override
