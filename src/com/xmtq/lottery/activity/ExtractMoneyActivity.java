@@ -116,7 +116,7 @@ public class ExtractMoneyActivity extends BaseActivity {
 			return;
 		}
 
-		if (Integer.parseInt(drawalmoney) > Integer.parseInt(userInfoBean
+		if (Double.parseDouble(drawalmoney) > Double.parseDouble(userInfoBean
 				.getAccount())) {
 			ToastUtil.showCenterToast(ExtractMoneyActivity.this, "余额不足");
 			return;
@@ -151,7 +151,7 @@ public class ExtractMoneyActivity extends BaseActivity {
 							ExtractMoneySuccessActivity.class);
 					intent.putExtra("drawalmoney", drawalmoney);
 					startActivity(intent);
-
+					finish();
 				} else {
 					ToastUtil.showCenterToast(ExtractMoneyActivity.this,
 							result.errormsg);

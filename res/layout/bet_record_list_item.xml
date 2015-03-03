@@ -39,6 +39,7 @@
         android:layout_marginLeft="15dip"
         android:layout_toRightOf="@id/bet_ll_left"
         android:gravity="center_vertical"
+        android:layout_centerVertical="true"
         android:orientation="vertical" >
 
         <TextView

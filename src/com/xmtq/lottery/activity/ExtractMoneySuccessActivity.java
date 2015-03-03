@@ -58,9 +58,10 @@ public class ExtractMoneySuccessActivity extends BaseActivity {
 			this.finish();
 			break;
 		case R.id.extract_money_done:
-			Intent intent = new Intent(ExtractMoneySuccessActivity.this,
-					RecomendActivity.class);
-			startActivity(intent);
+			// Intent intent = new Intent(ExtractMoneySuccessActivity.this,
+			// RecomendActivity.class);
+			// startActivity(intent);
+			finish();
 			break;
 
 		default:
