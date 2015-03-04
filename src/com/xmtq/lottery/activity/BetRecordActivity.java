@@ -5,9 +5,15 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.Consts;
+import com.xmtq.lottery.bean.CheckUserResponse;
 import com.xmtq.lottery.fragment.BetRecordFragment;
+import com.xmtq.lottery.network.HttpRequestAsyncTask;
+import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.network.RequestMaker;
 
 /**
  * 投注记录
@@ -35,12 +41,7 @@ public class BetRecordActivity extends BaseActivity implements
 
 	@Override
 	public void dealLogicBeforeInitView() {
-		// 测试检查用户名是否存在
-		// RequestMaker mRequestMaker = RequestMaker.getInstance();
-		// HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		// mAsyncTask.execute(mRequestMaker.getCheckUser("xmwd", "", ""));
-		// mAsyncTask.setOnCompleteListener(mtestOnCompleteListener);
-
+		
 		// request("130", "", "", "1", statue);
 		recordAllFragment = new BetRecordFragment(ALL_TAG);
 		recordWinFragment = new BetRecordFragment(WIN_TAG);
@@ -48,41 +49,7 @@ public class BetRecordActivity extends BaseActivity implements
 
 	}
 
-	// // 测试检查用户名是否存在
-	// private OnCompleteListener<CheckUserResponse> mtestOnCompleteListener =
-	// new OnCompleteListener<CheckUserResponse>() {
-	//
-	// @Override
-	// public void onComplete(CheckUserResponse result, String resultString) {
-	//
-	// if (result != null) {
-	// if (result.errorcode.equals("0")) {
-	// // PurchaseRecordsResponse mResponse = result;
-	// // Toast.makeText(BetRecordActivity.this, "查询成功",
-	// // 2000).show();
-	// //
-	// // List<PurchaseRecordsBean> mRecordsBeansList =
-	// // mResponse.purchaseRecordsBeans;
-	// // // List<String> mList = new ArrayList<String>();
-	// // // for (int i = 0; i < 10; i++) {
-	// // // mList.add(i + "");
-	// // // }
-	// // BetRecordListAdapter mAdapter = new BetRecordListAdapter(
-	// // BetRecordActivity.this, mRecordsBeansList);
-	// // bet_record_all.setAdapter(mAdapter);
-	// // bet_record_wait.setAdapter(mAdapter);
-	// // bet_record_win.setAdapter(mAdapter);
-	//
-	// } else {
-	// Toast.makeText(BetRecordActivity.this, result.errormsg,
-	// 2000).show();
-	// }
-	// } else {
-	// Toast.makeText(BetRecordActivity.this, Consts.REQUEST_ERROR,
-	// 2000).show();
-	// }
-	// }
-	// };
+	
 
 	@Override
 	public void initView() {

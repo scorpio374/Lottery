@@ -5,9 +5,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.Consts;
+import com.xmtq.lottery.bean.CheckUserResponse;
 import com.xmtq.lottery.bean.UserBean;
+import com.xmtq.lottery.network.HttpRequestAsyncTask;
+import com.xmtq.lottery.network.RequestMaker;
+import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.utils.StringUtil;
 import com.xmtq.lottery.utils.ToastUtil;
 import com.xmtq.lottery.utils.Util;
@@ -25,6 +31,7 @@ public class RegisterActivity extends BaseActivity {
 	private EditText mPhoneView;
 	private EditText mPasswordView;
 	private EditText mUserNameView;
+	private UserBean userBean;
 
 	@Override
 	public void setContentLayout() {
@@ -76,7 +83,6 @@ public class RegisterActivity extends BaseActivity {
 			break;
 		}
 	}
-	
 
 	/**
 	 * 提交注册
@@ -102,18 +108,83 @@ public class RegisterActivity extends BaseActivity {
 			ToastUtil.showCenterToast(this, "请输入密码");
 			return;
 		} else if (!StringUtil.matchPwd(password)) {
-			// ToastUtil.showCenterToast(this, "请输入6-16位密码,密码必须包含数字和字母");
-			// return;
+			ToastUtil.showCenterToast(this, "请输入6-15位密码,密码必须包含数字和字母");
+			return;
 		}
-		
-		UserBean userBean=new UserBean();
+
+		requestCheckUser(userName, phoneNum);
+
+		userBean = new UserBean();
 		userBean.setPassword(password);
 		userBean.setPhoneNum(phoneNum);
 		userBean.setUsername(userName);
-		
-		Intent intent=new Intent(RegisterActivity.this, RegisterSecondActivity.class);
-		intent.putExtra("userBean", userBean);
-		startActivity(intent);
+
 	}
+
+	/**
+	 * 测试检查用户名是否存在
+	 * 
+	 * @param username
+	 * @param phoneNum
+	 */
+	private void requestCheckUser(String username, String phoneNum) {
+		//
+		RequestMaker mRequestMaker = RequestMaker.getInstance();
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(mRequestMaker.getCheckUser(username, phoneNum));
+		mAsyncTask.setOnCompleteListener(mtestOnCompleteListener);
+	}
+
+	// 测试检查用户名是否存在
+	private OnCompleteListener<CheckUserResponse> mtestOnCompleteListener = new OnCompleteListener<CheckUserResponse>() {
+
+		@Override
+		public void onComplete(CheckUserResponse result, String resultString) {
+
+			if (result != null) {
+				if (result.errorcode.equals("0")) {
+					// PurchaseRecordsResponse mResponse = result;
+					CheckUserResponse mResponse = result;
+
+					if (mResponse.checkUserBean.getUstate().equals("1")) {
+						Toast.makeText(RegisterActivity.this, "用户名已经存在", 2000)
+								.show();
+						return;
+					}
+
+					if (mResponse.checkUserBean.getPstate().equals("1")) {
+						Toast.makeText(RegisterActivity.this, "手机号码已经存在", 2000)
+								.show();
+						return;
+					}
+
+					Intent intent = new Intent(RegisterActivity.this,
+							RegisterSecondActivity.class);
+					intent.putExtra("userBean", userBean);
+					startActivity(intent);
+
+					//
+					// List<PurchaseRecordsBean> mRecordsBeansList =
+					// mResponse.purchaseRecordsBeans;
+					// // List<String> mList = new ArrayList<String>();
+					// // for (int i = 0; i < 10; i++) {
+					// // mList.add(i + "");
+					// // }
+					// BetRecordListAdapter mAdapter = new BetRecordListAdapter(
+					// BetRecordActivity.this, mRecordsBeansList);
+					// bet_record_all.setAdapter(mAdapter);
+					// bet_record_wait.setAdapter(mAdapter);
+					// bet_record_win.setAdapter(mAdapter);
+
+				} else {
+					Toast.makeText(RegisterActivity.this, result.errormsg, 2000)
+							.show();
+				}
+			} else {
+				Toast.makeText(RegisterActivity.this, Consts.REQUEST_ERROR,
+						2000).show();
+			}
+		}
+	};
 
 }
