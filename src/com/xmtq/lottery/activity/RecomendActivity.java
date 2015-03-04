@@ -15,9 +15,11 @@ import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.FragmentPagerAdater;
+import com.xmtq.lottery.bean.NewUserLoginBean;
 import com.xmtq.lottery.fragment.LoginFragment;
 import com.xmtq.lottery.fragment.RecomendFragment;
 import com.xmtq.lottery.fragment.RecomendHistoryFragment;
+import com.xmtq.lottery.fragment.UserInfoFragment;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.view.slidingmenu.SlidingMenu;
 import com.xmtq.lottery.view.slidingmenu.app.SlidingFragmentActivity;
@@ -58,6 +60,16 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 
 	public void initView() {
 		initMenuDrawer();
+		NewUserLoginBean newUserLoginBean = (NewUserLoginBean) getIntent()
+				.getSerializableExtra("newUserLoginBean");
+		if (newUserLoginBean != null) {
+			UserInfoFragment fragment = new UserInfoFragment();
+			Bundle b = new Bundle();
+			b.putSerializable("newUserLoginBean", newUserLoginBean);
+			fragment.setArguments(b);
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.menu_frame, fragment).commit();
+		}
 	}
 
 	@Override
@@ -97,7 +109,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		// setContentView(R.layout.content_frame);
 		// getSupportFragmentManager().beginTransaction()
 		// .replace(R.id.content_frame, new RecomendFragment()).commit();
-		
+
 		// // right sliding menu
 		// menu.setSecondaryMenu(R.layout.menu_frame_two);
 		// menu.setSecondaryShadowDrawable(R.drawable.shadowright);
@@ -154,7 +166,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		vp.setCurrentItem(1);
 		fragmentPagerAdater.notifyDataSetChanged();
 	}
-	
+
 	public void closeRightDrawer() {
 		// menu.showSecondaryMenu();
 		vp.setCurrentItem(0);
@@ -171,13 +183,13 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			
+
 			// 关闭右边的Fragment
-			if(vp != null && vp.getCurrentItem() != 0){
+			if (vp != null && vp.getCurrentItem() != 0) {
 				closeRightDrawer();
 				return true;
 			}
-			
+
 			if ((System.currentTimeMillis() - exitTime) > TIME_DIFF) {
 				Toast.makeText(RecomendActivity.this, "再按一次退出",
 						Toast.LENGTH_SHORT).show();
@@ -190,7 +202,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 
 		return super.onKeyDown(keyCode, event);
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub

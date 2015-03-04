@@ -178,7 +178,7 @@ public class RecomendFragment extends BaseFragment {
 		// 仅用于计算注数
 		String sVoteinfo = getOddsData(TYPE_VOTENUMS, String.valueOf(multiple));
 		int votenums = getVoteNums(sVoteinfo);
-		if(votenums == 0){
+		if (votenums == 0) {
 			ToastUtil.showCenterToast(getActivity(), "串关方式有误");
 			return;
 		}
@@ -296,8 +296,15 @@ public class RecomendFragment extends BaseFragment {
 						public void onComplete(String resultString) {
 							// TODO Auto-generated method stub
 							if (resultString != null) {
-								check_chuan_guan.setText(resultString + "倍");
-								onRefreshBetListener.onRefresh();
+								if (Integer.parseInt(resultString) <= 10000) {
+									check_chuan_guan
+											.setText(resultString + "倍");
+									onRefreshBetListener.onRefresh();
+								} else {
+									ToastUtil.showCenterToast(getActivity(),
+											"倍数不能大于一万倍");
+								}
+
 							}
 						}
 					});
@@ -548,12 +555,12 @@ public class RecomendFragment extends BaseFragment {
 	 */
 	private void initGameData() {
 		for (GameCanBetBean gameCanBetBean : gameCanBetBeans) {
-			List<Odds> spOddsList =  gameCanBetBean.getSpOddsList();
-			List<Odds> rqOddsList =  gameCanBetBean.getRqOddsList();
-			List<Odds> bfOddsList =  gameCanBetBean.getBfOddsList();
-			List<Odds> bqOddsList =  gameCanBetBean.getBqOddsList();
-			List<Odds> jqOddsList =  gameCanBetBean.getJqOddsList();
-			
+			List<Odds> spOddsList = gameCanBetBean.getSpOddsList();
+			List<Odds> rqOddsList = gameCanBetBean.getRqOddsList();
+			List<Odds> bfOddsList = gameCanBetBean.getBfOddsList();
+			List<Odds> bqOddsList = gameCanBetBean.getBqOddsList();
+			List<Odds> jqOddsList = gameCanBetBean.getJqOddsList();
+
 			initOddsList(spOddsList);
 			initOddsList(rqOddsList);
 			initOddsList(bfOddsList);
@@ -562,8 +569,8 @@ public class RecomendFragment extends BaseFragment {
 		}
 		mAdapter.notifyDataSetChanged();
 	}
-	
-	private void initOddsList(List<Odds> oddsList){
+
+	private void initOddsList(List<Odds> oddsList) {
 		for (Odds odds : oddsList) {
 			odds.setChecked(false);
 		}

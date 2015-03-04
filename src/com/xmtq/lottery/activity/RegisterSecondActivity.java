@@ -1,5 +1,8 @@
 package com.xmtq.lottery.activity;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.EditText;
@@ -9,10 +12,14 @@ import android.widget.TextView;
 import com.example.lottery.R;
 import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.bean.BaseResponse;
+import com.xmtq.lottery.bean.NewUserLoginBean;
+import com.xmtq.lottery.bean.NewUserLoginResponse;
 import com.xmtq.lottery.bean.UserBean;
+import com.xmtq.lottery.fragment.UserInfoFragment;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
+import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.StringUtil;
 import com.xmtq.lottery.utils.ToastUtil;
 import com.xmtq.lottery.utils.Util;
@@ -34,6 +41,7 @@ public class RegisterSecondActivity extends BaseActivity {
 	private CountDown mCountDown;
 	private boolean isGetCoding = false;
 	private UserBean userBean;
+	private SharedPrefHelper spfs;
 
 	@Override
 	public void setContentLayout() {
@@ -43,6 +51,7 @@ public class RegisterSecondActivity extends BaseActivity {
 
 	@Override
 	public void dealLogicBeforeInitView() {
+		spfs = SharedPrefHelper.getInstance(this);
 		userBean = (UserBean) getIntent().getSerializableExtra("userBean");
 
 		mRequestMaker = RequestMaker.getInstance();
@@ -115,7 +124,7 @@ public class RegisterSecondActivity extends BaseActivity {
 			ToastUtil.showCenterToast(this, "验证码已发送，请注意查收");
 		} else {
 			ToastUtil.showCenterToast(this, "请输入正确的手机号码");
-			finish();
+			return;
 		}
 	}
 
@@ -132,10 +141,12 @@ public class RegisterSecondActivity extends BaseActivity {
 					mCountDown = new CountDown(60000, 1000);
 					mCountDown.start();
 				} else {
-					ToastUtil.showCenterToast(RegisterSecondActivity.this, result.errormsg);
+					ToastUtil.showCenterToast(RegisterSecondActivity.this,
+							result.errormsg);
 				}
 			} else {
-				ToastUtil.showCenterToast(RegisterSecondActivity.this, "获取验证码失败！");
+				ToastUtil.showCenterToast(RegisterSecondActivity.this,
+						"获取验证码失败！");
 			}
 		}
 	};
@@ -172,19 +183,22 @@ public class RegisterSecondActivity extends BaseActivity {
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
 					isGetCoding = true;
-					ToastUtil.showCenterToast(RegisterSecondActivity.this, "注册成功");
+					// ToastUtil.showCenterToast(RegisterSecondActivity.this,
+					// "注册成功");
 
 					if (mCountDown != null) {
 						mCountDown.cancel();
 					}
 
-					// 注册成功，返回前一个页面
-					finish();
+					requestLogin(userBean);
+
 				} else {
-					ToastUtil.showCenterToast(RegisterSecondActivity.this, result.errormsg);
+					ToastUtil.showCenterToast(RegisterSecondActivity.this,
+							result.errormsg);
 				}
 			} else {
-				ToastUtil.showCenterToast(RegisterSecondActivity.this, Consts.REQUEST_ERROR);
+				ToastUtil.showCenterToast(RegisterSecondActivity.this,
+						Consts.REQUEST_ERROR);
 			}
 
 			mLoadingDialog.dismiss();
@@ -217,4 +231,68 @@ public class RegisterSecondActivity extends BaseActivity {
 			isGetCoding = false;
 		}
 	}
+
+	private void requestLogin(UserBean userBean) {
+		mLoadingDialog.show("注册成功,正在自动登录...");
+
+		String userName = userBean.getUsername();
+		String password = userBean.getPassword();
+		if (spfs.getIsRememberPwd()) {
+			spfs.setUserPassward(password);
+			spfs.setUserName(userName);
+		}
+
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(RequestMaker.getInstance().getUserLogin(userName,
+				password));
+		mAsyncTask.setOnCompleteListener(mOnLoginCompleteListener);
+	}
+
+	/**
+	 * 用户登陆回调处理
+	 */
+	private OnCompleteListener<BaseResponse> mOnLoginCompleteListener = new OnCompleteListener<BaseResponse>() {
+		@Override
+		public void onComplete(BaseResponse result, String resultString) {
+			// TODO Auto-generated method stub
+			if (result != null) {
+				if (result.errorcode.equals("0")) {
+					onSuccess(result);
+				} else {
+					onFailure(result.errormsg);
+				}
+			} else {
+				onFailure(Consts.REQUEST_ERROR);
+			}
+			mLoadingDialog.dismiss();
+		}
+	};
+
+	/**
+	 * 登陆成功
+	 */
+	private void onSuccess(BaseResponse result) {
+		NewUserLoginResponse response = (NewUserLoginResponse) result;
+		NewUserLoginBean newUserLoginBean = response.newUserLoginBean;
+
+		// 保存用户登陆状态及信息
+		spfs.setIsLogin(true);
+		spfs.setUid(newUserLoginBean.getUid());
+		ToastUtil.showCenterToast(this, "登录成功");
+		// 登陆成功，跳转另一个页面
+		Intent intent = new Intent(RegisterSecondActivity.this,
+				RecomendActivity.class);
+		intent.putExtra("newUserLoginBean", newUserLoginBean);
+		startActivity(intent);
+	}
+
+	/**
+	 * 登陆失败
+	 * 
+	 * @param msg
+	 */
+	private void onFailure(String msg) {
+		ToastUtil.showCenterToast(this, msg);
+	}
+
 }

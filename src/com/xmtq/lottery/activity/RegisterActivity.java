@@ -163,19 +163,6 @@ public class RegisterActivity extends BaseActivity {
 					intent.putExtra("userBean", userBean);
 					startActivity(intent);
 
-					//
-					// List<PurchaseRecordsBean> mRecordsBeansList =
-					// mResponse.purchaseRecordsBeans;
-					// // List<String> mList = new ArrayList<String>();
-					// // for (int i = 0; i < 10; i++) {
-					// // mList.add(i + "");
-					// // }
-					// BetRecordListAdapter mAdapter = new BetRecordListAdapter(
-					// BetRecordActivity.this, mRecordsBeansList);
-					// bet_record_all.setAdapter(mAdapter);
-					// bet_record_wait.setAdapter(mAdapter);
-					// bet_record_win.setAdapter(mAdapter);
-
 				} else {
 					Toast.makeText(RegisterActivity.this, result.errormsg, 2000)
 							.show();
