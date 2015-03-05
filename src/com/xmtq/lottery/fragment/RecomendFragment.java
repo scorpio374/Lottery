@@ -37,6 +37,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
+import com.xmtq.lottery.utils.LogUtil;
 import com.xmtq.lottery.utils.OddsUtil;
 import com.xmtq.lottery.utils.OnRefreshListener;
 import com.xmtq.lottery.utils.PassTypeUtil;
@@ -314,7 +315,7 @@ public class RecomendFragment extends BaseFragment {
 								if (Integer.parseInt(resultString) <= 1000) {
 									check_chuan_guan
 											.setText(resultString + "倍");
-									onRefreshBetListener.onRefresh();
+									onRefreshBet();
 								} else {
 									ToastUtil.showCenterToast(getActivity(),
 											"倍数不能大于一千倍");
@@ -333,6 +334,7 @@ public class RecomendFragment extends BaseFragment {
 		case R.id.recomend_refresh:
 			currentPageNum = 1;
 			mLoadingDialog.show("加载数据");
+			initData();
 			request();
 			break;
 
@@ -352,7 +354,7 @@ public class RecomendFragment extends BaseFragment {
 			mChuanGuanDialog.dismiss();
 
 			// 点击串关取消后，初始化过关数据
-			onRefreshBetListener.onRefresh();
+			onRefreshBet();
 		}
 	};
 
@@ -365,7 +367,7 @@ public class RecomendFragment extends BaseFragment {
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
 			mChuanGuanDialog.dismiss();
-			onRefreshBetListener.onRefresh();
+			onRefreshBet();
 		}
 	};
 
@@ -586,6 +588,8 @@ public class RecomendFragment extends BaseFragment {
 		}
 		mAdapter.notifyDataSetChanged();
 		gameCheckNum = 0;
+		lastCheckNum = 0;
+		isSupportDg = false;
 	}
 
 	private void initOddsList(List<Odds> oddsList) {
@@ -609,9 +613,21 @@ public class RecomendFragment extends BaseFragment {
 
 		public void onRefresh() {
 			// TODO Auto-generated method stub
-			sendEmptyMessage(REFRESH_BET_INFO);
+			
+			// 刷新过关类型，选中比赛item的回调才执行
+			initPassType();
+			
+			// 刷新投注信息
+			onRefreshBet();
 		}
 	};
+	
+	/**
+	 * 刷新比赛数据
+	 */
+	private void onRefreshBet(){
+		sendEmptyMessage(REFRESH_BET_INFO);
+	}
 
 	/**
 	 * 发送空消息
@@ -619,10 +635,8 @@ public class RecomendFragment extends BaseFragment {
 	 * @param what
 	 */
 	private void sendEmptyMessage(int what) {
-		Message msg = new Message();
-		msg.what = what;
 		mHandler.removeMessages(what);
-		mHandler.sendMessage(msg);
+		mHandler.sendEmptyMessage(what);
 	}
 
 	/**
@@ -807,6 +821,8 @@ public class RecomendFragment extends BaseFragment {
 		// 所有比赛投注拼接
 		lastCheckNum = gameCheckNum;
 		gameCheckNum = gameCheckList.size();
+		LogUtil.log("lastCheckNum:" + lastCheckNum + " gameCheckNum:"
+				+ gameCheckNum);
 		if (gameCheckList.size() == 0) {
 			return null;
 		} else {
