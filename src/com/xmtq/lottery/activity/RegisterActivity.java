@@ -14,8 +14,8 @@ import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.bean.CheckUserResponse;
 import com.xmtq.lottery.bean.UserBean;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.StringUtil;
 import com.xmtq.lottery.utils.ToastUtil;
 import com.xmtq.lottery.utils.Util;
@@ -221,7 +221,7 @@ public class RegisterActivity extends BaseActivity {
 	 */
 	private void requestCheckUsername(String username, String phoneNum) {
 		//
-		mLoadingDialog.show("数据加载中...");
+		// mLoadingDialog.show("数据加载中...");
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(mRequestMaker.getCheckUser(username, phoneNum));
@@ -252,7 +252,7 @@ public class RegisterActivity extends BaseActivity {
 				Toast.makeText(RegisterActivity.this, Consts.REQUEST_ERROR,
 						2000).show();
 			}
-			mLoadingDialog.dismiss();
+			// mLoadingDialog.dismiss();
 		}
 	};
 
@@ -264,7 +264,7 @@ public class RegisterActivity extends BaseActivity {
 	 */
 	private void requestCheckPhonenumber(String username, String phoneNum) {
 		//
-		mLoadingDialog.show("数据加载中...");
+		// mLoadingDialog.show("数据加载中...");
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(mRequestMaker.getCheckUser(username, phoneNum));
@@ -276,7 +276,6 @@ public class RegisterActivity extends BaseActivity {
 
 		@Override
 		public void onComplete(CheckUserResponse result, String resultString) {
-			mLoadingDialog.dismiss();
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
 					// PurchaseRecordsResponse mResponse = result;
@@ -294,7 +293,7 @@ public class RegisterActivity extends BaseActivity {
 				Toast.makeText(RegisterActivity.this, Consts.REQUEST_ERROR,
 						2000).show();
 			}
-
+			// mLoadingDialog.dismiss();
 		}
 	};
 

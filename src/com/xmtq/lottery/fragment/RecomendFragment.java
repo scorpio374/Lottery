@@ -37,7 +37,6 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
-import com.xmtq.lottery.utils.LogUtil;
 import com.xmtq.lottery.utils.OddsUtil;
 import com.xmtq.lottery.utils.OnRefreshListener;
 import com.xmtq.lottery.utils.PassTypeUtil;
@@ -586,12 +585,19 @@ public class RecomendFragment extends BaseFragment {
 			initOddsList(bqOddsList);
 			initOddsList(jqOddsList);
 		}
+
 		mAdapter.notifyDataSetChanged();
 		gameCheckNum = 0;
 		lastCheckNum = 0;
 		isSupportDg = false;
+		check_chuan_guan.setText("倍数");
 	}
 
+	/**
+	 * 初始化赔率玩法
+	 * 
+	 * @param oddsList
+	 */
 	private void initOddsList(List<Odds> oddsList) {
 		for (Odds odds : oddsList) {
 			odds.setChecked(false);
@@ -604,6 +610,13 @@ public class RecomendFragment extends BaseFragment {
 	private void initPassType() {
 		simplePassList = PassTypeUtil.getSimplePassList(gameCheckNum);
 		morePassList = PassTypeUtil.getMorePassList(gameCheckNum);
+
+		// 不支持单关
+		if (!isSupportDg) {
+			if (simplePassList != null && simplePassList.size() > 0) {
+				simplePassList.remove(0);
+			}
+		}
 	}
 
 	/**
@@ -613,19 +626,19 @@ public class RecomendFragment extends BaseFragment {
 
 		public void onRefresh() {
 			// TODO Auto-generated method stub
-			
+
 			// 刷新过关类型，选中比赛item的回调才执行
 			initPassType();
-			
+
 			// 刷新投注信息
 			onRefreshBet();
 		}
 	};
-	
+
 	/**
 	 * 刷新比赛数据
 	 */
-	private void onRefreshBet(){
+	private void onRefreshBet() {
 		sendEmptyMessage(REFRESH_BET_INFO);
 	}
 
@@ -703,7 +716,6 @@ public class RecomendFragment extends BaseFragment {
 		List<String> checkList = new ArrayList<String>();
 		for (PassType passType : simplePassList) {
 			if (passType.isChecked()) {
-				// 去掉单关模式
 				if (!(passType.getName().equals("单关") && !isSupportDg)) {
 					checkList.add(passType.getValue());
 				}
@@ -774,7 +786,7 @@ public class RecomendFragment extends BaseFragment {
 			String bfOddsData = OddsUtil.getBfOddsData(gameCanBetBean
 					.getBfOddsList());
 			if (!TextUtils.isEmpty(bfOddsData)) {
-				if (gameCanBetBean.getRqDg().equals("0")) {
+				if (gameCanBetBean.getBfDg().equals("0")) {
 					isSupportDg = false;
 				}
 				gameOddsList.add(bfOddsData);
@@ -821,8 +833,6 @@ public class RecomendFragment extends BaseFragment {
 		// 所有比赛投注拼接
 		lastCheckNum = gameCheckNum;
 		gameCheckNum = gameCheckList.size();
-		LogUtil.log("lastCheckNum:" + lastCheckNum + " gameCheckNum:"
-				+ gameCheckNum);
 		if (gameCheckList.size() == 0) {
 			return null;
 		} else {
