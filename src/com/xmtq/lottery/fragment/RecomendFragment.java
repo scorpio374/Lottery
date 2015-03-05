@@ -296,13 +296,13 @@ public class RecomendFragment extends BaseFragment {
 						public void onComplete(String resultString) {
 							// TODO Auto-generated method stub
 							if (resultString != null) {
-								if (Integer.parseInt(resultString) <= 10000) {
+								if (Integer.parseInt(resultString) <= 1000) {
 									check_chuan_guan
 											.setText(resultString + "倍");
 									onRefreshBetListener.onRefresh();
 								} else {
 									ToastUtil.showCenterToast(getActivity(),
-											"倍数不能大于一万倍");
+											"倍数不能大于一千倍");
 								}
 
 							}
@@ -418,8 +418,9 @@ public class RecomendFragment extends BaseFragment {
 
 		if (currentPageNum == 1) {
 			count = Integer.parseInt(gameCanBetResponse.count);
-			if (count > 0) {
-				recomend_lottery_times.setText("推荐" + count + "场比赛");
+			int comCount = Integer.parseInt(gameCanBetResponse.comCount);
+			if (comCount > 0) {
+				recomend_lottery_times.setText("推荐" + comCount + "场比赛");
 			}
 			gameCanBetBeans = gameCanBetResponse.gameCanBetBeans;
 			mAdapter = new RecomendListAdapter(getActivity(), gameCanBetBeans);

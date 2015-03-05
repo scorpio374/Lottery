@@ -34,9 +34,9 @@
                 android:id="@+id/match_team"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_gravity="center"
                 android:text="特兰米尔"
                 android:textColor="@color/white_shallow" />
 
@@ -44,10 +44,9 @@
                 android:id="@+id/league"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dip"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_gravity="center"
                 android:text="欧冠杯"
                 android:textColor="@color/white_light" />
 
@@ -55,17 +54,18 @@
                 android:id="@+id/host_team"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dip"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_gravity="center"
                 android:text="沃尔索尔"
                 android:textColor="@color/white_shallow" />
         </LinearLayout>
 
-        <TextView
+        <View
+            android:id="@+id/recomend_item_view"
             android:layout_width="20dip"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dip" />
     </LinearLayout>
 
     <LinearLayout
@@ -162,6 +162,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/recomend_ll_analyze"
             android:layout_width="20dip"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dip"
@@ -173,7 +174,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dip"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="center" 
                 android:text="析"
                 android:textColor="@color/white_shallow" />
 

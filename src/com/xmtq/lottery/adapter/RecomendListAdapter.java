@@ -78,6 +78,10 @@ public class RecomendListAdapter extends BaseAdapter {
 					.findViewById(R.id.dis_agree);
 			holder.odds_more = (LinearLayout) convertView
 					.findViewById(R.id.odds_more);
+			holder.item_view = convertView
+					.findViewById(R.id.recomend_item_view);
+			holder.recomend_ll_analyze = (LinearLayout) convertView
+					.findViewById(R.id.recomend_ll_analyze);
 			if (onMoreListener != null) {
 				holder.odds_more.setOnClickListener(onMoreListener);
 			}
@@ -121,8 +125,11 @@ public class RecomendListAdapter extends BaseAdapter {
 
 		// 赛事分析
 		if (gameCanBetBeans.get(position).getSpContent() == null) {
-			holder.analyze.setVisibility(View.GONE);
+			holder.recomend_ll_analyze.setVisibility(View.GONE);
+			holder.item_view.setVisibility(View.GONE);
 		} else {
+			holder.recomend_ll_analyze.setVisibility(View.VISIBLE);
+			holder.item_view.setVisibility(View.VISIBLE);
 			holder.analyze.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
@@ -132,14 +139,16 @@ public class RecomendListAdapter extends BaseAdapter {
 					analyzeDialog.show();
 				}
 			});
+
+			holder.dis_agree.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					disagreeDialog = new DisagreeDialog(mContext,
+							mDisAgreeListener);
+					disagreeDialog.show();
+				}
+			});
 		}
-		holder.dis_agree.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				disagreeDialog = new DisagreeDialog(mContext, mDisAgreeListener);
-				disagreeDialog.show();
-			}
-		});
 
 		return convertView;
 	}
@@ -156,6 +165,8 @@ public class RecomendListAdapter extends BaseAdapter {
 		ToggleButton lose;
 		TextView analyze;
 		ImageView dis_agree;
+		View item_view;
+		LinearLayout recomend_ll_analyze;
 	}
 
 	private OnClickListener mDisAgreeListener = new OnClickListener() {
@@ -218,7 +229,7 @@ public class RecomendListAdapter extends BaseAdapter {
 	public void setOnMoreListener(OnClickListener onMoreListener) {
 		this.onMoreListener = onMoreListener;
 	}
-	
+
 	/**
 	 * 设置刷新Listener
 	 */

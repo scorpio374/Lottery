@@ -1,7 +1,9 @@
 package com.xmtq.lottery.activity;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -48,9 +50,9 @@ public class RegisterActivity extends BaseActivity {
 	public void initView() {
 		btn_back = (ImageButton) findViewById(R.id.back);
 		register_commit = (TextView) findViewById(R.id.register_commit);
+		mUserNameView = (EditText) findViewById(R.id.user_name);
 		mPhoneView = (EditText) findViewById(R.id.phone_number);
 		mPasswordView = (EditText) findViewById(R.id.password);
-		mUserNameView = (EditText) findViewById(R.id.user_name);
 
 		btn_back.setOnClickListener(this);
 		register_commit.setOnClickListener(this);
@@ -60,6 +62,44 @@ public class RegisterActivity extends BaseActivity {
 	public void dealLogicAfterInitView() {
 		// TODO Auto-generated method stub
 
+		mUserNameView.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (mUserNameView.hasFocus() == false) {
+					String userName = mUserNameView.getText().toString().trim();
+
+					if (StringUtil.isNullOrEmpty(userName)) {
+						ToastUtil.showCenterToast(RegisterActivity.this,
+								"请输入用户名");
+						return;
+					}
+					requestCheckUsername(userName, "13312345678");
+				}
+			}
+		});
+
+		mPhoneView.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (mPhoneView.hasFocus() == false) {
+					String phoneNum = mPhoneView.getText().toString().trim();
+
+					if (TextUtils.isEmpty(phoneNum)) {
+						ToastUtil.showCenterToast(RegisterActivity.this,
+								"请输入手机号");
+						return;
+					}
+					if (!Util.isMobileNO(phoneNum)) {
+						ToastUtil.showCenterToast(RegisterActivity.this,
+								"请输入正确的手机号码");
+						return;
+					}
+					requestCheckPhonenumber("fuck123321", phoneNum);
+				}
+
+			}
+		});
 	}
 
 	@Override
@@ -122,7 +162,7 @@ public class RegisterActivity extends BaseActivity {
 	}
 
 	/**
-	 * 测试检查用户名是否存在
+	 * 测试检查用户名和手机号是否存在
 	 * 
 	 * @param username
 	 * @param phoneNum
@@ -135,7 +175,7 @@ public class RegisterActivity extends BaseActivity {
 		mAsyncTask.setOnCompleteListener(mtestOnCompleteListener);
 	}
 
-	// 测试检查用户名是否存在
+	// 测试检查用户名和手机号是否存在
 	private OnCompleteListener<CheckUserResponse> mtestOnCompleteListener = new OnCompleteListener<CheckUserResponse>() {
 
 		@Override
@@ -151,7 +191,6 @@ public class RegisterActivity extends BaseActivity {
 								.show();
 						return;
 					}
-
 					if (mResponse.checkUserBean.getPstate().equals("1")) {
 						Toast.makeText(RegisterActivity.this, "手机号码已经存在", 2000)
 								.show();
@@ -171,6 +210,91 @@ public class RegisterActivity extends BaseActivity {
 				Toast.makeText(RegisterActivity.this, Consts.REQUEST_ERROR,
 						2000).show();
 			}
+		}
+	};
+
+	/**
+	 * 检查用户名 是否存在
+	 * 
+	 * @param username
+	 * @param phoneNum
+	 */
+	private void requestCheckUsername(String username, String phoneNum) {
+		//
+		mLoadingDialog.show("数据加载中...");
+		RequestMaker mRequestMaker = RequestMaker.getInstance();
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(mRequestMaker.getCheckUser(username, phoneNum));
+		mAsyncTask.setOnCompleteListener(mtestUsernameOnCompleteListener);
+	}
+
+	// 测试检查用户名和手机号是否存在
+	private OnCompleteListener<CheckUserResponse> mtestUsernameOnCompleteListener = new OnCompleteListener<CheckUserResponse>() {
+
+		@Override
+		public void onComplete(CheckUserResponse result, String resultString) {
+
+			if (result != null) {
+				if (result.errorcode.equals("0")) {
+					// PurchaseRecordsResponse mResponse = result;
+					CheckUserResponse mResponse = result;
+
+					if (mResponse.checkUserBean.getUstate().equals("1")) {
+						Toast.makeText(RegisterActivity.this, "用户名已经存在", 2000)
+								.show();
+					}
+				} else {
+					Toast.makeText(RegisterActivity.this, result.errormsg, 2000)
+							.show();
+				}
+
+			} else {
+				Toast.makeText(RegisterActivity.this, Consts.REQUEST_ERROR,
+						2000).show();
+			}
+			mLoadingDialog.dismiss();
+		}
+	};
+
+	/**
+	 * 检查手机号是否存在
+	 * 
+	 * @param username
+	 * @param phoneNum
+	 */
+	private void requestCheckPhonenumber(String username, String phoneNum) {
+		//
+		mLoadingDialog.show("数据加载中...");
+		RequestMaker mRequestMaker = RequestMaker.getInstance();
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(mRequestMaker.getCheckUser(username, phoneNum));
+		mAsyncTask.setOnCompleteListener(mtestPhoneNumberOnCompleteListener);
+	}
+
+	// 测试检查用户名和手机号是否存在
+	private OnCompleteListener<CheckUserResponse> mtestPhoneNumberOnCompleteListener = new OnCompleteListener<CheckUserResponse>() {
+
+		@Override
+		public void onComplete(CheckUserResponse result, String resultString) {
+			mLoadingDialog.dismiss();
+			if (result != null) {
+				if (result.errorcode.equals("0")) {
+					// PurchaseRecordsResponse mResponse = result;
+					CheckUserResponse mResponse = result;
+
+					if (mResponse.checkUserBean.getPstate().equals("1")) {
+						Toast.makeText(RegisterActivity.this, "手机号码已经存在", 2000)
+								.show();
+					}
+				} else {
+					Toast.makeText(RegisterActivity.this, result.errormsg, 2000)
+							.show();
+				}
+			} else {
+				Toast.makeText(RegisterActivity.this, Consts.REQUEST_ERROR,
+						2000).show();
+			}
+
 		}
 	};
 
