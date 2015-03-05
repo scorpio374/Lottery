@@ -35,12 +35,11 @@ public class CheckBankFirstActivity extends BaseActivity {
 	private ImageView iv_checkBank;
 	private CreateOrderBean mCreateOrderBean;
 	private LinearLayout ll_bank_c;
-	private EditText check_bank;
 	private String requestOrderId;
 	private String bankCode;
 	private EditText et_card_name;
 	private EditText et_id_card;
-	private EditText et_bank_name;
+	private TextView et_bank_name;
 	private EditText et_bank_account;
 	private EditText et_valid_date;
 	private EditText et_cvn_code;
@@ -103,7 +102,7 @@ public class CheckBankFirstActivity extends BaseActivity {
 
 		et_card_name = (EditText) findViewById(R.id.et_card_name);
 		et_id_card = (EditText) findViewById(R.id.et_id_card);
-		et_bank_name = (EditText) findViewById(R.id.et_bank_name);
+		et_bank_name = (TextView) findViewById(R.id.et_bank_name);
 		et_bank_account = (EditText) findViewById(R.id.et_bank_account);
 		et_valid_date = (EditText) findViewById(R.id.et_valid_date);
 		et_cvn_code = (EditText) findViewById(R.id.et_cvn_code);
@@ -115,7 +114,6 @@ public class CheckBankFirstActivity extends BaseActivity {
 		commit.setOnClickListener(this);
 		send_verification.setOnClickListener(this);
 		iv_checkBank.setOnClickListener(this);
-		check_bank = (EditText) findViewById(R.id.et_bank_name);
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
 	}
@@ -170,7 +168,7 @@ public class CheckBankFirstActivity extends BaseActivity {
 			String bankName = "";
 			bankName = data.getStringExtra("bankName");
 			bankCode = data.getStringExtra("bankCode");
-			check_bank.setText(bankName);
+			et_bank_name.setText(bankName);
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}

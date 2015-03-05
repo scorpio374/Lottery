@@ -71,7 +71,7 @@
             android:cursorVisible="true"
             android:hint=""
             android:singleLine="true"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textColorHint="@color/soft_gray"
             android:textCursorDrawable="@drawable/edit"
             android:textSize="@dimen/main_textsize2" />

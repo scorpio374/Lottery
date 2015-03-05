@@ -78,7 +78,6 @@ public class HttpRequestAsyncTask extends
 			e.printStackTrace();
 		}
 		return object;
-
 	}
 
 	@Override
