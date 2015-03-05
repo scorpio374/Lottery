@@ -73,6 +73,8 @@ public class RecomendListAdapter extends BaseAdapter {
 			holder.win = (ToggleButton) convertView.findViewById(R.id.win);
 			holder.draw = (ToggleButton) convertView.findViewById(R.id.draw);
 			holder.lose = (ToggleButton) convertView.findViewById(R.id.lose);
+			holder.analyze_ll = (LinearLayout) convertView
+					.findViewById(R.id.analyze_ll);
 			holder.analyze = (TextView) convertView.findViewById(R.id.analyze);
 			holder.dis_agree = (ImageView) convertView
 					.findViewById(R.id.dis_agree);
@@ -121,8 +123,13 @@ public class RecomendListAdapter extends BaseAdapter {
 
 		// 赛事分析
 		if (gameCanBetBeans.get(position).getSpContent() == null) {
+			holder.analyze_ll.setVisibility(View.GONE);
 			holder.analyze.setVisibility(View.GONE);
+			holder.dis_agree.setVisibility(View.GONE);
 		} else {
+			holder.analyze_ll.setVisibility(View.VISIBLE);
+			holder.analyze.setVisibility(View.VISIBLE);
+			holder.dis_agree.setVisibility(View.VISIBLE);
 			holder.analyze.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
@@ -132,14 +139,16 @@ public class RecomendListAdapter extends BaseAdapter {
 					analyzeDialog.show();
 				}
 			});
+
+			holder.dis_agree.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					disagreeDialog = new DisagreeDialog(mContext,
+							mDisAgreeListener);
+					disagreeDialog.show();
+				}
+			});
 		}
-		holder.dis_agree.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				disagreeDialog = new DisagreeDialog(mContext, mDisAgreeListener);
-				disagreeDialog.show();
-			}
-		});
 
 		return convertView;
 	}
@@ -154,6 +163,7 @@ public class RecomendListAdapter extends BaseAdapter {
 		ToggleButton win;
 		ToggleButton draw;
 		ToggleButton lose;
+		LinearLayout analyze_ll;
 		TextView analyze;
 		ImageView dis_agree;
 	}
@@ -189,25 +199,33 @@ public class RecomendListAdapter extends BaseAdapter {
 		toggleButton.setTextOff(sOdds);
 
 		toggleButton.setTag(odds);
+		if (odds.isChecked()) {
+			if (!toggleButton.isChecked()) {
+				toggleButton.setChecked(true);
+			}
+		} else {
+			if (toggleButton.isChecked()) {
+				toggleButton.setChecked(false);
+			}
+		}
+
 		toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 				// TODO Auto-generated method stub
 				Odds odds = (Odds) arg0.getTag();
-				if (arg1) {
-					odds.setChecked(true);
-				} else {
-					odds.setChecked(false);
-				}
-				onRefreshListener.onRefresh();
+				odds.setChecked(arg1);
 			}
 		});
 
-		if (odds.isChecked()) {
-			toggleButton.setChecked(true);
-		} else {
-			toggleButton.setChecked(false);
-		}
+		toggleButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				onRefreshListener.onRefresh();
+			}
+		});
 	}
 
 	/**
@@ -218,7 +236,7 @@ public class RecomendListAdapter extends BaseAdapter {
 	public void setOnMoreListener(OnClickListener onMoreListener) {
 		this.onMoreListener = onMoreListener;
 	}
-	
+
 	/**
 	 * 设置刷新Listener
 	 */

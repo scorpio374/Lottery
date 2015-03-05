@@ -111,6 +111,10 @@ public class RecomendFragment extends BaseFragment {
 	private TextView win_record;
 	private boolean isSupportDg = false;
 
+	// 选中的比赛场次
+	private int gameCheckNum = 0;
+	private int lastCheckNum = 0;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -161,7 +165,9 @@ public class RecomendFragment extends BaseFragment {
 		String playtype = Consts.PLAY_TYPE;
 		String protype = Consts.PRO_TYPE;
 		int multiple = getMultiple();
-		String voteinfo = getOddsData(TYPE_BETTING, String.valueOf(multiple));
+		String passtype = getPassType();
+		String voteinfo = getOddsData(TYPE_BETTING, String.valueOf(multiple),
+				passtype);
 		if (TextUtils.isEmpty(voteinfo)) {
 			ToastUtil.showCenterToast(getActivity(), "请选择投注场次");
 			return;
@@ -171,19 +177,19 @@ public class RecomendFragment extends BaseFragment {
 			return;
 		}
 
-		// 过关类型转换，passtype为1_1
-		String passtype = getPassType();
-		passtype = passtype.replace("*", "_");
-
 		// 仅用于计算注数
-		String sVoteinfo = getOddsData(TYPE_VOTENUMS, String.valueOf(multiple));
+		String sVoteinfo = getOddsData(TYPE_VOTENUMS, String.valueOf(multiple),
+				passtype);
 		int votenums = getVoteNums(sVoteinfo);
-		if(votenums == 0){
+		if (votenums == 0) {
 			ToastUtil.showCenterToast(getActivity(), "串关方式有误");
 			return;
 		}
 		int buymoney = multiple * votenums * 2;
 		int totalmoney = buymoney;
+
+		// 过关类型转换，passtype为1_1
+		passtype = passtype.replace("*", "_");
 
 		// 保存投注数据，传递到其他组件
 		BetInfoBean betInfoBean = new BetInfoBean();
@@ -281,6 +287,15 @@ public class RecomendFragment extends BaseFragment {
 			break;
 
 		case R.id.chuan_guan:
+			if (gameCheckNum == 0) {
+				ToastUtil.showCenterToast(getActivity(), "请选择投注场次");
+				return;
+			}
+
+			if (gameCheckNum != lastCheckNum) {
+				initPassType();
+			}
+
 			mChuanGuanDialog = new ChuanGuanDialog(getActivity(),
 					mCancelListener, mCommitListener, simplePassList,
 					morePassList, isSupportDg);
@@ -330,8 +345,6 @@ public class RecomendFragment extends BaseFragment {
 			mChuanGuanDialog.dismiss();
 
 			// 点击串关取消后，初始化过关数据
-			simplePassList = PassTypeUtil.getSimplePassList();
-			morePassList = PassTypeUtil.getMorePassList();
 			onRefreshBetListener.onRefresh();
 		}
 	};
@@ -411,8 +424,9 @@ public class RecomendFragment extends BaseFragment {
 
 		if (currentPageNum == 1) {
 			count = Integer.parseInt(gameCanBetResponse.count);
-			if (count > 0) {
-				recomend_lottery_times.setText("推荐" + count + "场比赛");
+			int comCount = Integer.parseInt(gameCanBetResponse.comCount);
+			if (comCount > 0) {
+				recomend_lottery_times.setText("推荐" + comCount + "场比赛");
 			}
 			gameCanBetBeans = gameCanBetResponse.gameCanBetBeans;
 			mAdapter = new RecomendListAdapter(getActivity(), gameCanBetBeans);
@@ -467,8 +481,10 @@ public class RecomendFragment extends BaseFragment {
 			// TODO Auto-generated method stub
 			switch (msg.what) {
 			case REFRESH_DATA_FINISH:
-				mAdapter.notifyDataSetChanged();
-				recomend_list.onRefreshComplete();
+				if (mAdapter != null) {
+					mAdapter.notifyDataSetChanged();
+					recomend_list.onRefreshComplete();
+				}
 				break;
 
 			case LOAD_DATA_FINISH:
@@ -541,6 +557,7 @@ public class RecomendFragment extends BaseFragment {
 	private void initData() {
 		initGameData();
 		initPassType();
+		refresh();
 	}
 
 	/**
@@ -548,12 +565,12 @@ public class RecomendFragment extends BaseFragment {
 	 */
 	private void initGameData() {
 		for (GameCanBetBean gameCanBetBean : gameCanBetBeans) {
-			List<Odds> spOddsList =  gameCanBetBean.getSpOddsList();
-			List<Odds> rqOddsList =  gameCanBetBean.getRqOddsList();
-			List<Odds> bfOddsList =  gameCanBetBean.getBfOddsList();
-			List<Odds> bqOddsList =  gameCanBetBean.getBqOddsList();
-			List<Odds> jqOddsList =  gameCanBetBean.getJqOddsList();
-			
+			List<Odds> spOddsList = gameCanBetBean.getSpOddsList();
+			List<Odds> rqOddsList = gameCanBetBean.getRqOddsList();
+			List<Odds> bfOddsList = gameCanBetBean.getBfOddsList();
+			List<Odds> bqOddsList = gameCanBetBean.getBqOddsList();
+			List<Odds> jqOddsList = gameCanBetBean.getJqOddsList();
+
 			initOddsList(spOddsList);
 			initOddsList(rqOddsList);
 			initOddsList(bfOddsList);
@@ -561,9 +578,10 @@ public class RecomendFragment extends BaseFragment {
 			initOddsList(jqOddsList);
 		}
 		mAdapter.notifyDataSetChanged();
+		gameCheckNum = 0;
 	}
-	
-	private void initOddsList(List<Odds> oddsList){
+
+	private void initOddsList(List<Odds> oddsList) {
 		for (Odds odds : oddsList) {
 			odds.setChecked(false);
 		}
@@ -573,8 +591,8 @@ public class RecomendFragment extends BaseFragment {
 	 * 初始化过关类型
 	 */
 	private void initPassType() {
-		simplePassList = PassTypeUtil.getSimplePassList();
-		morePassList = PassTypeUtil.getMorePassList();
+		simplePassList = PassTypeUtil.getSimplePassList(gameCheckNum);
+		morePassList = PassTypeUtil.getMorePassList(gameCheckNum);
 	}
 
 	/**
@@ -582,7 +600,6 @@ public class RecomendFragment extends BaseFragment {
 	 */
 	private OnRefreshListener onRefreshBetListener = new OnRefreshListener() {
 
-		@Override
 		public void onRefresh() {
 			// TODO Auto-generated method stub
 			sendEmptyMessage(REFRESH_BET_INFO);
@@ -595,8 +612,10 @@ public class RecomendFragment extends BaseFragment {
 	 * @param what
 	 */
 	private void sendEmptyMessage(int what) {
+		Message msg = new Message();
+		msg.what = what;
 		mHandler.removeMessages(what);
-		mHandler.sendEmptyMessage(what);
+		mHandler.sendMessage(msg);
 	}
 
 	/**
@@ -604,13 +623,14 @@ public class RecomendFragment extends BaseFragment {
 	 */
 	private void refresh() {
 		int multiple = getMultiple();
-		String voteinfo = getOddsData(TYPE_VOTENUMS, String.valueOf(multiple));
+		String passType = getPassType();
+		String voteinfo = getOddsData(TYPE_VOTENUMS, String.valueOf(multiple),
+				passType);
 		if (voteinfo != null && voteinfo.equals(NO_PASS_TYPE)) {
 			voteinfo = null;
 		}
 		int votenums = getVoteNums(voteinfo);
 		int buymoney = votenums * multiple * 2;
-
 		betting_info.setText(votenums + "注" + multiple + "倍" + "  共" + buymoney
 				+ "元");
 	}
@@ -662,7 +682,10 @@ public class RecomendFragment extends BaseFragment {
 		List<String> checkList = new ArrayList<String>();
 		for (PassType passType : simplePassList) {
 			if (passType.isChecked()) {
-				checkList.add(passType.getValue());
+				// 去掉单关模式
+				if (!(passType.getName().equals("单关") && !isSupportDg)) {
+					checkList.add(passType.getValue());
+				}
 			}
 		}
 
@@ -682,9 +705,9 @@ public class RecomendFragment extends BaseFragment {
 			}
 		} else {
 			// 默认过关类型
-			if (isSupportDg) {
-				sb.append("1*1");
-			}
+			// if (isSupportDg) {
+			// sb.append("1*1");
+			// }
 		}
 
 		return sb.toString();
@@ -693,7 +716,7 @@ public class RecomendFragment extends BaseFragment {
 	/**
 	 * 竞猜数据拼接 type 0：投注串(每场比赛之间用"_"连接) 1：计算注数(每场比赛之间用"&"连接)
 	 */
-	private String getOddsData(int type, String multiple) {
+	private String getOddsData(int type, String multiple, String passType) {
 		if (gameCanBetBeans == null || gameCanBetBeans.size() == 0) {
 			return null;
 		}
@@ -775,6 +798,8 @@ public class RecomendFragment extends BaseFragment {
 		}
 
 		// 所有比赛投注拼接
+		lastCheckNum = gameCheckNum;
+		gameCheckNum = gameCheckList.size();
 		if (gameCheckList.size() == 0) {
 			return null;
 		} else {
@@ -792,7 +817,6 @@ public class RecomendFragment extends BaseFragment {
 		}
 
 		// 串关
-		String passType = getPassType();
 		if (TextUtils.isEmpty(passType)) {
 			return NO_PASS_TYPE;
 		}

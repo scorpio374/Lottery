@@ -7,5 +7,6 @@ package com.xmtq.lottery.utils;
  * 
  */
 public interface OnRefreshListener {
+	
 	public void onRefresh();
 }

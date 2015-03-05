@@ -29,6 +29,7 @@ public class BetConfirmDialog {
 	private LinearLayout layout;
 	private BetInfoBean betInfoBean;
 	private OnRefreshListener onRefreshListener;
+	private ImageView dialog_commit;
 
 	public BetConfirmDialog(Context context, BetInfoBean betInfoBean) {
 		this.context = context;
@@ -48,7 +49,7 @@ public class BetConfirmDialog {
 	}
 
 	private void setListener() {
-		ImageView dialog_commit = (ImageView) layout
+		dialog_commit = (ImageView) layout
 				.findViewById(R.id.dialog_commit);
 		dialog_commit.setOnClickListener(myShureListener);
 	}
@@ -85,7 +86,10 @@ public class BetConfirmDialog {
 		@Override
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
+			
+			// 投注入设置按钮不可点击
 			bet();
+			dialog_commit.setClickable(false);
 			onRefreshListener.onRefresh();
 		}
 	};
@@ -133,6 +137,7 @@ public class BetConfirmDialog {
 		}
 	};
 	
+
 	/**
 	 * 设置刷新Listener
 	 */

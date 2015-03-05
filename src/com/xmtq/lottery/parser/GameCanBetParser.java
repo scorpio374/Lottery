@@ -31,6 +31,7 @@ public class GameCanBetParser extends BaseParser<GameCanBetResponse> {
 			JSONObject bodyObj = msgObj.getJSONObject("body");
 			JSONObject elementsObj = bodyObj.getJSONObject("elements");
 			response.count = elementsObj.getString("count");
+			response.comCount = elementsObj.getString("comCount");
 
 			try {
 				JSONArray elementArray = elementsObj.getJSONArray("element");

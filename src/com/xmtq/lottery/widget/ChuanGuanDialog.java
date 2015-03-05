@@ -36,7 +36,6 @@ public class ChuanGuanDialog {
 	private OnClickListener myCommitClickListener;
 	private List<PassType> simplePassList;
 	private List<PassType> morePassList;
-	private boolean isSupportDg;
 
 	public ChuanGuanDialog(Context context,
 			OnClickListener cancelClickListener,
@@ -47,7 +46,6 @@ public class ChuanGuanDialog {
 		this.myCommitClickListener = commitClickListener;
 		this.simplePassList = simplePassList;
 		this.morePassList = morePassList;
-		this.isSupportDg = isSupportDg;
 	}
 
 	private void initview() {
@@ -58,27 +56,30 @@ public class ChuanGuanDialog {
 
 		tv_more_style = (LinearLayout) layout.findViewById(R.id.tv_more_style);
 		chuanguan_gridview = (GridView) layout.findViewById(R.id.chuanguan);
-		chuanguan_more_gridview = (GridView) layout.findViewById(R.id.chuanguan_more);
+		chuanguan_more_gridview = (GridView) layout
+				.findViewById(R.id.chuanguan_more);
 
 		ChuanGuanMoreAdapter simpleAdapter = new ChuanGuanMoreAdapter(context,
-				simplePassList,isSupportDg);
+				simplePassList);
 		chuanguan_gridview.setAdapter(simpleAdapter);
-		
+
 		ChuanGuanMoreAdapter moreAdapter = new ChuanGuanMoreAdapter(context,
-				morePassList,isSupportDg);
+				morePassList);
 		chuanguan_more_gridview.setAdapter(moreAdapter);
 
-		tv_more_style.setOnClickListener(new OnClickListener() {
+		if (morePassList != null && morePassList.size() > 0) {
+			tv_more_style.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				if (chuanguan_more_gridview.getVisibility() == View.GONE) {
-					chuanguan_more_gridview.setVisibility(View.VISIBLE);
-				} else {
-					chuanguan_more_gridview.setVisibility(View.GONE);
+				@Override
+				public void onClick(View arg0) {
+					if (chuanguan_more_gridview.getVisibility() == View.GONE) {
+						chuanguan_more_gridview.setVisibility(View.VISIBLE);
+					} else {
+						chuanguan_more_gridview.setVisibility(View.GONE);
+					}
 				}
-			}
-		});
+			});
+		}
 
 	}
 
@@ -116,11 +117,10 @@ public class ChuanGuanDialog {
 			mdialog.dismiss();
 		}
 	}
-	
+
 	OnKeyListener keylistener = new DialogInterface.OnKeyListener() {
 		public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-			if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0
-					) {
+			if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 				myCancelListener.onClick(btn_cancel);
 				return true;
 			} else {
@@ -128,5 +128,5 @@ public class ChuanGuanDialog {
 			}
 		}
 	};
-	
+
 }

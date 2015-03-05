@@ -22,7 +22,7 @@ public class PassTypeUtil {
 	 * 
 	 */
 	public static List<PassType> getSimplePassList(){
-		return getSimplePassList(0);
+		return getSimplePassList(1);
 	}
 	
 	/**
@@ -35,11 +35,12 @@ public class PassTypeUtil {
 		for (int i = 0; i < simplePassArray.length; i++) {
 			String name = simplePassArray[i];
 			String value = getPassValue(name);
-			
-			PassType passType = new PassType();
-			passType.setName(name);
-			passType.setValue(value);
-			passList.add(passType);
+			if(String.valueOf(num).compareTo(value.substring(0,1)) >= 0){
+				PassType passType = new PassType();
+				passType.setName(name);
+				passType.setValue(value);
+				passList.add(passType);
+			}
 		}
 		return passList;
 	}
@@ -49,7 +50,7 @@ public class PassTypeUtil {
 	 *
 	 */
 	public static List<PassType> getMorePassList(){
-		return getMorePassList(0);
+		return getMorePassList(1);
 	}
 	
 	/**
@@ -63,10 +64,12 @@ public class PassTypeUtil {
 			String name = morePassArray[i];
 			String value = getPassValue(name);
 			
-			PassType passType = new PassType();
-			passType.setName(name);
-			passType.setValue(value);
-			passList.add(passType);
+			if(String.valueOf(num).compareTo(value.substring(0,1)) >= 0){
+				PassType passType = new PassType();
+				passType.setName(name);
+				passType.setValue(value);
+				passList.add(passType);
+			}
 		}
 		return passList;
 	}

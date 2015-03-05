@@ -18,21 +18,15 @@ public class ChuanGuanMoreAdapter extends BaseAdapter {
 
 	private Context context;
 	private List<PassType> simplePassList;
-	private boolean isSupportDg;
 
-	public ChuanGuanMoreAdapter(Context context, List<PassType> simplePassList,
-			boolean isSupportDg) {
+	public ChuanGuanMoreAdapter(Context context, List<PassType> simplePassList) {
 		this.context = context;
 		this.simplePassList = simplePassList;
-		this.isSupportDg = isSupportDg;
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		if (!isSupportDg) {
-			return simplePassList.size() - 1;
-		}
 		return simplePassList.size();
 	}
 
@@ -63,11 +57,7 @@ public class ChuanGuanMoreAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-		if (!isSupportDg) {
-			setText(holder.toggleButton, simplePassList.get(position + 1));
-		} else {
-			setText(holder.toggleButton, simplePassList.get(position));
-		}
+		setText(holder.toggleButton, simplePassList.get(position));
 		return convertView;
 	}
 
