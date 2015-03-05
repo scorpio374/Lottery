@@ -223,11 +223,11 @@ public class UserInfoFragment extends BaseFragment {
 
 			break;
 		case R.id.exit_loading:
-			intent = new Intent(getActivity(), RecomendActivity.class);
-			startActivity(intent);
-			// SharedPreferences spf = getActivity().getSharedPreferences(
-			// "isLogin", Context.MODE_PRIVATE);
-			// spf.edit().putBoolean("isLogin", false).commit();
+
+			LoginFragment fragment = new LoginFragment();
+			getActivity().getSupportFragmentManager().beginTransaction()
+					.replace(R.id.menu_frame, fragment).commit();
+
 			SharedPrefHelper spf = SharedPrefHelper.getInstance(getActivity());
 			spf.setIsLogin(false);
 			break;

@@ -288,9 +288,9 @@ public class RequestMaker {
 	/**
 	 * 检测用户名/手机/邮箱是否存在
 	 */
-	public Request getCheckUser(String parameter, String phone, String email) {
+	public Request getCheckUser(String parameter, String phone) {
 		CheckUserParser parser = new CheckUserParser();
-		String body = createCheckUser(parameter, phone, email);
+		String body = createCheckUser(parameter, phone);
 		String xmlBody = makeXml(body, "10010");
 
 		Request request = new Request(
@@ -298,15 +298,14 @@ public class RequestMaker {
 		return request;
 	}
 
-	private String createCheckUser(String parameter, String phone, String email) {
+	private String createCheckUser(String parameter, String phone) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("<body>");
 		sb.append("<elements>");
 		sb.append("<element>");
-		sb.append(makeTag("parameter", parameter));
+		sb.append(makeTag("username", parameter));
 		sb.append(makeTag("phone", phone));
-		sb.append(makeTag("email", email));
 		sb.append("</element>");
 		sb.append("</elements>");
 		sb.append("</body>");

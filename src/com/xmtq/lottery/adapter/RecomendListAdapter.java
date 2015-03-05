@@ -73,13 +73,15 @@ public class RecomendListAdapter extends BaseAdapter {
 			holder.win = (ToggleButton) convertView.findViewById(R.id.win);
 			holder.draw = (ToggleButton) convertView.findViewById(R.id.draw);
 			holder.lose = (ToggleButton) convertView.findViewById(R.id.lose);
-			holder.analyze_ll = (LinearLayout) convertView
-					.findViewById(R.id.analyze_ll);
 			holder.analyze = (TextView) convertView.findViewById(R.id.analyze);
 			holder.dis_agree = (ImageView) convertView
 					.findViewById(R.id.dis_agree);
 			holder.odds_more = (LinearLayout) convertView
 					.findViewById(R.id.odds_more);
+			holder.item_view = convertView
+					.findViewById(R.id.recomend_item_view);
+			holder.recomend_ll_analyze = (LinearLayout) convertView
+					.findViewById(R.id.recomend_ll_analyze);
 			if (onMoreListener != null) {
 				holder.odds_more.setOnClickListener(onMoreListener);
 			}
@@ -123,13 +125,11 @@ public class RecomendListAdapter extends BaseAdapter {
 
 		// 赛事分析
 		if (gameCanBetBeans.get(position).getSpContent() == null) {
-			holder.analyze_ll.setVisibility(View.GONE);
-			holder.analyze.setVisibility(View.GONE);
-			holder.dis_agree.setVisibility(View.GONE);
+			holder.recomend_ll_analyze.setVisibility(View.GONE);
+			holder.item_view.setVisibility(View.GONE);
 		} else {
-			holder.analyze_ll.setVisibility(View.VISIBLE);
-			holder.analyze.setVisibility(View.VISIBLE);
-			holder.dis_agree.setVisibility(View.VISIBLE);
+			holder.recomend_ll_analyze.setVisibility(View.VISIBLE);
+			holder.item_view.setVisibility(View.VISIBLE);
 			holder.analyze.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
@@ -166,6 +166,8 @@ public class RecomendListAdapter extends BaseAdapter {
 		LinearLayout analyze_ll;
 		TextView analyze;
 		ImageView dis_agree;
+		View item_view;
+		LinearLayout recomend_ll_analyze;
 	}
 
 	private OnClickListener mDisAgreeListener = new OnClickListener() {

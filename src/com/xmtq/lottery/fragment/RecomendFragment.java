@@ -311,8 +311,15 @@ public class RecomendFragment extends BaseFragment {
 						public void onComplete(String resultString) {
 							// TODO Auto-generated method stub
 							if (resultString != null) {
-								check_chuan_guan.setText(resultString + "倍");
-								onRefreshBetListener.onRefresh();
+								if (Integer.parseInt(resultString) <= 1000) {
+									check_chuan_guan
+											.setText(resultString + "倍");
+									onRefreshBetListener.onRefresh();
+								} else {
+									ToastUtil.showCenterToast(getActivity(),
+											"倍数不能大于一千倍");
+								}
+
 							}
 						}
 					});

@@ -88,6 +88,11 @@ public class ModifiPasswordActivity extends BaseActivity {
 			// return;
 		}
 
+		if (oldPassword.equals(newPassword)) {
+			ToastUtil.showCenterToast(this, "新密码与原密码一致，请重新输入");
+			return;
+		}
+
 		if (StringUtil.isNullOrEmpty(confirmPassword)
 				|| !confirmPassword.equals(newPassword)) {
 			ToastUtil.showCenterToast(this, "两次输入新密码不一致，请重新输入");
@@ -109,15 +114,18 @@ public class ModifiPasswordActivity extends BaseActivity {
 			// TODO Auto-generated method stub
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
-					ToastUtil.showCenterToast(ModifiPasswordActivity.this, "密码修改成功");
+					ToastUtil.showCenterToast(ModifiPasswordActivity.this,
+							"密码修改成功");
 
 					// 修改成功，返回前一个页面
 					finish();
 				} else {
-					ToastUtil.showCenterToast(ModifiPasswordActivity.this, result.errormsg);
+					ToastUtil.showCenterToast(ModifiPasswordActivity.this,
+							result.errormsg);
 				}
 			} else {
-				ToastUtil.showCenterToast(ModifiPasswordActivity.this, Consts.REQUEST_ERROR);
+				ToastUtil.showCenterToast(ModifiPasswordActivity.this,
+						Consts.REQUEST_ERROR);
 			}
 		}
 	};
