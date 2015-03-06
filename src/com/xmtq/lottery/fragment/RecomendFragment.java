@@ -590,9 +590,9 @@ public class RecomendFragment extends BaseFragment {
 				initOddsList(bqOddsList);
 				initOddsList(jqOddsList);
 			}
+			mAdapter.notifyDataSetChanged();
 		}
-
-		mAdapter.notifyDataSetChanged();
+		
 		gameCheckNum = 0;
 		lastCheckNum = 0;
 		isSupportDg = false;

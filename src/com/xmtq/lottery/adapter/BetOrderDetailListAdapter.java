@@ -62,15 +62,16 @@ public class BetOrderDetailListAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-		holder.bet_detail_week.setText(mBetDetailBeans.get(arg0).getName());
+		holder.bet_detail_week.setText(mBetDetailBeans.get(arg0).getName()
+				+ "\n" + mBetDetailBeans.get(arg0).getNumber());
 		holder.bet_detail_team.setText(mBetDetailBeans.get(arg0).getMatchteam()
 				+ "\nvs\n" + mBetDetailBeans.get(arg0).getHostteam());
 		holder.bet_detail_spf.setText(mBetDetailBeans.get(arg0)
 				.getmBetOddBeans().get(0).getPlayname());
 		holder.bet_detail_s.setText(mBetDetailBeans.get(arg0).getmBetOddBeans()
 				.get(0).getGameresult());
-		holder.bet_detail_f.setText(mBetDetailBeans.get(arg0)
-				.getmBetOddBeans().get(0).getBetinfo());
+		holder.bet_detail_f.setText(mBetDetailBeans.get(arg0).getmBetOddBeans()
+				.get(0).getBetinfo());
 		// holder.tv_program_name.setText(childList.get(position).getTitle());
 
 		return convertView;

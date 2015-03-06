@@ -11,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.utils.SharedPrefHelper;
 
 public class LoadingActivity extends Activity {
 	private AlphaAnimation aa = null;
@@ -46,10 +47,17 @@ public class LoadingActivity extends Activity {
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
-			Intent mainIntent = new Intent(LoadingActivity.this,
-					RecomendActivity.class);
-			startActivity(mainIntent);
-			finish();
+			if(SharedPrefHelper.getInstance(LoadingActivity.this).getFirstLogin()){
+				Intent intent = new Intent(LoadingActivity.this,
+						GuideActivity.class);
+				startActivity(intent);
+				finish();
+			}else{
+				Intent mainIntent = new Intent(LoadingActivity.this,
+						RecomendActivity.class);
+				startActivity(mainIntent);
+				finish();
+			}
 		}
 	};
 }

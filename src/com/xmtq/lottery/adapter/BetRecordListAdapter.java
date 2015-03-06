@@ -128,9 +128,7 @@ public class BetRecordListAdapter extends BaseAdapter {
 				} else {
 					result = "未中奖";
 				}
-			} else if (state.equals("出票中")) {
-				result = "等待开奖";
-			} else {
+			}  else {
 				result = state;
 			}
 		} else {
