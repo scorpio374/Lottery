@@ -1,14 +1,13 @@
 package com.xmtq.lottery.adapter;
 
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.example.lottery.R;
 import com.xmtq.lottery.bean.AccountDetailBean;
 
@@ -40,6 +39,7 @@ public class AccountDetailListAdapter extends BaseAdapter {
 		return arg0;
 	}
 
+	@SuppressLint("ResourceAsColor")
 	@Override
 	public View getView(int arg0, View convertView, ViewGroup arg2) {
 		Holder holder = null;
@@ -82,6 +82,13 @@ public class AccountDetailListAdapter extends BaseAdapter {
 				money = mList.get(arg0).getMoney() + "元";
 			}
 			holder.bet_count.setText(money);
+			if (money.contains("+")) {
+				holder.bet_count.setTextColor(mContext.getResources().getColor(
+						R.color.account_color));
+			} else {
+				holder.bet_count.setTextColor(mContext.getResources().getColor(
+						R.color.white));
+			}
 			holder.bet_date.setText(date);
 			holder.bet_style.setText(style);
 

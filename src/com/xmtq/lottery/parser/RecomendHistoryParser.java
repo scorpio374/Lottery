@@ -26,23 +26,28 @@ public class RecomendHistoryParser extends BaseParser<RecomendHistoryResponse> {
 		if (response.errorcode.equals("0")) {
 			JSONObject bodyObj = msgObj.getJSONObject("body");
 			if (bodyObj.containsKey("elements")) {
-				JSONObject elementsObj = bodyObj.getJSONObject("elements");
 				try {
-					JSONArray ja = elementsObj.getJSONArray("element");
-					if (ja != null) {
-						for (int i = 0; i < ja.size(); i++) {
-							JSONObject j = ja.getJSONObject(i);
-							getParser(response, j);
+					JSONObject elementsObj = bodyObj.getJSONObject("elements");
+					try {
+						JSONArray ja = elementsObj.getJSONArray("element");
+						if (ja != null) {
+							for (int i = 0; i < ja.size(); i++) {
+								JSONObject j = ja.getJSONObject(i);
+								getParser(response, j);
 
+							}
 						}
+					} catch (Exception e) {
+						// TODO: handle exception
+						JSONObject j = elementsObj.getJSONObject("element");
+
+						getParser(response, j);
 					}
+
 				} catch (Exception e) {
-					// TODO: handle exception
-					JSONObject j = elementsObj.getJSONObject("element");
-
-					getParser(response, j);
+					 
 				}
-
+				
 			}
 
 		}

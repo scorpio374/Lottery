@@ -29,7 +29,7 @@
             android:layout_margin="8dp"
             android:background="@drawable/dialog_edit_bg"
             android:gravity="top"
-            android:text="皇马具有主场优势。。"
+            android:text=" "
             android:maxLines="6"
             android:minLines="1"
             android:padding="5dp"

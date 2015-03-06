@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.lottery.R;
 
@@ -19,15 +20,21 @@ public class AnalyzeDialog {
 	private LinearLayout layout;
 	private OnClickListener myShureListener;
 
-	public AnalyzeDialog(Context context, OnClickListener myShureListener) {
+	private String content;
+	private TextView dialog_edit;
+
+	public AnalyzeDialog(Context context, OnClickListener myShureListener,
+			String analyze) {
 		this.context = context;
 		this.myShureListener = myShureListener;
+		this.content = analyze;
 	}
 
 	private void initview() {
 		layout = (LinearLayout) LayoutInflater.from(context).inflate(
 				R.layout.analyze_dialog, null);
-
+		dialog_edit = (TextView) layout.findViewById(R.id.dialog_edit);
+		dialog_edit.setText(content);
 	}
 
 	private void setListener() {

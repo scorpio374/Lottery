@@ -27,6 +27,7 @@ import com.xmtq.lottery.parser.PurchaseRecordsParser;
 import com.xmtq.lottery.parser.RecomendHistoryParser;
 import com.xmtq.lottery.parser.RecomendWinRecordParser;
 import com.xmtq.lottery.parser.RepasswordParser;
+import com.xmtq.lottery.parser.SimpleParser;
 import com.xmtq.lottery.parser.UserInfoParser;
 import com.xmtq.lottery.parser.UserRegisterParser;
 import com.xmtq.lottery.parser.VerificationCodeParser;
@@ -704,12 +705,12 @@ public class RequestMaker {
 	 */
 	public Request getGameTodayRecomend(String uid, String matchId,
 			String vote, String content) {
-
+		SimpleParser paser = new SimpleParser();
 		String body = createGameTodayRecomend(uid, matchId, vote, content);
 		String xmlBody = makeXml(body, "12028");
 
 		Request request = new Request(
-				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, null);
+				ServerInterfaceDefinition.OPT_GETLOTTERYINFO, xmlBody, paser);
 		return request;
 	}
 

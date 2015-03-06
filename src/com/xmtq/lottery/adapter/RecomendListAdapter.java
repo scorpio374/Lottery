@@ -17,12 +17,17 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.Odds;
+import com.xmtq.lottery.network.HttpRequestAsyncTask;
+import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.OddsUtil;
 import com.xmtq.lottery.utils.OnRefreshListener;
+import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.widget.AnalyzeDialog;
 import com.xmtq.lottery.widget.DisagreeDialog;
+import com.xmtq.lottery.widget.DisagreeDialog.OnCompleteListener;
 
 public class RecomendListAdapter extends BaseAdapter {
 	private Context mContext;
@@ -32,9 +37,14 @@ public class RecomendListAdapter extends BaseAdapter {
 	private OnClickListener onMoreListener;
 	private OnRefreshListener onRefreshListener;
 
+	private String content = "";
+	private String userid;
+	private String matchid = "";
+
 	public RecomendListAdapter(Context c, List<GameCanBetBean> gameCanBetBeans) {
 		this.mContext = c;
 		this.gameCanBetBeans = gameCanBetBeans;
+		this.userid = SharedPrefHelper.getInstance(c).getUid();
 	}
 
 	@Override
@@ -122,12 +132,15 @@ public class RecomendListAdapter extends BaseAdapter {
 				}
 			}
 		}
-
+		content = gameCanBetBeans.get(position).getContent();
+		matchid = gameCanBetBeans.get(position).getMatchId();
 		// 赛事分析
-		if (gameCanBetBeans.get(position).getSpContent() == null) {
+		if (gameCanBetBeans.get(position).getCommendUser() == null
+				|| gameCanBetBeans.get(position).getCommendId() == null||TextUtils.isEmpty(content)) {
 			holder.recomend_ll_analyze.setVisibility(View.GONE);
 			holder.item_view.setVisibility(View.GONE);
 		} else {
+
 			holder.recomend_ll_analyze.setVisibility(View.VISIBLE);
 			holder.item_view.setVisibility(View.VISIBLE);
 			holder.analyze.setOnClickListener(new OnClickListener() {
@@ -135,7 +148,7 @@ public class RecomendListAdapter extends BaseAdapter {
 				public void onClick(View arg0) {
 					// 这个Dialog需要传赛事分析文字
 					analyzeDialog = new AnalyzeDialog(mContext,
-							mAnalyzeListener);
+							mAnalyzeListener, content);
 					analyzeDialog.show();
 				}
 			});
@@ -143,15 +156,43 @@ public class RecomendListAdapter extends BaseAdapter {
 			holder.dis_agree.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
-					disagreeDialog = new DisagreeDialog(mContext,
-							mDisAgreeListener);
+					disagreeDialog = new DisagreeDialog(mContext);
 					disagreeDialog.show();
+					disagreeDialog
+							.setOnCompleteListener(new OnCompleteListener() {
+
+								@Override
+								public void onComplete(String resultString) {
+									if (resultString != null && matchid != null) {
+										requestDisagree(matchid, resultString);
+									}
+								}
+							});
 				}
 			});
 		}
 
 		return convertView;
 	}
+
+	private void requestDisagree(String matchId, String content) {
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(RequestMaker.getInstance().getGameTodayRecomend(
+				userid, matchId, "1", content));
+		// mAsyncTask.setOnCompleteListener(mDisagreeCompleteListener);
+
+	}
+
+	// private
+	// com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener<BaseResponse>
+	// mDisagreeCompleteListener=new OnCompleteListener<BaseResponse>() {
+	//
+	// @Override
+	// public void onComplete(BaseResponse result, String resultString) {
+	// // TODO Auto-generated method stub
+	//
+	// }
+	// };
 
 	public class Holder {
 		LinearLayout odds_more;
@@ -170,14 +211,14 @@ public class RecomendListAdapter extends BaseAdapter {
 		LinearLayout recomend_ll_analyze;
 	}
 
-	private OnClickListener mDisAgreeListener = new OnClickListener() {
-
-		@Override
-		public void onClick(View arg0) {
-			// TODO Auto-generated method stub
-			disagreeDialog.dismiss();
-		}
-	};
+	// private OnClickListener mDisAgreeListener = new OnClickListener() {
+	//
+	// @Override
+	// public void onClick(View arg0) {
+	// // TODO Auto-generated method stub
+	// disagreeDialog.dismiss();
+	// }
+	// };
 
 	private OnClickListener mAnalyzeListener = new OnClickListener() {
 
@@ -245,4 +286,5 @@ public class RecomendListAdapter extends BaseAdapter {
 	public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
 		this.onRefreshListener = onRefreshListener;
 	}
+
 }
