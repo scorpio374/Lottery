@@ -5,15 +5,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.Toast;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.Consts;
-import com.xmtq.lottery.bean.CheckUserResponse;
 import com.xmtq.lottery.fragment.BetRecordFragment;
-import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
-import com.xmtq.lottery.network.RequestMaker;
 
 /**
  * 投注记录
