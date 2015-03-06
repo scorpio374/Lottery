@@ -276,7 +276,6 @@ public class CheckBankFirstActivity extends BaseActivity {
 			// TODO Auto-generated method stub
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
-					PhonePayDepositFirstResponse mPayFirstResponse = (PhonePayDepositFirstResponse) result;
 					ToastUtil.showCenterToast(CheckBankFirstActivity.this,
 							"充值成功");
 
@@ -285,7 +284,6 @@ public class CheckBankFirstActivity extends BaseActivity {
 							result.errormsg);
 				}
 			} else {
-				Log.d("xm", "PhonePayDepositFirstResponse" + "请求失败");
 				ToastUtil.showCenterToast(CheckBankFirstActivity.this, "请求失败");
 			}
 
@@ -329,6 +327,13 @@ public class CheckBankFirstActivity extends BaseActivity {
 					PhonePayFirstResponse mPayFirstResponse = (PhonePayFirstResponse) result;
 					ToastUtil.showCenterToast(CheckBankFirstActivity.this,
 							"充值成功");
+					
+					String money = mPayFirstResponse.money;
+					Intent intent = new Intent(CheckBankFirstActivity.this,
+							QuickPaymentSuccessActivity.class);
+					intent.putExtra("money", money);
+					startActivity(intent);
+					finish();
 
 				} else {
 					ToastUtil.showCenterToast(CheckBankFirstActivity.this,

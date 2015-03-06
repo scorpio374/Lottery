@@ -57,9 +57,10 @@ public class QuickPaymentSuccessActivity extends BaseActivity {
 			this.finish();
 			break;
 		case R.id.quick_pay_done:
-			Intent intent = new Intent(QuickPaymentSuccessActivity.this,
-					RecomendActivity.class);
-			startActivity(intent);
+			// Intent intent = new Intent(QuickPaymentSuccessActivity.this,
+			// RecomendActivity.class);
+			// startActivity(intent);
+			finish();
 			break;
 
 		default:

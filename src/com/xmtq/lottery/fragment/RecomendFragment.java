@@ -311,7 +311,11 @@ public class RecomendFragment extends BaseFragment {
 						public void onComplete(String resultString) {
 							// TODO Auto-generated method stub
 							if (resultString != null) {
-								if (Integer.parseInt(resultString) <= 1000) {
+								if (Integer.parseInt(resultString) == 0) {
+									ToastUtil.showCenterToast(getActivity(),
+											"倍数不能为0");
+									return;
+								} else if (Integer.parseInt(resultString) <= 1000) {
 									check_chuan_guan
 											.setText(resultString + "倍");
 									onRefreshBet();
@@ -332,7 +336,7 @@ public class RecomendFragment extends BaseFragment {
 
 		case R.id.recomend_refresh:
 			currentPageNum = 1;
-			mLoadingDialog.show("加载数据");
+			mLoadingDialog.show("加载数据...");
 			initData();
 			request();
 			break;
@@ -572,18 +576,20 @@ public class RecomendFragment extends BaseFragment {
 	 * 初始化比赛数据
 	 */
 	private void initGameData() {
-		for (GameCanBetBean gameCanBetBean : gameCanBetBeans) {
-			List<Odds> spOddsList = gameCanBetBean.getSpOddsList();
-			List<Odds> rqOddsList = gameCanBetBean.getRqOddsList();
-			List<Odds> bfOddsList = gameCanBetBean.getBfOddsList();
-			List<Odds> bqOddsList = gameCanBetBean.getBqOddsList();
-			List<Odds> jqOddsList = gameCanBetBean.getJqOddsList();
+		if (gameCanBetBeans != null) {
+			for (GameCanBetBean gameCanBetBean : gameCanBetBeans) {
+				List<Odds> spOddsList = gameCanBetBean.getSpOddsList();
+				List<Odds> rqOddsList = gameCanBetBean.getRqOddsList();
+				List<Odds> bfOddsList = gameCanBetBean.getBfOddsList();
+				List<Odds> bqOddsList = gameCanBetBean.getBqOddsList();
+				List<Odds> jqOddsList = gameCanBetBean.getJqOddsList();
 
-			initOddsList(spOddsList);
-			initOddsList(rqOddsList);
-			initOddsList(bfOddsList);
-			initOddsList(bqOddsList);
-			initOddsList(jqOddsList);
+				initOddsList(spOddsList);
+				initOddsList(rqOddsList);
+				initOddsList(bfOddsList);
+				initOddsList(bqOddsList);
+				initOddsList(jqOddsList);
+			}
 		}
 
 		mAdapter.notifyDataSetChanged();

@@ -221,6 +221,7 @@ public class QuickPaymentActivity extends BaseActivity {
 							QuickPaymentSuccessActivity.class);
 					intent.putExtra("money", money);
 					startActivity(intent);
+					finish();
 				} else {
 					ToastUtil.showCenterToast(QuickPaymentActivity.this,
 							result.errormsg);

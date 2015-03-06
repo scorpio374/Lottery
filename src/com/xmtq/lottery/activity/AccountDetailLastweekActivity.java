@@ -99,17 +99,17 @@ public class AccountDetailLastweekActivity extends BaseActivity {
 				AccountDetailResponse mResponse = result;
 				List<AccountDetailBean> mHistoryBeansList = mResponse.accountDetailList;
 				pay2 = mResponse.getPay();
-				if (!TextUtils.isEmpty(pay2)) {
+				if (!TextUtils.isEmpty(pay2) && !pay2.equals("null")) {
 					pay.setText("支出：" + pay2);
 				} else {
-					pay.setText("");
+					pay.setText("支出: 无");
 				}
 
 				income2 = mResponse.getIncome();
-				if (!TextUtils.isEmpty(pay2)) {
+				if (!TextUtils.isEmpty(income2) && !income2.equals("null")) {
 					income.setText("收入：" + income2);
 				} else {
-					income.setText("");
+					income.setText("收入：无");
 				}
 
 				if (mHistoryBeansList != null) {

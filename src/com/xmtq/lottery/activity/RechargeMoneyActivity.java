@@ -65,13 +65,12 @@ public class RechargeMoneyActivity extends BaseActivity {
 	@Override
 	public void setContentLayout() {
 		setContentView(R.layout.recharge);
-
 	}
 
 	@Override
 	public void dealLogicBeforeInitView() {
 		mDialog = new LoadingDialog(this);
-		request("10");
+		request("10", 0);
 	}
 
 	@Override
@@ -127,7 +126,6 @@ public class RechargeMoneyActivity extends BaseActivity {
 
 	@Override
 	public void onClickEvent(View view) {
-		Intent intent;
 		switch (view.getId()) {
 		case R.id.back:
 			this.finish();
@@ -138,60 +136,49 @@ public class RechargeMoneyActivity extends BaseActivity {
 			rechargeMoney = search_edit.getText().toString().trim();
 
 			if (StringUtil.isNullOrEmpty(rechargeMoney)) {
-				Toast.makeText(RechargeMoneyActivity.this, "请输入充值金额", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(RechargeMoneyActivity.this, "请输入充值金额",
+						Toast.LENGTH_SHORT).show();
 				return;
 			}
 			if (!isNumeric(rechargeMoney)) {
-				Toast.makeText(RechargeMoneyActivity.this, "充值金额必须为整数", Toast.LENGTH_SHORT)
-						.show();
-				return;
+				 Toast.makeText(RechargeMoneyActivity.this, "充值金额必须为整数",
+				 Toast.LENGTH_SHORT).show();
+				 return;
 			}
 			if (Integer.parseInt(rechargeMoney) < 5) {
-				Toast.makeText(RechargeMoneyActivity.this, "充值金额不小于五元", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(RechargeMoneyActivity.this, "充值金额不小于五元",
+						Toast.LENGTH_SHORT).show();
 				return;
 			}
 
-			intent = new Intent(RechargeMoneyActivity.this,
-					CheckBankFirstActivity.class);
-			intent.putExtra("requestId", requestId);
-			intent.putExtra("mCreateOrderBean", mCreateOrderBean);
-			startActivity(intent);
-
+			request(rechargeMoney, 1);
 			break;
 		case R.id.recharge_commit:
 			rechargeMoney = search_edit.getText().toString().trim();
 
 			if (StringUtil.isNullOrEmpty(rechargeMoney)) {
-				Toast.makeText(RechargeMoneyActivity.this, "请输入充值金额", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(RechargeMoneyActivity.this, "请输入充值金额",
+						Toast.LENGTH_SHORT).show();
 				return;
 			}
 			if (!isNumeric(rechargeMoney)) {
-				Toast.makeText(RechargeMoneyActivity.this, "充值金额必须为整数", Toast.LENGTH_SHORT)
-						.show();
-				return;
+				 Toast.makeText(RechargeMoneyActivity.this, "充值金额必须为整数",
+				 Toast.LENGTH_SHORT).show();
+				 return;
 			}
 			if (Integer.parseInt(rechargeMoney) < 5) {
-				Toast.makeText(RechargeMoneyActivity.this, "充值金额不小于五元", Toast.LENGTH_SHORT)
-						.show();
-				return;
+				 Toast.makeText(RechargeMoneyActivity.this, "充值金额不小于五元",
+				 Toast.LENGTH_SHORT).show();
+				 return;
 			}
 
 			if (!isCheckedBank) {
-				Toast.makeText(RechargeMoneyActivity.this, "请选择银行卡", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(RechargeMoneyActivity.this, "请选择银行卡",
+						Toast.LENGTH_SHORT).show();
 				return;
 			}
 
-			intent = new Intent(RechargeMoneyActivity.this,
-					QuickPaymentActivity.class);
-			intent.putExtra("requestId", requestId);
-			intent.putExtra("selectedBankBean", selectedBankBean);
-			intent.putExtra("rechargeMoney", rechargeMoney);
-
-			startActivity(intent);
+			request(rechargeMoney, 2);
 			break;
 		default:
 			break;
@@ -212,17 +199,32 @@ public class RechargeMoneyActivity extends BaseActivity {
 
 	/**
 	 * 创建支付订单
+	 * <ul>
+	 * <li>0 : 获取绑定的银行卡</li>
+	 * <li>1  ：首次支付</li>
+	 * <li>2 : 快捷支付</li>
+	 * </ul>
+	 * 
 	 */
-	private void request(String totalPrice) {
+	private void request(String totalPrice, int type) {
 		mDialog.show("数据正在加载中...");
 		String userid = SharedPrefHelper.getInstance(this).getUid();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getFengPay(userid,
 				totalPrice));
-		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
+		if (type == 0) {
+			mAsyncTask.setOnCompleteListener(mOnCompleteListener);
+		} else if (type == 1) {
+			mAsyncTask.setOnCompleteListener(mOnFirstPayCompleteListener);
+		} else if (type == 2) {
+			mAsyncTask.setOnCompleteListener(mOnQuickPayCompleteListener);
+		}
 
 	}
 
+	/**
+	 * 获取绑定的银行卡
+	 */
 	private OnCompleteListener<BaseResponse> mOnCompleteListener = new OnCompleteListener<BaseResponse>() {
 
 		@Override
@@ -230,45 +232,7 @@ public class RechargeMoneyActivity extends BaseActivity {
 			// TODO Auto-generated method stub
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
-					CreateOrderResponse mOrderResponse = (CreateOrderResponse) result;
-					if (mOrderResponse.requestId != null) {
-						requestId = mOrderResponse.requestId;
-					}
-
-					mCreateOrderBean = mOrderResponse.createOrderBean;
-					if (mCreateOrderBean != null) {
-
-						if (mCreateOrderBean.getBankList().size() > 0) {
-							for (int i = 0; i < mCreateOrderBean.getBankList()
-									.size(); i++) {
-								bankMap.put(
-										mCreateOrderBean.getBankList().get(i)
-												.getBankCode(),
-										mCreateOrderBean.getBankList().get(i)
-												.getBankName());
-							}
-						}
-						if (mCreateOrderBean.getBankCList().size() > 0) {
-							for (int j = 0; j < mCreateOrderBean.getBankCList()
-									.size(); j++) {
-								bankCMap.put(mCreateOrderBean.getBankCList()
-										.get(j).getBankCode(), mCreateOrderBean
-										.getBankCList().get(j).getBankName());
-							}
-						}
-
-					}
-
-					if (mCreateOrderBean.getUserBankList().size() > 0) {
-
-						adapter = new RechargeBindingListAdapter(
-								RechargeMoneyActivity.this,
-								mCreateOrderBean.getUserBankList());
-						recharge_binding_list.setAdapter(adapter);
-						recharge_binding_list.setVisibility(View.VISIBLE);
-						recharge_commit.setVisibility(View.VISIBLE);
-					}
-
+					onSuccess(result);
 				} else {
 					ToastUtil.showCenterToast(RechargeMoneyActivity.this,
 							result.errormsg);
@@ -282,5 +246,107 @@ public class RechargeMoneyActivity extends BaseActivity {
 			mDialog.dismiss();
 		}
 	};
+
+	/**
+	 * 首次支付
+	 */
+	private OnCompleteListener<BaseResponse> mOnFirstPayCompleteListener = new OnCompleteListener<BaseResponse>() {
+
+		@Override
+		public void onComplete(BaseResponse result, String resultString) {
+			// TODO Auto-generated method stub
+			if (result != null) {
+				if (result.errorcode.equals("0")) {
+					onSuccess(result);
+					Intent intent;
+					intent = new Intent(RechargeMoneyActivity.this,
+							CheckBankFirstActivity.class);
+					intent.putExtra("requestId", requestId);
+					intent.putExtra("mCreateOrderBean", mCreateOrderBean);
+					startActivity(intent);
+					
+				} else {
+					ToastUtil.showCenterToast(RechargeMoneyActivity.this,
+							result.errormsg);
+					recharge_binding_list.setVisibility(View.GONE);
+				}
+			} else {
+				ToastUtil.showCenterToast(RechargeMoneyActivity.this, "请求失败");
+				recharge_binding_list.setVisibility(View.GONE);
+			}
+
+			mDialog.dismiss();
+		}
+	};
+
+	/**
+	 * 快捷支付
+	 */
+	private OnCompleteListener<BaseResponse> mOnQuickPayCompleteListener = new OnCompleteListener<BaseResponse>() {
+
+		@Override
+		public void onComplete(BaseResponse result, String resultString) {
+			// TODO Auto-generated method stub
+			if (result != null) {
+				if (result.errorcode.equals("0")) {
+					onSuccess(result);
+					Intent intent;
+					intent = new Intent(RechargeMoneyActivity.this,
+							QuickPaymentActivity.class);
+					intent.putExtra("requestId", requestId);
+					intent.putExtra("selectedBankBean", selectedBankBean);
+					intent.putExtra("rechargeMoney", rechargeMoney);
+
+					startActivity(intent);
+				} else {
+					ToastUtil.showCenterToast(RechargeMoneyActivity.this,
+							result.errormsg);
+					recharge_binding_list.setVisibility(View.GONE);
+				}
+			} else {
+				ToastUtil.showCenterToast(RechargeMoneyActivity.this, "请求失败");
+				recharge_binding_list.setVisibility(View.GONE);
+			}
+
+			mDialog.dismiss();
+		}
+	};
+
+	private void onSuccess(BaseResponse result) {
+		CreateOrderResponse mOrderResponse = (CreateOrderResponse) result;
+		if (mOrderResponse.requestId != null) {
+			requestId = mOrderResponse.requestId;
+		}
+
+		mCreateOrderBean = mOrderResponse.createOrderBean;
+		if (mCreateOrderBean != null) {
+
+			if (mCreateOrderBean.getBankList().size() > 0) {
+				for (int i = 0; i < mCreateOrderBean.getBankList().size(); i++) {
+					bankMap.put(mCreateOrderBean.getBankList().get(i)
+							.getBankCode(),
+							mCreateOrderBean.getBankList().get(i).getBankName());
+				}
+			}
+			if (mCreateOrderBean.getBankCList().size() > 0) {
+				for (int j = 0; j < mCreateOrderBean.getBankCList().size(); j++) {
+					bankCMap.put(mCreateOrderBean.getBankCList().get(j)
+							.getBankCode(), mCreateOrderBean.getBankCList()
+							.get(j).getBankName());
+				}
+			}
+
+		}
+
+		if (mCreateOrderBean.getUserBankList().size() > 0) {
+
+			adapter = new RechargeBindingListAdapter(
+					RechargeMoneyActivity.this,
+					mCreateOrderBean.getUserBankList());
+			recharge_binding_list.setAdapter(adapter);
+			recharge_binding_list.setVisibility(View.VISIBLE);
+			recharge_commit.setVisibility(View.VISIBLE);
+		}
+	}
 
 }
