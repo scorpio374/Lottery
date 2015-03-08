@@ -3,6 +3,7 @@ package com.xmtq.lottery.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -10,14 +11,15 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
 import android.widget.Toast;
 
 import com.example.lottery.R;
 import com.xmtq.lottery.adapter.FragmentPagerAdater;
-import com.xmtq.lottery.fragment.BetRecordFragment;
+import com.xmtq.lottery.bean.NewUserLoginBean;
 import com.xmtq.lottery.fragment.LoginFragment;
 import com.xmtq.lottery.fragment.RecomendFragment;
+import com.xmtq.lottery.fragment.RecomendHistoryFragment;
+import com.xmtq.lottery.fragment.UserInfoFragment;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.view.slidingmenu.SlidingMenu;
 import com.xmtq.lottery.view.slidingmenu.app.SlidingFragmentActivity;
@@ -37,10 +39,14 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	private SharedPrefHelper spfs;
 	private ViewPager vp;
 	private FragmentPagerAdater fragmentPagerAdater;
+	private RecomendFragment recomendFragment;
+	private RecomendHistoryFragment historyFragment;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		spfs = SharedPrefHelper.getInstance(this);
+		// 开户APP默认不登陆
+		spfs.setIsLogin(false);
 		initView();
 		// test();
 	}
@@ -54,6 +60,16 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 
 	public void initView() {
 		initMenuDrawer();
+		NewUserLoginBean newUserLoginBean = (NewUserLoginBean) getIntent()
+				.getSerializableExtra("newUserLoginBean");
+		if (newUserLoginBean != null) {
+			UserInfoFragment fragment = new UserInfoFragment();
+			Bundle b = new Bundle();
+			b.putSerializable("newUserLoginBean", newUserLoginBean);
+			fragment.setArguments(b);
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.menu_frame, fragment).commit();
+		}
 	}
 
 	@Override
@@ -93,7 +109,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		// setContentView(R.layout.content_frame);
 		// getSupportFragmentManager().beginTransaction()
 		// .replace(R.id.content_frame, new RecomendFragment()).commit();
-		//
+
 		// // right sliding menu
 		// menu.setSecondaryMenu(R.layout.menu_frame_two);
 		// menu.setSecondaryShadowDrawable(R.drawable.shadowright);
@@ -103,12 +119,13 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 
 		vp = new ViewPager(this);
 		vp.setId("VP".hashCode());
-		RecomendFragment recomendFragment =  new RecomendFragment();
-		BetRecordFragment betRecordFragment = new BetRecordFragment();
+		recomendFragment = new RecomendFragment();
+		historyFragment = new RecomendHistoryFragment();
 		List<Fragment> fragments = new ArrayList<Fragment>();
 		fragments.add(recomendFragment);
-		fragments.add(betRecordFragment);
-		fragmentPagerAdater = new FragmentPagerAdater(getSupportFragmentManager(),fragments);
+		fragments.add(historyFragment);
+		fragmentPagerAdater = new FragmentPagerAdater(
+				getSupportFragmentManager(), fragments);
 		vp.setAdapter(fragmentPagerAdater);
 		setContentView(vp);
 
@@ -149,7 +166,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		vp.setCurrentItem(1);
 		fragmentPagerAdater.notifyDataSetChanged();
 	}
-	
+
 	public void closeRightDrawer() {
 		// menu.showSecondaryMenu();
 		vp.setCurrentItem(0);
@@ -166,6 +183,13 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+			// 关闭右边的Fragment
+			if (vp != null && vp.getCurrentItem() != 0) {
+				closeRightDrawer();
+				return true;
+			}
+
 			if ((System.currentTimeMillis() - exitTime) > TIME_DIFF) {
 				Toast.makeText(RecomendActivity.this, "再按一次退出",
 						Toast.LENGTH_SHORT).show();
@@ -177,6 +201,13 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		}
 
 		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		recomendFragment.setIntentResult(requestCode, resultCode, data);
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 }

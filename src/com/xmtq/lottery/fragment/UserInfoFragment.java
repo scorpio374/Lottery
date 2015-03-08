@@ -1,31 +1,38 @@
 package com.xmtq.lottery.fragment;
 
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.Consts;
+import com.xmtq.lottery.WelCheckDialog;
 import com.xmtq.lottery.activity.AccountDetailActivity;
+import com.xmtq.lottery.activity.BetRecordActivity;
 import com.xmtq.lottery.activity.ExtractMoneyActivity;
 import com.xmtq.lottery.activity.ModifiPasswordActivity;
 import com.xmtq.lottery.activity.PersonDataActivity;
 import com.xmtq.lottery.activity.RechargeMoneyActivity;
-import com.xmtq.lottery.activity.RecomendActivity;
-import com.xmtq.lottery.activity.RecomendHistoryActivity;
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.NewUserLoginBean;
 import com.xmtq.lottery.bean.UserInfoBean;
 import com.xmtq.lottery.bean.UserInfoResponse;
+import com.xmtq.lottery.bean.VersionBean;
+import com.xmtq.lottery.bean.VersionResponse;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
+import com.xmtq.lottery.utils.ToastUtil;
+import com.xmtq.lottery.utils.VersionUtil;
 
 /**
  * 个人中心
@@ -37,9 +44,11 @@ public class UserInfoFragment extends BaseFragment {
 	private RelativeLayout rl_repassword, rl_bet_record, rl_userinfo;
 	private RelativeLayout account_information;
 	private TextView tv_esc_login, user_name, account_balance;
-	private Toast toast;
 
 	private UserInfoBean userInfoBean;
+	private boolean isAddUserInfo = false;
+	private boolean isAddBankInfo = false;
+	private RelativeLayout check_version;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +75,7 @@ public class UserInfoFragment extends BaseFragment {
 		rl_repassword = (RelativeLayout) v.findViewById(R.id.rl_repassword);
 		rl_bet_record = (RelativeLayout) v.findViewById(R.id.rl_bet_record);
 		rl_userinfo = (RelativeLayout) v.findViewById(R.id.rl_userinfo);
+		check_version = (RelativeLayout) v.findViewById(R.id.check_version);
 		tv_esc_login = (TextView) v.findViewById(R.id.exit_loading);
 		tv_esc_login.setOnClickListener(this);
 		account_information = (RelativeLayout) v
@@ -81,6 +91,7 @@ public class UserInfoFragment extends BaseFragment {
 		rl_repassword.setOnClickListener(this);
 		rl_userinfo.setOnClickListener(this);
 		account_information.setOnClickListener(this);
+		check_version.setOnClickListener(this);
 		recharge_money.setOnClickListener(this);
 		extract_money.setOnClickListener(this);
 	}
@@ -98,6 +109,8 @@ public class UserInfoFragment extends BaseFragment {
 
 				SharedPrefHelper.getInstance(getActivity()).setUserName(
 						newUserLoginBean.getUsername());
+				SharedPrefHelper.getInstance(getActivity()).setAccountBalance(
+						newUserLoginBean.getMoney());
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -109,9 +122,6 @@ public class UserInfoFragment extends BaseFragment {
 	 * 获取用户信息
 	 */
 	private void requestUserData() {
-		toast = Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, 0, 0);
-
 		String uid = SharedPrefHelper.getInstance(getActivity()).getUid();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getUserInfo(uid));
@@ -129,12 +139,10 @@ public class UserInfoFragment extends BaseFragment {
 				if (result.errorcode.equals("0")) {
 					onSuccess(result);
 				} else {
-					toast.setText(result.errormsg);
-					toast.show();
+					ToastUtil.showCenterToast(getActivity(), result.errormsg);
 				}
 			} else {
-				toast.setText("请求错误");
-				toast.show();
+				ToastUtil.showCenterToast(getActivity(), Consts.REQUEST_ERROR);
 			}
 		}
 	};
@@ -142,7 +150,8 @@ public class UserInfoFragment extends BaseFragment {
 	private void onSuccess(BaseResponse result) {
 		UserInfoResponse response = (UserInfoResponse) result;
 		userInfoBean = response.userInfoBean;
-
+		checkUserInfo(userInfoBean);
+		checkBankInfo(userInfoBean);
 		// SharedPrefHelper.getInstance(getActivity()).setRealName(userInfoBean.getRealname());
 		// SharedPrefHelper.getInstance(getActivity()).setCardId(userInfoBean.getCardid());
 	}
@@ -153,10 +162,20 @@ public class UserInfoFragment extends BaseFragment {
 		switch (v.getId()) {
 		// 投注记录
 		case R.id.rl_bet_record:
-			// intent = new Intent(getActivity(), BetRecordActivity.class);
-			// 测试推荐历史
-			intent = new Intent(getActivity(), RecomendHistoryActivity.class);
+			intent = new Intent(getActivity(), BetRecordActivity.class);
 			startActivity(intent);
+
+			// // 测试dialog
+			// BalanceNotEnoughDialog dialog = new BalanceNotEnoughDialog(
+			// getActivity(), new View.OnClickListener() {
+			//
+			// @Override
+			// public void onClick(View arg0) {
+			// // TODO Auto-generated method stub
+			//
+			// }
+			// });
+			// dialog.show();
 
 			break;
 		// 个人资料
@@ -178,6 +197,9 @@ public class UserInfoFragment extends BaseFragment {
 			startActivity(intent);
 
 			break;
+		case R.id.check_version:
+			requestVersion();
+			break;
 
 		// 充值
 		case R.id.recharge:
@@ -187,16 +209,24 @@ public class UserInfoFragment extends BaseFragment {
 			break;
 		// 提现
 		case R.id.extract_money:
-			intent = new Intent(getActivity(), ExtractMoneyActivity.class);
-			startActivity(intent);
+			if (isAddBankInfo && isAddUserInfo) {
+				intent = new Intent(getActivity(), ExtractMoneyActivity.class);
+				intent.putExtra("userInfoBean", userInfoBean);
+				intent.putExtra("accountbalance", account_balance.getText());
+				startActivity(intent);
+			} else {
+				ToastUtil.showCenterToast(getActivity(), "请完善个人信息");
+				intent = new Intent(getActivity(), PersonDataActivity.class);
+				startActivity(intent);
+			}
 
 			break;
 		case R.id.exit_loading:
-			intent = new Intent(getActivity(), RecomendActivity.class);
-			startActivity(intent);
-			// SharedPreferences spf = getActivity().getSharedPreferences(
-			// "isLogin", Context.MODE_PRIVATE);
-			// spf.edit().putBoolean("isLogin", false).commit();
+
+			LoginFragment fragment = new LoginFragment();
+			getActivity().getSupportFragmentManager().beginTransaction()
+					.replace(R.id.menu_frame, fragment).commit();
+
 			SharedPrefHelper spf = SharedPrefHelper.getInstance(getActivity());
 			spf.setIsLogin(false);
 			break;
@@ -205,4 +235,105 @@ public class UserInfoFragment extends BaseFragment {
 			break;
 		}
 	}
+
+	/**
+	 * 判断是否添加用户信息
+	 */
+	private void checkUserInfo(UserInfoBean userInfoBean) {
+		String realName = userInfoBean.getRealname();
+		String cardId = userInfoBean.getCardid();
+
+		if (isValidValue(realName) && isValidValue(cardId)) {
+			isAddUserInfo = true;
+		}
+	}
+
+	/**
+	 * 判断是否添加银行卡信息
+	 */
+	private void checkBankInfo(UserInfoBean userInfoBean) {
+		String bankName = userInfoBean.getBankname();
+		String bankAcount = userInfoBean.getBankaccount();
+		String bankAddress = userInfoBean.getBankaddress();
+		// String acount = userInfoBean.getAccount(); // 帐户余额
+
+		if (isValidValue(bankName) && isValidValue(bankAcount)
+				&& isValidValue(bankAddress)) {
+			isAddBankInfo = true;
+		}
+	}
+
+	public boolean isValidValue(String vaule) {
+		if (TextUtils.isEmpty(vaule) || vaule.equals("*")) {
+			return false;
+		}
+		return true;
+	}
+
+	private void requestVersion() {
+		mLoadingDialog.show("版本检查中...");
+		RequestMaker mRequestMaker = RequestMaker.getInstance();
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(mRequestMaker.getVersion(VersionUtil
+				.getVersionName(getActivity())));
+		mAsyncTask.setOnCompleteListener(mVersionCompleteListener);
+	}
+
+	private String update = "0";
+	private OnCompleteListener<VersionResponse> mVersionCompleteListener = new OnCompleteListener<VersionResponse>() {
+
+		@Override
+		public void onComplete(VersionResponse result, String resultString) {
+			if (result != null) {
+				if (result.errorcode.equals("1")) {
+					VersionResponse mResponse = result;
+					VersionBean mBean = mResponse.versionBean;
+					String newVersion = mBean.getVersion();
+
+					// ToastUtil.showCenterToast(getActivity(),
+					// mResponse.versionBean.getVersion());
+					final String appPath = mBean.getDowload();
+					update = mBean.getUpdate();
+
+					int oldVersion = VersionUtil.getVersionCode(getActivity());
+					if (Integer.parseInt(newVersion.replace(".", "")) > oldVersion) {
+						getActivity().runOnUiThread(new Runnable() {
+
+							public void run() {
+								WelCheckDialog dialog = new WelCheckDialog(
+										getActivity(), "", appPath, null,
+										keylistener, update);
+								dialog.show();
+
+							}
+						});
+
+					} else {
+						ToastUtil.showCenterToast(getActivity(), "当前已是最新版本");
+					}
+
+				} else {
+					ToastUtil.showCenterToast(getActivity(), result.errormsg);
+				}
+
+			} else {
+				ToastUtil.showCenterToast(getActivity(), "数据请求失败");
+			}
+
+			mLoadingDialog.dismiss();
+
+		}
+	};
+
+	OnKeyListener keylistener = new DialogInterface.OnKeyListener() {
+		public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+			if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0
+					&& update.equals("1")) {
+				ToastUtil.showCenterToast(getActivity(), "升级后才可以正常使用");
+				return true;
+			} else {
+				return false;
+			}
+		}
+	};
 }

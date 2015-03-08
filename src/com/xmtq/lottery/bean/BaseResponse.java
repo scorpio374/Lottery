@@ -19,5 +19,14 @@ public abstract class BaseResponse implements Serializable {
 	// ErrorCode
 	public String errorcode;
 	public String errormsg;
-
+	public String money;
+	public String requestId;
+	/**
+	 * 短信验证校验码编号
+	 */
+	public String randomValidateId;
+	/**
+	 * 丰付交易流水号
+	 */
+	public String tradeId;
 }

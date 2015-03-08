@@ -58,10 +58,10 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/radio_btn_selector"
+            android:background="@drawable/ym_constact_left"
             android:button="@null"
-            android:checked="true"
             android:gravity="center"
+            android:checked="true"
             android:text="全部"
             android:textColor="@drawable/radiobtn_textcolor_selector"
             android:textSize="@dimen/main_textsize" />
@@ -76,7 +76,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/radio_btn_selector"
+            android:background="@drawable/ym_constact_center"
             android:button="@null"
             android:gravity="center"
             android:text="中奖"
@@ -93,7 +93,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/radio_btn_selector"
+            android:background="@drawable/ym_constact_right"
             android:button="@null"
             android:gravity="center"
             android:text="待开"
@@ -108,39 +108,9 @@
         android:layout_marginTop="8dip"
         android:background="#2d2f3b" />
 
-    <ListView
-        android:id="@+id/record_all_list"
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/gray"
-        android:cacheColorHint="#00000000"
-        android:divider="@color/deep_gray"
-        android:dividerHeight="0dip"
-        android:fadingEdge="none"
-        android:scrollbars="none" />
-
-    <ListView
-        android:id="@+id/record_win_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/gray"
-        android:cacheColorHint="#00000000"
-        android:divider="@color/deep_gray"
-        android:dividerHeight="0dip"
-        android:fadingEdge="none"
-        android:scrollbars="none"
-        android:visibility="gone" />
-
-    <ListView
-        android:id="@+id/record_wait_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/gray"
-        android:cacheColorHint="#00000000"
-        android:divider="@color/deep_gray"
-        android:dividerHeight="0dip"
-        android:fadingEdge="none"
-        android:scrollbars="none"
-        android:visibility="gone" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

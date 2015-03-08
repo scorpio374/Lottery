@@ -30,7 +30,7 @@ public class StringUtil {
 		// if (pwd.length() <8 || pwd.length() >16) {
 		// return false;
 		// }
-		String str = "^(?![^a-zA-Z]+$)(?!\\D+$).{8,16}$";
+		String str = "^(?![^a-zA-Z]+$)(?!\\D+$).{6,16}$";
 		Pattern p = Pattern.compile(str);
 		Matcher m = p.matcher(pwd);
 		return m.matches();

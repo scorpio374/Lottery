@@ -1,30 +1,15 @@
 package com.xmtq.lottery.activity;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import android.content.Intent;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.adapter.AccountDetailListAdapter;
-import com.xmtq.lottery.adapter.BetOrderDetailListAdapter;
-import com.xmtq.lottery.adapter.BetRecordListAdapter;
-import com.xmtq.lottery.adapter.RecomendHistoryListAdapter;
-import com.xmtq.lottery.bean.AccountDetailBean;
-import com.xmtq.lottery.bean.AccountDetailResponse;
-import com.xmtq.lottery.bean.GameHistoryDateResponse;
-import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.RequestMaker;
-import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.fragment.AccountFragment;
 
 /**
  * 账户明细
@@ -32,11 +17,17 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
  * @author Administrator
  * 
  */
-public class AccountDetailActivity extends BaseActivity {
-
-	private ListView account_detail_list;
+public class AccountDetailActivity extends BaseActivity implements
+		OnCheckedChangeListener {
 	private ImageButton btn_back;
 	private TextView head_right;
+	private String mFormerTag;
+	private final static String TOTAL_TAG = "";
+	private final static String RECHARGE_TAG = "93,1";
+	private final static String DEPOSIT_TAG = "5,6";
+	private AccountFragment totalAccountFragment;
+	private AccountFragment rechargeAccountFragment;
+	private AccountFragment depositAccountFragment;
 
 	@Override
 	public void setContentLayout() {
@@ -46,87 +37,63 @@ public class AccountDetailActivity extends BaseActivity {
 
 	@Override
 	public void dealLogicBeforeInitView() {
-		// 默认请求
-		request("0");
+		totalAccountFragment = new AccountFragment(TOTAL_TAG);
+		rechargeAccountFragment = new AccountFragment(RECHARGE_TAG);
+		depositAccountFragment = new AccountFragment(DEPOSIT_TAG);
 	}
 
 	@Override
 	public void initView() {
 		head_right = (TextView) findViewById(R.id.head_right);
-		account_detail_list = (ListView) findViewById(R.id.account_detail_list);
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
 		head_right.setOnClickListener(this);
-
 		RadioGroup account_detail_radiogroup = (RadioGroup) findViewById(R.id.account_detail_radiogroup);
+		account_detail_radiogroup.setOnCheckedChangeListener(this);
 
-		account_detail_radiogroup
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					@Override
-					public void onCheckedChanged(RadioGroup group, int checkedId) {
-						// TODO Auto-generated method stub
-						if (checkedId == R.id.account_my) {
-							Toast.makeText(AccountDetailActivity.this, "账户",
-									2000).show();
-							request("0");
-						} else if (checkedId == R.id.account_recharge) {
-							Toast.makeText(AccountDetailActivity.this, "充值",
-									2000).show();
-							request("0");
-						} else if (checkedId == R.id.account_deposit) {
-							Toast.makeText(AccountDetailActivity.this, "提现",
-									2000).show();
-							request("0");
-						}
-					}
-				});
-
+		mFormerTag = TOTAL_TAG;
+		getSupportFragmentManager().beginTransaction()
+				.add(R.id.content_frame, totalAccountFragment, TOTAL_TAG)
+				.commit();
 	}
 
-	private void request(String mFlag) {
+	@Override
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		// TODO Auto-generated method stub
+		FragmentTransaction mTransaction = getSupportFragmentManager()
+				.beginTransaction();
+		mTransaction.hide(getSupportFragmentManager().findFragmentByTag(
+				mFormerTag));
 
-		RequestMaker mRequestMaker = RequestMaker.getInstance();
-		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		mAsyncTask.execute(mRequestMaker.getAccountDetail("", "", userid,
-				mFlag, "1", "10"));
-		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
-	}
-
-	private OnCompleteListener<AccountDetailResponse> mOnCompleteListener = new OnCompleteListener<AccountDetailResponse>() {
-
-		@Override
-		public void onComplete(AccountDetailResponse result, String resultString) {
-			if (result != null) {
-				AccountDetailResponse mResponse = result;
-				List<AccountDetailBean> mHistoryBeansList = mResponse.accountDetailList;
-				if (mHistoryBeansList != null) {
-					Toast.makeText(
-							AccountDetailActivity.this,
-							"AccountDetailBean获取到了数据"
-									+ mHistoryBeansList.size(), 2000).show();
-
-					// for (int i = 0; i < mHistoryBeansList.size(); i++) {
-					//
-					// }
-					AccountDetailListAdapter mAdapter = new AccountDetailListAdapter(
-							AccountDetailActivity.this, mHistoryBeansList);
-					account_detail_list.setAdapter(mAdapter);
-
-				}
+		if (checkedId == R.id.account_my) {
+			mFormerTag = TOTAL_TAG;
+			if (totalAccountFragment.isAdded()) {
+				mTransaction.show(totalAccountFragment).commit();
+			} else {
+				mTransaction.add(R.id.content_frame, totalAccountFragment,
+						TOTAL_TAG).commit();
 			}
-
+		} else if (checkedId == R.id.account_recharge) {
+			mFormerTag = RECHARGE_TAG;
+			if (rechargeAccountFragment.isAdded()) {
+				mTransaction.show(rechargeAccountFragment).commit();
+			} else {
+				mTransaction.add(R.id.content_frame, rechargeAccountFragment,
+						RECHARGE_TAG).commit();
+			}
+		} else if (checkedId == R.id.account_deposit) {
+			mFormerTag = DEPOSIT_TAG;
+			if (depositAccountFragment.isAdded()) {
+				mTransaction.show(depositAccountFragment).commit();
+			} else {
+				mTransaction.add(R.id.content_frame, depositAccountFragment,
+						DEPOSIT_TAG).commit();
+			}
 		}
-	};
+	}
 
 	@Override
 	public void dealLogicAfterInitView() {
-		// List<String> mList = new ArrayList<String>();
-		// for (int i = 0; i < 10; i++) {
-		// mList.add(i + "");
-		// }
-		// AccountDetailListAdapter mAdapter = new AccountDetailListAdapter(
-		// AccountDetailActivity.this, mList);
-		// account_detail_list.setAdapter(mAdapter);
 
 	}
 
@@ -138,14 +105,23 @@ public class AccountDetailActivity extends BaseActivity {
 			break;
 		case R.id.head_right:
 
+			// 近一周的交易信息，应该使用日期去查询
 			Intent intent = new Intent(AccountDetailActivity.this,
 					AccountDetailLastweekActivity.class);
 			startActivity(intent);
+			// if (mHistoryBeansList != null && mHistoryBeansList.size() > 0) {
+			// intent.putExtra("mHistoryBeansList",
+			// (Serializable) mHistoryBeansList);
+			// intent.putExtra("pay", pay);
+			// intent.putExtra("income", income);
+			// } else {
+			// ToastUtil.showCenterToast(AccountDetailActivity.this,
+			// "近一周没有交易信息");
+			// }
 			break;
 		default:
 			break;
 		}
 
 	}
-
 }

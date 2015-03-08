@@ -41,4 +41,39 @@ public class Consts {
 	 * 找回密码验证
 	 */
 	public static final String FIND_PASSWORD_VERI = "02";
+	
+	/**
+	 * 竞彩混投（客户端现只支持混投）
+	 */
+	public static final String Lottery_ID = "136";
+	
+	/**
+	 * 购买方式（1:合买，2：代购，暂只支持代购	）
+	 */
+	public static final String VOTE_TYPE = "2";
+	
+	/**
+	 * 方案类型（混投=6）
+	 */
+	public static final String PLAY_TYPE = "6";
+	
+	/**
+	 * 方案类型（0：单式，1：复式，竞彩手机端只有复式）
+	 */
+	public static final String PRO_TYPE = "1";
+	
+	/**
+	 * 请求网络错误
+	 */
+	public static final String REQUEST_ERROR = "网络错误";
+	
+	/**
+	 * 上拉刷新
+	 */
+	public static final int LOAD_DATA_FINISH = 10;
+	
+	/**
+	 * 下拉加载
+	 */
+	public static final int REFRESH_DATA_FINISH = 11;
 }

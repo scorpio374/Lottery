@@ -51,6 +51,7 @@
             android:id="@+id/account_detail_radiogroup"
             android:layout_width="match_parent"
             android:layout_height="40dip"
+            android:layout_marginBottom="8dip"
             android:layout_marginLeft="15dip"
             android:layout_marginRight="15dip"
             android:layout_marginTop="8dip"
@@ -66,8 +67,8 @@
                 android:layout_weight="1"
                 android:background="@drawable/ym_constact_left"
                 android:button="@null"
-                android:checked="true"
                 android:gravity="center"
+                android:checked="true"
                 android:text="账户"
                 android:textColor="@drawable/radiobtn_textcolor_selector"
                 android:textSize="@dimen/main_textsize" />
@@ -132,7 +133,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dip"
         android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -155,15 +157,9 @@
             android:src="@drawable/right" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/account_detail_list"
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/gray"
-        android:cacheColorHint="#00000000"
-        android:divider="@color/deep_gray"
-        android:dividerHeight="0dip"
-        android:fadingEdge="none"
-        android:scrollbars="none" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

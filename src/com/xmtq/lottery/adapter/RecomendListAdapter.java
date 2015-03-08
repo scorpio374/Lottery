@@ -6,22 +6,45 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.GameCanBetBean;
-import com.xmtq.lottery.bean.SpOdds;
+import com.xmtq.lottery.bean.Odds;
+import com.xmtq.lottery.network.HttpRequestAsyncTask;
+import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.OddsUtil;
+import com.xmtq.lottery.utils.OnRefreshListener;
+import com.xmtq.lottery.utils.SharedPrefHelper;
+import com.xmtq.lottery.widget.AnalyzeDialog;
+import com.xmtq.lottery.widget.DisagreeDialog;
+import com.xmtq.lottery.widget.DisagreeDialog.OnCompleteListener;
 
 public class RecomendListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<GameCanBetBean> gameCanBetBeans;
+	private DisagreeDialog disagreeDialog;
+	private AnalyzeDialog analyzeDialog;
+	private OnClickListener onMoreListener;
+	private OnRefreshListener onRefreshListener;
+
+	private String content = "";
+	private String userid;
+	private String matchid = "";
 
 	public RecomendListAdapter(Context c, List<GameCanBetBean> gameCanBetBeans) {
 		this.mContext = c;
 		this.gameCanBetBeans = gameCanBetBeans;
+		this.userid = SharedPrefHelper.getInstance(c).getUid();
 	}
 
 	@Override
@@ -57,15 +80,30 @@ public class RecomendListAdapter extends BaseAdapter {
 					.findViewById(R.id.host_team);
 			holder.play_type = (TextView) convertView
 					.findViewById(R.id.play_type);
-			holder.win = (TextView) convertView.findViewById(R.id.win);
-			holder.draw = (TextView) convertView.findViewById(R.id.draw);
-			holder.lose = (TextView) convertView.findViewById(R.id.lose);
+			holder.win = (ToggleButton) convertView.findViewById(R.id.win);
+			holder.draw = (ToggleButton) convertView.findViewById(R.id.draw);
+			holder.lose = (ToggleButton) convertView.findViewById(R.id.lose);
+			holder.analyze = (TextView) convertView.findViewById(R.id.analyze);
+			holder.dis_agree = (ImageView) convertView
+					.findViewById(R.id.dis_agree);
+			holder.odds_more = (LinearLayout) convertView
+					.findViewById(R.id.odds_more);
+			holder.item_view = convertView
+					.findViewById(R.id.recomend_item_view);
+			holder.recomend_ll_analyze = (LinearLayout) convertView
+					.findViewById(R.id.recomend_ll_analyze);
+			if (onMoreListener != null) {
+				holder.odds_more.setOnClickListener(onMoreListener);
+			}
 			convertView.setTag(holder);
 		} else {
 			holder = (Holder) convertView.getTag();
 		}
 
-		// holder.game_time.setText(gameCanBetBeans.get(position).getGameTime());
+		// 赔率详情
+		holder.odds_more.setTag(position);
+
+		// 比赛时间
 		String gameTimeData = gameCanBetBeans.get(position).getGameTime();
 		if (!TextUtils.isEmpty(gameTimeData)) {
 			String gameTime = OddsUtil.getGameTime(gameTimeData);
@@ -74,29 +112,179 @@ public class RecomendListAdapter extends BaseAdapter {
 			}
 		}
 
+		// 比赛队伍
 		holder.match_team.setText(gameCanBetBeans.get(position).getMatchTeam());
 		holder.league.setText(gameCanBetBeans.get(position).getLeague());
 		holder.host_team.setText(gameCanBetBeans.get(position).getHostTeam());
-		holder.play_type.setText("胜负平");
 
-		String spOddsData = gameCanBetBeans.get(position).getSpOdds();
-		if (!TextUtils.isEmpty(spOddsData)) {
-			SpOdds spOdds = OddsUtil.getSpOdds(spOddsData);
-			holder.win.setText("胜 " + spOdds.getWinOdds());
-			holder.draw.setText("平 " + spOdds.getDrawOdds());
-			holder.lose.setText("负 " + spOdds.getLoseOdds());
+		// 胜负平赔率
+		holder.play_type.setText("胜负平");
+		List<Odds> spOddsList = gameCanBetBeans.get(position).getSpOddsList();
+		if (spOddsList.size() > 0) {
+			for (int j = 0; j < spOddsList.size(); j++) {
+				Odds odds = spOddsList.get(j);
+				if (odds.getResult().equals("胜")) {
+					setText(holder.win, odds);
+				} else if (odds.getResult().equals("平")) {
+					setText(holder.draw, odds);
+				} else if (odds.getResult().equals("负")) {
+					setText(holder.lose, odds);
+				}
+			}
 		}
+		content = gameCanBetBeans.get(position).getContent();
+		matchid = gameCanBetBeans.get(position).getMatchId();
+		// 赛事分析
+		if (gameCanBetBeans.get(position).getCommendUser() == null
+				|| gameCanBetBeans.get(position).getCommendId() == null||TextUtils.isEmpty(content)) {
+			holder.recomend_ll_analyze.setVisibility(View.GONE);
+			holder.item_view.setVisibility(View.GONE);
+		} else {
+
+			holder.recomend_ll_analyze.setVisibility(View.VISIBLE);
+			holder.item_view.setVisibility(View.VISIBLE);
+			holder.analyze.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					// 这个Dialog需要传赛事分析文字
+					analyzeDialog = new AnalyzeDialog(mContext,
+							mAnalyzeListener, content);
+					analyzeDialog.show();
+				}
+			});
+
+			holder.dis_agree.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					disagreeDialog = new DisagreeDialog(mContext);
+					disagreeDialog.show();
+					disagreeDialog
+							.setOnCompleteListener(new OnCompleteListener() {
+
+								@Override
+								public void onComplete(String resultString) {
+									if (resultString != null && matchid != null) {
+										requestDisagree(matchid, resultString);
+									}
+								}
+							});
+				}
+			});
+		}
+
 		return convertView;
 	}
 
+	private void requestDisagree(String matchId, String content) {
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(RequestMaker.getInstance().getGameTodayRecomend(
+				userid, matchId, "1", content));
+		// mAsyncTask.setOnCompleteListener(mDisagreeCompleteListener);
+
+	}
+
+	// private
+	// com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener<BaseResponse>
+	// mDisagreeCompleteListener=new OnCompleteListener<BaseResponse>() {
+	//
+	// @Override
+	// public void onComplete(BaseResponse result, String resultString) {
+	// // TODO Auto-generated method stub
+	//
+	// }
+	// };
+
 	public class Holder {
+		LinearLayout odds_more;
 		TextView game_time;
 		TextView match_team;
 		TextView league;
 		TextView host_team;
 		TextView play_type;
-		TextView win;
-		TextView draw;
-		TextView lose;
+		ToggleButton win;
+		ToggleButton draw;
+		ToggleButton lose;
+		LinearLayout analyze_ll;
+		TextView analyze;
+		ImageView dis_agree;
+		View item_view;
+		LinearLayout recomend_ll_analyze;
 	}
+
+	// private OnClickListener mDisAgreeListener = new OnClickListener() {
+	//
+	// @Override
+	// public void onClick(View arg0) {
+	// // TODO Auto-generated method stub
+	// disagreeDialog.dismiss();
+	// }
+	// };
+
+	private OnClickListener mAnalyzeListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			analyzeDialog.dismiss();
+		}
+	};
+
+	/**
+	 * 设置开关按钮的状态
+	 * 
+	 * @param toggleButton
+	 * @param text
+	 */
+	private void setText(ToggleButton toggleButton, Odds odds) {
+		String sOdds = odds.getResult() + " " + odds.getOdds();
+		toggleButton.setText(sOdds);
+		toggleButton.setTextOn(sOdds);
+		toggleButton.setTextOff(sOdds);
+
+		toggleButton.setTag(odds);
+		if (odds.isChecked()) {
+			if (!toggleButton.isChecked()) {
+				toggleButton.setChecked(true);
+			}
+		} else {
+			if (toggleButton.isChecked()) {
+				toggleButton.setChecked(false);
+			}
+		}
+
+		toggleButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+				// TODO Auto-generated method stub
+				Odds odds = (Odds) arg0.getTag();
+				odds.setChecked(arg1);
+			}
+		});
+
+		toggleButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				onRefreshListener.onRefresh();
+			}
+		});
+	}
+
+	/**
+	 * 设置更多玩法Listener
+	 * 
+	 * @param onMoreListener
+	 */
+	public void setOnMoreListener(OnClickListener onMoreListener) {
+		this.onMoreListener = onMoreListener;
+	}
+
+	/**
+	 * 设置刷新Listener
+	 */
+	public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
+		this.onRefreshListener = onRefreshListener;
+	}
+
 }

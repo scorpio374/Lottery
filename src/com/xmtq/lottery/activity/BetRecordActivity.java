@@ -1,17 +1,13 @@
 package com.xmtq.lottery.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.adapter.BetRecordListAdapter;
+import com.xmtq.lottery.fragment.BetRecordFragment;
 
 /**
  * 投注记录
@@ -19,10 +15,17 @@ import com.xmtq.lottery.adapter.BetRecordListAdapter;
  * @author Administrator
  * 
  */
-public class BetRecordActivity extends BaseActivity {
+public class BetRecordActivity extends BaseActivity implements
+		OnCheckedChangeListener {
 
-	private ListView bet_record_all, bet_record_win, bet_record_wait;
 	private ImageButton btn_back;
+	private String mFormerTag;
+	private final static String ALL_TAG = "0";
+	private final static String WIN_TAG = "1";
+	private final static String WAIT_TAG = "2";
+	private BetRecordFragment recordAllFragment;
+	private BetRecordFragment recordWinFragment;
+	private BetRecordFragment recordWaitFragment;
 
 	@Override
 	public void setContentLayout() {
@@ -32,62 +35,69 @@ public class BetRecordActivity extends BaseActivity {
 
 	@Override
 	public void dealLogicBeforeInitView() {
+		
+		// request("130", "", "", "1", statue);
+		recordAllFragment = new BetRecordFragment(ALL_TAG);
+		recordWinFragment = new BetRecordFragment(WIN_TAG);
+		recordWaitFragment = new BetRecordFragment(WAIT_TAG);
 
 	}
+
+	
 
 	@Override
 	public void initView() {
 		// TODO Auto-generated method stub
-
-		bet_record_all = (ListView) findViewById(R.id.record_all_list);
-		bet_record_win = (ListView) findViewById(R.id.record_win_list);
-		bet_record_wait = (ListView) findViewById(R.id.record_wait_list);
-
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
 
 		RadioGroup bet_record_radiogroup = (RadioGroup) findViewById(R.id.bet_record_radiogroup);
 
-		bet_record_radiogroup
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		bet_record_radiogroup.setOnCheckedChangeListener(this);
+		mFormerTag = ALL_TAG;
+		getSupportFragmentManager().beginTransaction()
+				.add(R.id.content_frame, recordAllFragment, ALL_TAG).commit();
+	}
 
-					@Override
-					public void onCheckedChanged(RadioGroup group, int checkedId) {
-						if (checkedId == R.id.bet_record_all) {
-							Toast.makeText(BetRecordActivity.this, "全部", 2000)
-									.show();
-							bet_record_all.setVisibility(View.VISIBLE);
-							bet_record_win.setVisibility(View.GONE);
-							bet_record_wait.setVisibility(View.GONE);
+	@Override
+	public void onCheckedChanged(RadioGroup arg0, int checkedId) {
+		// TODO Auto-generated method stub
+		FragmentTransaction mTransaction = getSupportFragmentManager()
+				.beginTransaction();
+		mTransaction.hide(getSupportFragmentManager().findFragmentByTag(
+				mFormerTag));
 
-						} else if (checkedId == R.id.bet_record_win) {
-							Toast.makeText(BetRecordActivity.this, "中奖", 2000)
-									.show();
-							bet_record_all.setVisibility(View.GONE);
-							bet_record_win.setVisibility(View.VISIBLE);
-							bet_record_wait.setVisibility(View.GONE);
-						} else if (checkedId == R.id.bet_record_wait) {
-							Toast.makeText(BetRecordActivity.this, "待开", 2000)
-									.show();
-							bet_record_all.setVisibility(View.GONE);
-							bet_record_win.setVisibility(View.GONE);
-							bet_record_wait.setVisibility(View.VISIBLE);
-						}
-					}
-				});
+		if (checkedId == R.id.bet_record_all) {
+			mFormerTag = ALL_TAG;
+			if (recordAllFragment.isAdded()) {
+				mTransaction.show(recordAllFragment).commit();
+			} else {
+				mTransaction
+						.add(R.id.content_frame, recordAllFragment, ALL_TAG)
+						.commit();
+			}
+		} else if (checkedId == R.id.bet_record_win) {
+			mFormerTag = WIN_TAG;
+			if (recordWinFragment.isAdded()) {
+				mTransaction.show(recordWinFragment).commit();
+			} else {
+				mTransaction
+						.add(R.id.content_frame, recordWinFragment, WIN_TAG)
+						.commit();
+			}
+		} else if (checkedId == R.id.bet_record_wait) {
+			mFormerTag = WAIT_TAG;
+			if (recordWaitFragment.isAdded()) {
+				mTransaction.show(recordWaitFragment).commit();
+			} else {
+				mTransaction.add(R.id.content_frame, recordWaitFragment,
+						WAIT_TAG).commit();
+			}
+		}
 	}
 
 	@Override
 	public void dealLogicAfterInitView() {
-		List<String> mList = new ArrayList<String>();
-		for (int i = 0; i < 10; i++) {
-			mList.add(i + "");
-		}
-		BetRecordListAdapter mAdapter = new BetRecordListAdapter(
-				BetRecordActivity.this, mList);
-		bet_record_all.setAdapter(mAdapter);
-		bet_record_wait.setAdapter(mAdapter);
-		bet_record_win.setAdapter(mAdapter);
 
 	}
 
@@ -103,5 +113,4 @@ public class BetRecordActivity extends BaseActivity {
 		}
 
 	}
-
 }

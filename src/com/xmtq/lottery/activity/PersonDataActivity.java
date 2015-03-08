@@ -2,7 +2,6 @@ package com.xmtq.lottery.activity;
 
 import android.content.Intent;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -10,12 +9,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.bean.BaseResponse;
-import com.xmtq.lottery.bean.ImproveUserInfoBean;
-import com.xmtq.lottery.bean.ImproveUserInfoResponse;
 import com.xmtq.lottery.bean.UserInfoBean;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
@@ -23,6 +20,7 @@ import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.CardIdUtil;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.StringUtil;
+import com.xmtq.lottery.utils.ToastUtil;
 
 /**
  * 个人资料
@@ -32,7 +30,6 @@ import com.xmtq.lottery.utils.StringUtil;
  */
 public class PersonDataActivity extends BaseActivity {
 
-	private Toast toast;
 	private RadioGroup radiobtn_userinfo;
 	private LinearLayout userdata_userinfo;
 	private LinearLayout userdata_bankcard;
@@ -66,6 +63,8 @@ public class PersonDataActivity extends BaseActivity {
 	private UserInfoBean userInfoBean;
 	private boolean isAddUserInfo = false;
 	private boolean isAddBankInfo = false;
+	private TextView bank_card_name;
+	private TextView bank_card_tail_num;
 
 	@Override
 	public void setContentLayout() {
@@ -76,9 +75,6 @@ public class PersonDataActivity extends BaseActivity {
 	@Override
 	public void dealLogicBeforeInitView() {
 		// TODO Auto-generated method stub
-		toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.CENTER, 0, 0);
-
 		userInfoBean = (UserInfoBean) getIntent().getSerializableExtra(
 				"userInfoBean");
 		if (userInfoBean != null) {
@@ -172,6 +168,9 @@ public class PersonDataActivity extends BaseActivity {
 		userinfo_added = (LinearLayout) findViewById(R.id.userinfo_added);
 		bankcard_no_add = (LinearLayout) findViewById(R.id.bankcard_no_add);
 		bankcard_added = (LinearLayout) findViewById(R.id.bankcard_added);
+		bank_card_name = (TextView) findViewById(R.id.bank_card_name);
+		bank_card_tail_num = (TextView) findViewById(R.id.bank_card_tail_num);
+
 		if (isAddUserInfo) {
 			userinfo_no_add.setVisibility(View.GONE);
 			userinfo_added.setVisibility(View.VISIBLE);
@@ -186,7 +185,15 @@ public class PersonDataActivity extends BaseActivity {
 		if (isAddBankInfo) {
 			bankcard_no_add.setVisibility(View.GONE);
 			bankcard_added.setVisibility(View.VISIBLE);
-			// 还差个绑定的银行卡布局
+			bank_card_name.setText(userInfoBean.getBankname());
+			if (userInfoBean.getBankaccount().length() > 4) {
+
+				String tail = userInfoBean.getBankaccount().substring(
+						userInfoBean.getBankaccount().length() - 4,
+						userInfoBean.getBankaccount().length());
+				bank_card_tail_num.setText("尾号 " + tail);
+			}
+
 		}
 	}
 
@@ -209,7 +216,7 @@ public class PersonDataActivity extends BaseActivity {
 		String bankName = userInfoBean.getBankname();
 		String bankAcount = userInfoBean.getBankaccount();
 		String bankAddress = userInfoBean.getBankaddress();
-		String acount = userInfoBean.getAccount(); // 帐户余额
+		// String acount = userInfoBean.getAccount(); // 帐户余额
 
 		if (isValidValue(bankName) && isValidValue(bankAcount)
 				&& isValidValue(bankAddress)) {
@@ -218,40 +225,40 @@ public class PersonDataActivity extends BaseActivity {
 	}
 
 	/**
-	 * 获取用户数据
+	 * 获取用户数据(仅用于测试)
 	 */
-	private void getUserData() {
-		id_card.setText(SharedPrefHelper.getInstance(this).getCardId());
-		real_name.setText(SharedPrefHelper.getInstance(this).getRealName());
-
-		bankcard_person.setText(SharedPrefHelper.getInstance(this)
-				.getRealName());
-		bankcard_person_id.setText(SharedPrefHelper.getInstance(this)
-				.getCardId());
-		bank_name.setText(SharedPrefHelper.getInstance(this).getBankName());
-		bankcard_id.setText(SharedPrefHelper.getInstance(this).getBankCardId());
-		bank_address.setText(SharedPrefHelper.getInstance(this)
-				.getBankAddress());
-		user_password.setText(SharedPrefHelper.getInstance(this).getPassword());
-	}
+	// private void getUserData() {
+	// id_card.setText(SharedPrefHelper.getInstance(this).getCardId());
+	// real_name.setText(SharedPrefHelper.getInstance(this).getRealName());
+	//
+	// bankcard_person.setText(SharedPrefHelper.getInstance(this)
+	// .getRealName());
+	// bankcard_person_id.setText(SharedPrefHelper.getInstance(this)
+	// .getCardId());
+	// bank_name.setText(SharedPrefHelper.getInstance(this).getBankName());
+	// bankcard_id.setText(SharedPrefHelper.getInstance(this).getBankCardId());
+	// bank_address.setText(SharedPrefHelper.getInstance(this)
+	// .getBankAddress());
+	// user_password.setText(SharedPrefHelper.getInstance(this).getPassword());
+	// }
 
 	/**
-	 * 保存用户数据
+	 * 保存用户数据（仅用于测试）
 	 */
-	private void saveUserData() {
-		SharedPrefHelper.getInstance(this).setRealName(
-				bankcard_person.getText().toString().trim());
-		SharedPrefHelper.getInstance(this).setCardId(
-				bankcard_person_id.getText().toString().trim());
-		SharedPrefHelper.getInstance(this).setBankName(
-				bank_name.getText().toString().trim());
-		SharedPrefHelper.getInstance(this).setBankCardId(
-				bankcard_id.getText().toString().trim());
-		SharedPrefHelper.getInstance(this).setBankAddress(
-				bank_address.getText().toString().trim());
-		SharedPrefHelper.getInstance(this).setPassword(
-				user_password.getText().toString().trim());
-	}
+	// private void saveUserData() {
+	// SharedPrefHelper.getInstance(this).setRealName(
+	// bankcard_person.getText().toString().trim());
+	// SharedPrefHelper.getInstance(this).setCardId(
+	// bankcard_person_id.getText().toString().trim());
+	// SharedPrefHelper.getInstance(this).setBankName(
+	// bank_name.getText().toString().trim());
+	// SharedPrefHelper.getInstance(this).setBankCardId(
+	// bankcard_id.getText().toString().trim());
+	// SharedPrefHelper.getInstance(this).setBankAddress(
+	// bank_address.getText().toString().trim());
+	// SharedPrefHelper.getInstance(this).setPassword(
+	// user_password.getText().toString().trim());
+	// }
 
 	/**
 	 * 提交个人信息
@@ -265,22 +272,20 @@ public class PersonDataActivity extends BaseActivity {
 		// SharedPrefHelper.getInstance(this).setCardId(idCard);
 
 		if (StringUtil.isNullOrEmpty(idCard)) {
-			toast.setText("请输入身份证号");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入身份证号");
 			return;
 		} else if (!CardIdUtil.isIDCard(idCard)) {
 			// 判断身份证号是否合法
-			toast.setText("请输入正确的身份证号");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入正确的身份证号");
 			return;
 		}
 
 		if (StringUtil.isNullOrEmpty(realName)) {
-			toast.setText("请输入真实姓名");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入真实姓名");
 			return;
 		}
 
+		mLoadingDialog.show("数据加载中...");
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getPerfectUserInfo(uid,
 				realName, idCard));
@@ -305,40 +310,35 @@ public class PersonDataActivity extends BaseActivity {
 		// saveUserData();
 
 		if (StringUtil.isNullOrEmpty(bankCardPerson)) {
-			toast.setText("请输入持卡人姓名");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入持卡人姓名");
 			return;
 		}
 
 		if (StringUtil.isNullOrEmpty(bankCardPersonId)) {
-			toast.setText("请输入持卡人身份证号");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入持卡人身份证号");
 			return;
 		}
 
 		if (StringUtil.isNullOrEmpty(bankName)) {
-			toast.setText("请输入银行名称");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入银行名称");
 			return;
 		}
 
 		if (StringUtil.isNullOrEmpty(bankCardId)) {
-			toast.setText("请输入银行卡号");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入银行卡号");
 			return;
 		}
 
 		if (StringUtil.isNullOrEmpty(bankAddress)) {
-			toast.setText("请输入开户地");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入开户地");
 			return;
 		}
 
 		if (StringUtil.isNullOrEmpty(password)) {
-			toast.setText("请输入密码");
-			toast.show();
+			ToastUtil.showCenterToast(this, "请输入密码");
 			return;
 		}
+		mLoadingDialog.show("数据加载中...");
 
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getPerfectUserInfo(uid,
@@ -356,19 +356,24 @@ public class PersonDataActivity extends BaseActivity {
 			// TODO Auto-generated method stub
 			if (result != null) {
 				if (result.errorcode.equals("0")) {
-					toast.setText("完善个人信息成功");
-					toast.show();
+					ToastUtil.showCenterToast(PersonDataActivity.this,
+							"完善个人信息成功");
+					// ImproveUserInfoResponse response =
+					// (ImproveUserInfoResponse) result;
+					// ImproveUserInfoBean improveUserInfoBean =
+					// response.improveUserInfoBean;
 
-					ImproveUserInfoResponse response = (ImproveUserInfoResponse) result;
-					ImproveUserInfoBean improveUserInfoBean = response.improveUserInfoBean;
+					// 完善个人资料成功后，是否需要刷新
 				} else {
-					toast.setText(result.errormsg);
-					toast.show();
+					ToastUtil.showCenterToast(PersonDataActivity.this,
+							result.errormsg);
 				}
 			} else {
-				toast.setText("请求错误");
-				toast.show();
+				ToastUtil.showCenterToast(PersonDataActivity.this,
+						Consts.REQUEST_ERROR);
 			}
+
+			mLoadingDialog.dismiss();
 		}
 	};
 

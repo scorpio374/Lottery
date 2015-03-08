@@ -28,8 +28,29 @@ public abstract class BaseParser<T extends BaseResponse> {
 
 		// error code
 		JSONObject bodyObj = msgObj.getJSONObject("body");
-		JSONObject errorObj = bodyObj.getJSONObject("oelement");
-		response.errorcode = errorObj.getString("errorcode");
-		response.errormsg = errorObj.getString("errormsg");
+		if(bodyObj.containsKey("oelement")){
+			JSONObject errorObj = bodyObj.getJSONObject("oelement");
+			response.errorcode = errorObj.getString("errorcode");
+			response.errormsg = errorObj.getString("errormsg");
+			if (errorObj.containsKey("money")) {
+				response.money = errorObj.getString("money");
+			}
+			if (errorObj.containsKey("requestId")) {
+				response.requestId = errorObj.getString("requestId");
+			}
+	
+			if (errorObj.containsKey("randomValidateId")) {
+				response.randomValidateId = errorObj.getString("randomValidateId");
+			}
+	
+			if (errorObj.containsKey("tradeId")) {
+				response.tradeId = errorObj.getString("tradeId");
+			}
+		}else{
+			// 特殊处理
+			response.errorcode = "0";
+			response.errormsg = "成功";
+			
+		}
 	}
 }

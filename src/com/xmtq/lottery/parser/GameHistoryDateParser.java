@@ -5,14 +5,8 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.xmtq.lottery.bean.AccountDetailBean;
-import com.xmtq.lottery.bean.AccountDetailResponse;
 import com.xmtq.lottery.bean.GameHistoryDateBean;
 import com.xmtq.lottery.bean.GameHistoryDateResponse;
-import com.xmtq.lottery.bean.RecomendHistoryBean;
-import com.xmtq.lottery.bean.RecomendHistoryResponse;
-import com.xmtq.lottery.bean.UserRegisterResponse;
-import com.xmtq.lottery.bean.VersionResponse;
 import com.xmtq.lottery.utils.JsonUtil;
 
 public class GameHistoryDateParser extends BaseParser<GameHistoryDateResponse> {
@@ -47,6 +41,7 @@ public class GameHistoryDateParser extends BaseParser<GameHistoryDateResponse> {
 					}
 
 				}
+				response.count = elementsObj.getString("count");
 			}
 
 		}

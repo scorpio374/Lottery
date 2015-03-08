@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dip"
+    android:layout_height="wrap_content"
     android:background="#323642" >
 
     <LinearLayout
@@ -42,6 +42,8 @@
         android:layout_marginLeft="10dip"
         android:layout_toRightOf="@id/bet_ll_left"
         android:gravity="center"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
         android:text="购彩"
         android:textColor="@color/white"
         android:textSize="@dimen/main_textsize" />
@@ -52,6 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginRight="10dip"
         android:text="-2.00元"
         android:textColor="@color/white"
         android:textSize="17sp" />
@@ -60,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dip"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="15dip"
+        android:layout_marginLeft="10dip"
         android:layout_toRightOf="@id/bet_ll_left"
         android:background="#3e424e" />
 

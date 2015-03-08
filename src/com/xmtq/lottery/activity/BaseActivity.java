@@ -16,6 +16,7 @@ import android.view.WindowManager.BadTokenException;
 import android.widget.Toast;
 
 import com.xmtq.lottery.utils.SharedPrefHelper;
+import com.xmtq.lottery.widget.LoadingDialog;
 
 public abstract class BaseActivity extends FragmentActivity implements
 		OnClickListener {
@@ -23,6 +24,7 @@ public abstract class BaseActivity extends FragmentActivity implements
 	// protected boolean isAllowFullScreen;// 是否允许全屏
 	protected boolean hasMenu;// 是否有菜单显示
 	private ProgressDialog progressDialog;
+	public LoadingDialog mLoadingDialog;
 	protected Resources resources;
 	protected SharedPrefHelper mSharedPrefHelper;
 	// public UserBean mUserBean;
@@ -33,6 +35,8 @@ public abstract class BaseActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		mLoadingDialog = new LoadingDialog(this);
 		resources = getResources();
 		// softApplication = (MainApp) getApplicationContext();
 		// userid = getSharedPreferences("userInfo", Context.MODE_PRIVATE)

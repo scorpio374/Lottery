@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xmtq.lottery.bean.CheckUserResponse;
-import com.xmtq.lottery.bean.UserRegisterResponse;
 import com.xmtq.lottery.utils.JsonUtil;
 
 public class CheckUserParser extends BaseParser<CheckUserResponse> {
@@ -25,8 +24,8 @@ public class CheckUserParser extends BaseParser<CheckUserResponse> {
 		if (response.errorcode.equals("0")) {
 			JSONObject bodyObj = msgObj.getJSONObject("body");
 			JSONObject j = bodyObj.getJSONObject("element");
-			response.checkUserBean.setPstate(j.getString("ustate"));
-			response.checkUserBean.setUstate(j.getString("pstate"));
+			response.checkUserBean.setPstate(j.getString("pstate"));
+			response.checkUserBean.setUstate(j.getString("ustate"));
 		}
 
 		return response;

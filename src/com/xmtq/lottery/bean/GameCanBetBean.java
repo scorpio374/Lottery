@@ -1,5 +1,8 @@
 package com.xmtq.lottery.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameCanBetBean extends EntityBase {
 
 	/**
@@ -44,7 +47,21 @@ public class GameCanBetBean extends EntityBase {
 	private String bfDg;
 	private String bqDg;
 	private String jqDg;
-
+	private String rqContent;
+	private String spContent;
+	private String bfContent;
+	private String bqContent;
+	private String jqContent;
+	private boolean isWinChecked = false;
+	private boolean isDrawChecked = false;
+	private boolean isLoseChecked = false;
+	
+	private List<Odds> spOddsList = new ArrayList<Odds>();
+	private List<Odds> rqOddsList = new ArrayList<Odds>();
+	private List<Odds> bfOddsList = new ArrayList<Odds>();
+	private List<Odds> bqOddsList = new ArrayList<Odds>();
+	private List<Odds> jqOddsList = new ArrayList<Odds>();
+	
 	public String getCompanyId() {
 		return companyId;
 	}
@@ -221,4 +238,108 @@ public class GameCanBetBean extends EntityBase {
 		this.jqDg = jqDg;
 	}
 
+	public String getRqContent() {
+		return rqContent;
+	}
+
+	public void setRqContent(String rqContent) {
+		this.rqContent = rqContent;
+	}
+
+	public String getSpContent() {
+		return spContent;
+	}
+
+	public void setSpContent(String spContent) {
+		this.spContent = spContent;
+	}
+
+	public String getBfContent() {
+		return bfContent;
+	}
+
+	public void setBfContent(String bfContent) {
+		this.bfContent = bfContent;
+	}
+
+	public String getBqContent() {
+		return bqContent;
+	}
+
+	public void setBqContent(String bqContent) {
+		this.bqContent = bqContent;
+	}
+
+	public String getJqContent() {
+		return jqContent;
+	}
+
+	public void setJqContent(String jqContent) {
+		this.jqContent = jqContent;
+	}
+
+	public boolean isWinChecked() {
+		return isWinChecked;
+	}
+
+	public void setWinChecked(boolean isWinChecked) {
+		this.isWinChecked = isWinChecked;
+	}
+
+	public boolean isDrawChecked() {
+		return isDrawChecked;
+	}
+
+	public void setDrawChecked(boolean isDrawChecked) {
+		this.isDrawChecked = isDrawChecked;
+	}
+
+	public boolean isLoseChecked() {
+		return isLoseChecked;
+	}
+
+	public void setLoseChecked(boolean isLoseChecked) {
+		this.isLoseChecked = isLoseChecked;
+	}
+
+	public List<Odds> getSpOddsList() {
+		return spOddsList;
+	}
+
+	public void setSpOddsList(List<Odds> spOddsList) {
+		this.spOddsList = spOddsList;
+	}
+
+	public List<Odds> getRqOddsList() {
+		return rqOddsList;
+	}
+
+	public void setRqOddsList(List<Odds> rqOddsList) {
+		this.rqOddsList = rqOddsList;
+	}
+
+	public List<Odds> getBfOddsList() {
+		return bfOddsList;
+	}
+
+	public void setBfOddsList(List<Odds> bfOddsList) {
+		this.bfOddsList = bfOddsList;
+	}
+
+	public List<Odds> getBqOddsList() {
+		return bqOddsList;
+	}
+
+	public void setBqOddsList(List<Odds> bqOddsList) {
+		this.bqOddsList = bqOddsList;
+	}
+
+	public List<Odds> getJqOddsList() {
+		return jqOddsList;
+	}
+
+	public void setJqOddsList(List<Odds> jqOddsList) {
+		this.jqOddsList = jqOddsList;
+	}
+	
 }

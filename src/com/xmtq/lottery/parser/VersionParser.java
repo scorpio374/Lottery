@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xmtq.lottery.bean.UserRegisterResponse;
 import com.xmtq.lottery.bean.VersionResponse;
 import com.xmtq.lottery.utils.JsonUtil;
 

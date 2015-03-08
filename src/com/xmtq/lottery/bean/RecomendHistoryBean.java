@@ -7,34 +7,25 @@ public class RecomendHistoryBean extends EntityBase {
 	private static final long serialVersionUID = -8391624578292769336L;
 
 	// <companyId>150105005</companyId>
+	// <num>005</num>
 	// <league>法国杯</league>
 	// <matchTeam>蒙彼利埃</matchTeam>
 	// <matchId>62422</matchId>
 	// <hostTeam>巴黎圣曼</hostTeam>
 	// <gameTime>2015-01-06 03:44:00</gameTime>
-	// <bqContent>胜平</bqContent>
-	// <bqkj>平负</bqkj>
-	// <bqHit>未命中</bqHit>
-	// <commendUser>张慧华</commendUser>
-	// <commendId>1</commendId>
-	// <supportVotes>0</supportVotes>
-	// <againstVotes>0</againstVotes>
-	// <content/>
-
+	// <bfkjBc>2:1</bfkjBc>
+	// <bfkj>3:3</bfkj>
+	// <hit>0</hit>
 	private String companyId;
+	private String num;
 	private String league;
 	private String matchTeam;
 	private String matchId;
 	private String hostTeam;
 	private String gameTime;
-	private String bqContent;
-	private String bqkj;
-	private String bqHit;
-	private String commendUser;
-	private String commendId;
-	private String supportVotes;
-	private String againstVotes;
-	private String content;
+	private String bfkjBc;
+	private String bfkj;
+	private String hit;
 
 	public String getCompanyId() {
 		return companyId;
@@ -42,6 +33,14 @@ public class RecomendHistoryBean extends EntityBase {
 
 	public void setCompanyId(String companyId) {
 		this.companyId = companyId;
+	}
+
+	public String getNum() {
+		return num;
+	}
+
+	public void setNum(String num) {
+		this.num = num;
 	}
 
 	public String getLeague() {
@@ -84,68 +83,28 @@ public class RecomendHistoryBean extends EntityBase {
 		this.gameTime = gameTime;
 	}
 
-	public String getBqContent() {
-		return bqContent;
+	public String getBfkjBc() {
+		return bfkjBc;
 	}
 
-	public void setBqContent(String bqContent) {
-		this.bqContent = bqContent;
+	public void setBfkjBc(String bfkjBc) {
+		this.bfkjBc = bfkjBc;
 	}
 
-	public String getBqkj() {
-		return bqkj;
+	public String getBfkj() {
+		return bfkj;
 	}
 
-	public void setBqkj(String bqkj) {
-		this.bqkj = bqkj;
+	public void setBfkj(String bfkj) {
+		this.bfkj = bfkj;
 	}
 
-	public String getBqHit() {
-		return bqHit;
+	public String getHit() {
+		return hit;
 	}
 
-	public void setBqHit(String bqHit) {
-		this.bqHit = bqHit;
-	}
-
-	public String getCommendUser() {
-		return commendUser;
-	}
-
-	public void setCommendUser(String commendUser) {
-		this.commendUser = commendUser;
-	}
-
-	public String getCommendId() {
-		return commendId;
-	}
-
-	public void setCommendId(String commendId) {
-		this.commendId = commendId;
-	}
-
-	public String getSupportVotes() {
-		return supportVotes;
-	}
-
-	public void setSupportVotes(String supportVotes) {
-		this.supportVotes = supportVotes;
-	}
-
-	public String getAgainstVotes() {
-		return againstVotes;
-	}
-
-	public void setAgainstVotes(String againstVotes) {
-		this.againstVotes = againstVotes;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
+	public void setHit(String hit) {
+		this.hit = hit;
 	}
 
 	public static long getSerialversionuid() {

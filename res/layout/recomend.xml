@@ -58,15 +58,33 @@
                 android:layout_marginTop="2dip"
                 android:background="@color/deep_gray" >
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <!-- <TextView -->
+                <!-- android:layout_width="wrap_content" -->
+                <!-- android:layout_height="wrap_content" -->
+                <!-- android:layout_gravity="center" -->
+                <!-- android:layout_marginBottom="1dip" -->
+                <!-- android:layout_marginLeft="10dip" -->
+                <!-- android:layout_marginTop="1dip" -->
+                <!-- android:singleLine="true" -->
+                <!-- android:text="刘某某竞彩足球混合过关2串1  7690元           吴某某竞彩足球混合过关3串1  12500元" -->
+                <!-- android:textColor="#7a7c7f" /> -->
+
+                <com.xmtq.lottery.widget.MarqueeText
+                    android:id="@+id/win_record"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginBottom="1dip"
                     android:layout_marginLeft="10dip"
                     android:layout_marginTop="1dip"
+                    android:duplicateParentState="true"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:marqueeRepeatLimit="marquee_forever"
                     android:singleLine="true"
-                    android:text="刘某某竞彩足球混合过关2串1  7690元           吴某某竞彩足球混合过关3串1  12500元"
+                    android:text=" "
                     android:textColor="#7a7c7f" />
             </LinearLayout>
 
@@ -108,7 +126,7 @@
                     android:layout_marginLeft="20dip"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="推荐6场比赛"
+                    android:text="暂无推荐比赛"
                     android:textColor="@color/white_shallow"
                     android:textSize="@dimen/main_textsize4" />
 
@@ -122,7 +140,7 @@
                     android:src="@drawable/refresh" />
             </LinearLayout>
 
-            <ListView
+            <com.xmtq.lottery.widget.CustomPullListView
                 android:id="@+id/recomend_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -130,34 +148,11 @@
                 android:background="@color/gray"
                 android:cacheColorHint="#00000000"
                 android:divider="@color/gray"
-                android:dividerHeight="8dip"
+                android:dividerHeight="5dip"
                 android:fadingEdge="none"
                 android:scrollbars="none" />
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#99000000"
-            android:visibility="gone" >
-
-            <LinearLayout
-                android:id="@+id/rl_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:background="@color/soft_gray"
-                android:orientation="horizontal"
-                android:padding="10dip"
-                android:visibility="visible" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="标准过关"
-                    android:textColor="#878eb4" />
-            </LinearLayout>
-        </RelativeLayout>
     </FrameLayout>
 
     <LinearLayout
@@ -172,92 +167,100 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:background="@drawable/rect_bg" >
+            android:layout_marginLeft="10dip" >
 
-            <RadioGroup
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <RadioButton
+                android:id="@+id/chuan_guan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/chuanguan_btn_selector"
+                android:button="@null"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="1dip" >
+                android:padding="5dip"
+                android:text="串关"
+                android:textColor="@drawable/chuanguan_radiobtn_textcolor_selector"
+                android:textSize="@dimen/main_textsize" />
 
-                <RadioButton
-                    android:id="@+id/draw"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/radio_btn_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:padding="10dip"
-                    android:text="串关"
-                    android:textColor="@drawable/radiobtn_textcolor_selector"
-                    android:textSize="@dimen/main_textsize" />
-
-                <ImageView
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:background="@color/green" />
-
-                <RadioButton
-                    android:id="@+id/draw"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/radio_btn_selector"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:padding="10dip"
-                    android:text="3倍"
-                    android:textColor="@drawable/radiobtn_textcolor_selector"
-                    android:textSize="@dimen/main_textsize" />
-            </RadioGroup>
+            <RadioButton
+                android:id="@+id/check_chuan_guan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/chuanguan_btn_selector"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dip"
+                android:text="倍数"
+                android:textColor="@drawable/chuanguan_radiobtn_textcolor_selector"
+                android:textSize="@dimen/main_textsize" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical" >
 
+            <TextView
+                android:id="@+id/betting_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0注1倍  共0元"
+                android:textColor="#878eb4"
+                android:padding="5dip"/>
+
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="5dip" >
+                android:padding="5dip"
+                android:visibility="gone" >
 
                 <TextView
+                    android:id="@+id/betting_votenums"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="6注3倍"
-                    android:textColor="#878eb4" />
+                    android:text="0注"
+                    android:textColor="#878eb4"/>
+
+                <TextView
+                    android:id="@+id/betting_multiple"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1倍"
+                    android:textColor="#878eb4"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dip"
                     android:text="共"
-                    android:textColor="#878eb4" />
+                    android:textColor="#878eb4"/>
 
                 <TextView
+                    android:id="@+id/betting_buymoney"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="36"
-                    android:textColor="@color/green" />
+                    android:text="0"
+                    android:textColor="@color/green"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="元"
-                    android:textColor="#878eb4" />
+                    android:textColor="#878eb4"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:visibility="gone" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -269,157 +272,26 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5399.77"
+                    android:text=""
                     android:textColor="@color/green" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="元"
+                    android:text=""
                     android:textColor="#878eb4" />
             </LinearLayout>
         </LinearLayout>
 
         <TextView
             android:id="@+id/recomend_commit"
-            android:layout_width="0dip"
+            android:layout_width="70dip"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dip"
-            android:layout_marginLeft="10dip"
             android:layout_marginRight="10dip"
             android:layout_marginTop="10dip"
-            android:layout_weight="1"
-            android:background="@color/green"
-            android:gravity="center"
-            android:padding="10dip"
-            android:text="投注"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/rl_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="100dip"
-        android:background="@color/soft_gray"
-        android:orientation="horizontal"
-        android:visibility="gone" >
-
-        <LinearLayout
-            android:id="@+id/recomend_bottom_head"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dip"
-            android:layout_marginRight="20dip"
-            android:layout_marginTop="5dip"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/rect_bg"
-                android:gravity="center"
-                android:padding="5dip"
-                android:text="清空"
-                android:textColor="@color/green" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dip"
-                android:layout_weight="2"
-                android:background="@drawable/rect_bg"
-                android:drawableRight="@drawable/down"
-                android:gravity="center"
-                android:padding="5dip"
-                android:text="2串1"
-                android:textColor="@color/white" />
-
-            <TextView
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dip"
-                android:layout_weight="3"
-                android:background="@drawable/rect_bg"
-                android:drawableLeft="@drawable/deleate"
-                android:drawableRight="@drawable/add"
-                android:gravity="center"
-                android:padding="5dip"
-                android:text="倍数: 1倍"
-                android:textColor="@color/white" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dip"
-            android:gravity="center_vertical"
-            android:orientation="horizontal" >
-
-            <LinearLayout
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="总金额："
-                    android:textColor="#878eb4" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12"
-                    android:textColor="@color/yellow"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" 元"
-                    android:textColor="#878eb4" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="理论最高奖金:"
-                    android:textColor="#878eb4" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12元"
-                    android:textColor="#878eb4" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/recomend_commit"
-            android:layout_width="match_parent"
-            android:layout_height="30dip"
-            android:layout_marginBottom="5dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip"
-            android:background="@color/green"
-            android:gravity="center"
-            android:text="投注"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:background="@drawable/touzhu_btn_selector"
+            android:gravity="center" />
     </LinearLayout>
 
 </LinearLayout>

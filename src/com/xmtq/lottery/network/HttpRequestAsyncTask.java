@@ -11,8 +11,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
+import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.utils.LogUtil;
 
@@ -36,8 +36,7 @@ public class HttpRequestAsyncTask extends
 			/**
 			 * 获取BaseUrl
 			 */
-			String urlString = request.getUrl();
-			LogUtil.log(urlString);
+			String urlString = Consts.host;
 			if (urlString == null) {
 				resultString = "NoUrl";
 				return null;
@@ -51,7 +50,7 @@ public class HttpRequestAsyncTask extends
 			 */
 
 			httpPost = new HttpPost(urlString);
-			httpPost.setEntity(new StringEntity(request.getBody(),"UTF-8"));
+			httpPost.setEntity(new StringEntity(request.getBody(), "UTF-8"));
 			HttpManager.shortTimeOut();
 			httpResponse = HttpManager.execute(httpPost);
 
@@ -79,18 +78,13 @@ public class HttpRequestAsyncTask extends
 			e.printStackTrace();
 		}
 		return object;
-
 	}
 
 	@Override
 	protected void onPostExecute(BaseResponse result) {
 		super.onPostExecute(result);
 		if (null != onCompleteListener) {
-			// if (null == result) {
-			// onCompleteListener.onComplete(null, null);
-			// } else {
 			onCompleteListener.onComplete(result, resultString);
-			// }
 		}
 	}
 

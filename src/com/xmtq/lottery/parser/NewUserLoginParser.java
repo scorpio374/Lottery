@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xmtq.lottery.bean.NewUserLoginResponse;
-import com.xmtq.lottery.bean.UserRegisterResponse;
 import com.xmtq.lottery.utils.JsonUtil;
 
 public class NewUserLoginParser extends BaseParser<NewUserLoginResponse> {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="80dip"
+    android:layout_height="70dp"
     android:background="#323642" >
 
     <LinearLayout
@@ -9,15 +9,13 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="15dip"
-        android:layout_marginTop="5dip"
         android:gravity="center_vertical"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/bet_date"
             android:layout_width="wrap_content"
-            android:layout_height="0dip"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="12/10"
             android:textColor="@color/green"
@@ -26,8 +24,10 @@
         <TextView
             android:id="@+id/bet_time"
             android:layout_width="wrap_content"
-            android:layout_height="0dip"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:text="13:12"
             android:textColor="#c0c2c1"
             android:textSize="@dimen/main_textsize" />
@@ -37,16 +37,15 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="15dip"
-        android:layout_marginTop="5dip"
         android:layout_toRightOf="@id/bet_ll_left"
         android:gravity="center_vertical"
+        android:layout_centerVertical="true"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/bet_style"
             android:layout_width="wrap_content"
-            android:layout_height="0dip"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="混投"
             android:textColor="#7b7b80"
@@ -55,12 +54,12 @@
         <TextView
             android:id="@+id/bet_money"
             android:layout_width="wrap_content"
-            android:layout_height="0dip"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
             android:text="20元"
             android:textColor="#c0c2c1"
-            android:textSize="@dimen/main_textsize2" />
+            android:textSize="@dimen/main_textsize4" />
     </LinearLayout>
 
     <ImageView
@@ -73,6 +72,7 @@
         android:src="@drawable/right" />
 
     <TextView
+        android:id="@+id/bet_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -83,8 +83,9 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="2dip"
+        android:layout_height="1dip"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dip"
         android:layout_toRightOf="@id/bet_ll_left"
         android:background="#3e424e" />

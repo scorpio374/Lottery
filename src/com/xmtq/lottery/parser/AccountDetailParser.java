@@ -7,8 +7,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xmtq.lottery.bean.AccountDetailBean;
 import com.xmtq.lottery.bean.AccountDetailResponse;
-import com.xmtq.lottery.bean.UserRegisterResponse;
-import com.xmtq.lottery.bean.VersionResponse;
 import com.xmtq.lottery.utils.JsonUtil;
 
 public class AccountDetailParser extends BaseParser<AccountDetailResponse> {
@@ -42,6 +40,17 @@ public class AccountDetailParser extends BaseParser<AccountDetailResponse> {
 					getParser(response, j);
 				}
 			}
+
+			if (elementsObj.containsKey("pay")) {
+				response.setPay(elementsObj.getString("pay"));
+			}
+			if (elementsObj.containsKey("income")) {
+				response.setIncome(elementsObj.getString("income"));
+			}
+			if (elementsObj.containsKey("count")) {
+				response.setCount(elementsObj.getString("count"));
+			}
+
 		}
 
 		return response;
