@@ -373,4 +373,7 @@ public final class DateUtil {
 		return "";
 	}
 
+	public static String getRealDate(String dateWithTime) {
+		return dateWithTime.substring(0, 10);
+	}
 }

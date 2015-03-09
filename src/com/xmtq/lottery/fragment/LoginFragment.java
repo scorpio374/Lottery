@@ -1,10 +1,12 @@
 package com.xmtq.lottery.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -114,7 +116,8 @@ public class LoginFragment extends BaseFragment {
 			ToastUtil.showCenterToast(getActivity(), "请输入密码");
 			return;
 		} else if (!StringUtil.matchPwd(password)) {
-			//ToastUtil.showCenterToast(getActivity(), "请输入6-16位密码,密码必须包含数字和字母");
+			// ToastUtil.showCenterToast(getActivity(),
+			// "请输入6-16位密码,密码必须包含数字和字母");
 			// return;
 		}
 		mLoadingDialog.show("登录中，请稍候...");
@@ -123,7 +126,7 @@ public class LoginFragment extends BaseFragment {
 			spfs.setUserPassward(password);
 			spfs.setUserName(userName);
 		}
-
+		hideImm(user_name);
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getUserLogin(userName,
 				password));
@@ -197,4 +200,11 @@ public class LoginFragment extends BaseFragment {
 		}
 	};
 
+	public void hideImm(View v) {
+		InputMethodManager imm = (InputMethodManager) getActivity()
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		if (imm != null) {
+			imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+		}
+	}
 }
