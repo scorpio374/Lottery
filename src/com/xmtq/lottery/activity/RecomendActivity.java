@@ -63,6 +63,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		NewUserLoginBean newUserLoginBean = (NewUserLoginBean) getIntent()
 				.getSerializableExtra("newUserLoginBean");
 		if (newUserLoginBean != null) {
+			spfs.setIsLogin(true);
 			UserInfoFragment fragment = new UserInfoFragment();
 			Bundle b = new Bundle();
 			b.putSerializable("newUserLoginBean", newUserLoginBean);
