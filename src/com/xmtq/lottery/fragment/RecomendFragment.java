@@ -39,6 +39,7 @@ import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.DateUtil;
+import com.xmtq.lottery.utils.LogUtil;
 import com.xmtq.lottery.utils.OddsUtil;
 import com.xmtq.lottery.utils.OnRefreshListener;
 import com.xmtq.lottery.utils.PassTypeUtil;
@@ -99,7 +100,7 @@ public class RecomendFragment extends BaseFragment {
 	private List<GameCanBetBean> gameCanBetBeans;
 	private RecomendListAdapter mAdapter;
 
-	private static final int LOAD_DATA_CHANGE = 9;// 上拉刷新
+	private static final int LOAD_DATA_CHANGE = 9;// 刷新日期
 	private static final int LOAD_DATA_FINISH = 10;// 上拉加载
 	private static final int REFRESH_DATA_FINISH = 11;// 下拉刷新
 	private static final int REFRESH_BET_INFO = 12;// 投注信息刷新
@@ -117,6 +118,7 @@ public class RecomendFragment extends BaseFragment {
 	// 选中的比赛场次
 	private int gameCheckNum = 0;
 	private int lastCheckNum = 0;
+	int scroll_state = OnScrollListener.SCROLL_STATE_IDLE;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -437,7 +439,6 @@ public class RecomendFragment extends BaseFragment {
 			}
 		}
 	};
-	int scroll_state = OnScrollListener.SCROLL_STATE_IDLE;
 
 	/**
 	 * 请求成功
@@ -497,20 +498,19 @@ public class RecomendFragment extends BaseFragment {
 						public void onScrollStateChanged(AbsListView view,
 								int scrollState) {
 							scroll_state = scrollState;
+							if (scroll_state == OnScrollListener.SCROLL_STATE_IDLE) {
+								mHandler.removeMessages(LOAD_DATA_CHANGE);
+								Message msg = new Message();
+								msg.what = LOAD_DATA_CHANGE;
+								msg.arg1 = view.getFirstVisiblePosition();
+								mHandler.sendMessage(msg);
+							}
 						}
 
 						@Override
 						public void onScroll(AbsListView view,
 								int firstVisibleItem, int visibleItemCount,
 								int totalItemCount) {
-							if (scroll_state == OnScrollListener.SCROLL_STATE_IDLE) {
-
-								Message msg = new Message();
-								msg.what = LOAD_DATA_CHANGE;
-								msg.arg1 = firstVisibleItem;
-								mHandler.removeMessages(LOAD_DATA_CHANGE);
-								mHandler.sendMessage(msg);
-							}
 						}
 					});
 
@@ -557,9 +557,9 @@ public class RecomendFragment extends BaseFragment {
 				String realDate = DateUtil.getRealDate(gameCanBetBeans.get(
 						msg.arg1).getGameTime());
 				recomend_date.setText(realDate);
+
 				Date date = DateUtil.stringToDateFormat(realDate, "yyyy-MM-dd");
 				String dayOfWeek = DateUtil.getWeek(date);
-
 				recomend_week.setText(dayOfWeek);
 				break;
 			default:
@@ -620,18 +620,49 @@ public class RecomendFragment extends BaseFragment {
 	 */
 	private void setRecommendGame(List<GameCanBetBean> gameCanBetBeans) {
 		for (GameCanBetBean gameCanBetBean : gameCanBetBeans) {
-			String spContent = gameCanBetBean.getSpContent();
-			if (!TextUtils.isEmpty(spContent)) {
-				List<Odds> oddsList = gameCanBetBean.getSpOddsList();
-				for (Odds odds : oddsList) {
-					if (odds.getResult().equals(spContent)) {
-						odds.setChecked(true);
-						break;
-					}
+			// 胜负平推荐
+			String content = gameCanBetBean.getSpContent();
+			List<Odds> oddsList = gameCanBetBean.getSpOddsList();
+			setDefaultCheck(content, oddsList);
+
+			// 让球胜负平推荐
+			content = gameCanBetBean.getRqContent();
+			oddsList = gameCanBetBean.getRqOddsList();
+			setDefaultCheck(content, oddsList);
+
+			// 比分推荐
+			content = gameCanBetBean.getBfContent();
+			oddsList = gameCanBetBean.getBfOddsList();
+			setDefaultCheck(content, oddsList);
+
+			// 进球推荐
+			content = gameCanBetBean.getJqContent();
+			oddsList = gameCanBetBean.getJqOddsList();
+			setDefaultCheck(content, oddsList);
+
+			// 半全场推荐
+			content = gameCanBetBean.getBqContent();
+			oddsList = gameCanBetBean.getBqOddsList();
+			setDefaultCheck(content, oddsList);
+		}
+		refreshBet();
+	}
+
+	/**
+	 * 设置默认选中
+	 * 
+	 * @param content
+	 * @param oddsList
+	 */
+	private void setDefaultCheck(String content, List<Odds> oddsList) {
+		if (!TextUtils.isEmpty(content) && oddsList != null) {
+			for (Odds odds : oddsList) {
+				if (odds.getResult().equals(content)) {
+					odds.setChecked(true);
+					break;
 				}
 			}
 		}
-		refreshBet();
 	}
 
 	/**

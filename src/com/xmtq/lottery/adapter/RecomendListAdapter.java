@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.lottery.R;
-import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.Odds;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
@@ -37,14 +36,9 @@ public class RecomendListAdapter extends BaseAdapter {
 	private OnClickListener onMoreListener;
 	private OnRefreshListener onRefreshListener;
 
-	private String content = "";
-	private String userid;
-	private String matchid = "";
-
 	public RecomendListAdapter(Context c, List<GameCanBetBean> gameCanBetBeans) {
 		this.mContext = c;
 		this.gameCanBetBeans = gameCanBetBeans;
-		this.userid = SharedPrefHelper.getInstance(c).getUid();
 	}
 
 	@Override
@@ -132,30 +126,45 @@ public class RecomendListAdapter extends BaseAdapter {
 				}
 			}
 		}
-		content = gameCanBetBeans.get(position).getContent();
-		matchid = gameCanBetBeans.get(position).getMatchId();
+		String content = gameCanBetBeans.get(position).getContent();
+		String matchid = gameCanBetBeans.get(position).getMatchId();
+		
 		// 赛事分析
-		if (gameCanBetBeans.get(position).getCommendUser() == null
-				|| gameCanBetBeans.get(position).getCommendId() == null||TextUtils.isEmpty(content)) {
-			holder.recomend_ll_analyze.setVisibility(View.GONE);
-			holder.item_view.setVisibility(View.GONE);
+		if (TextUtils.isEmpty(content)) {
+			holder.analyze.setVisibility(View.GONE);
 		} else {
-
-			holder.recomend_ll_analyze.setVisibility(View.VISIBLE);
-			holder.item_view.setVisibility(View.VISIBLE);
+			holder.analyze.setVisibility(View.VISIBLE);
+			holder.analyze.setTag(content);
 			holder.analyze.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
+					String content = (String) arg0.getTag();
 					// 这个Dialog需要传赛事分析文字
 					analyzeDialog = new AnalyzeDialog(mContext,
 							mAnalyzeListener, content);
 					analyzeDialog.show();
 				}
 			});
+		}
 
+		// 我不赞同
+		if (TextUtils.isEmpty(gameCanBetBeans.get(position).getSpContent())
+				&& TextUtils.isEmpty(gameCanBetBeans.get(position)
+						.getRqContent())
+				&& TextUtils.isEmpty(gameCanBetBeans.get(position)
+						.getBqContent())
+				&& TextUtils.isEmpty(gameCanBetBeans.get(position)
+						.getJqContent())
+				&& TextUtils.isEmpty(gameCanBetBeans.get(position)
+						.getBfContent())) {
+			holder.dis_agree.setVisibility(View.GONE);
+		} else {
+			holder.dis_agree.setVisibility(View.VISIBLE);
+			holder.dis_agree.setTag(matchid);
 			holder.dis_agree.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
+					final String matchid = (String)arg0.getTag();
 					disagreeDialog = new DisagreeDialog(mContext);
 					disagreeDialog.show();
 					disagreeDialog
@@ -172,10 +181,20 @@ public class RecomendListAdapter extends BaseAdapter {
 			});
 		}
 
+		if (holder.dis_agree.getVisibility() == View.GONE
+				&& holder.analyze.getVisibility() == View.GONE) {
+			holder.recomend_ll_analyze.setVisibility(View.GONE);
+			holder.item_view.setVisibility(View.GONE);
+		}else{
+			holder.recomend_ll_analyze.setVisibility(View.VISIBLE);
+			holder.item_view.setVisibility(View.VISIBLE);
+		}
+
 		return convertView;
 	}
 
 	private void requestDisagree(String matchId, String content) {
+		String userid = SharedPrefHelper.getInstance(mContext).getUid();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getGameTodayRecomend(
 				userid, matchId, "1", content));
