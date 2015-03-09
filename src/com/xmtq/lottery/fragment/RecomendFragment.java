@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -97,7 +99,8 @@ public class RecomendFragment extends BaseFragment {
 	private List<GameCanBetBean> gameCanBetBeans;
 	private RecomendListAdapter mAdapter;
 
-	private static final int LOAD_DATA_FINISH = 10;// 上拉刷新
+	private static final int LOAD_DATA_CHANGE = 9;// 上拉刷新
+	private static final int LOAD_DATA_FINISH = 10;// 上拉加载
 	private static final int REFRESH_DATA_FINISH = 11;// 下拉刷新
 	private static final int REFRESH_BET_INFO = 12;// 投注信息刷新
 	private RadioButton chuan_guan;
@@ -248,7 +251,7 @@ public class RecomendFragment extends BaseFragment {
 		imgBtnRight.setOnClickListener(this);
 		recomend_refresh.setOnClickListener(this);
 		recomend_list = (CustomPullListView) v.findViewById(R.id.recomend_list);
-		// recomend_list.setCanRefresh(true);
+		recomend_list.setCanRefresh(true);
 		recomend_list.setCanLoadMore(true);
 
 		recomend_lottery_times = (TextView) v
@@ -318,7 +321,7 @@ public class RecomendFragment extends BaseFragment {
 								} else if (Integer.parseInt(resultString) <= 1000) {
 									check_chuan_guan
 											.setText(resultString + "倍");
-									onRefreshBet();
+									refreshBet();
 								} else {
 									ToastUtil.showCenterToast(getActivity(),
 											"倍数不能大于一千倍");
@@ -335,15 +338,22 @@ public class RecomendFragment extends BaseFragment {
 			break;
 
 		case R.id.recomend_refresh:
-			currentPageNum = 1;
-			mLoadingDialog.show("加载数据...");
-			initData();
-			request();
+			reLoad();
 			break;
 
 		default:
 			break;
 		}
+	}
+
+	/**
+	 * 重新加载
+	 */
+	private void reLoad() {
+		currentPageNum = 1;
+		mLoadingDialog.show("加载数据...");
+		initData();
+		request();
 	}
 
 	/**
@@ -357,7 +367,7 @@ public class RecomendFragment extends BaseFragment {
 			mChuanGuanDialog.dismiss();
 
 			// 点击串关取消后，初始化过关数据
-			onRefreshBet();
+			refreshBet();
 		}
 	};
 
@@ -370,7 +380,7 @@ public class RecomendFragment extends BaseFragment {
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
 			mChuanGuanDialog.dismiss();
-			onRefreshBet();
+			refreshBet();
 		}
 	};
 
@@ -427,6 +437,7 @@ public class RecomendFragment extends BaseFragment {
 			}
 		}
 	};
+	int scroll_state = OnScrollListener.SCROLL_STATE_IDLE;
 
 	/**
 	 * 请求成功
@@ -446,15 +457,21 @@ public class RecomendFragment extends BaseFragment {
 			mAdapter.setOnRefreshListener(onRefreshBetListener);
 			recomend_list.setAdapter(mAdapter);
 
-			// // 下拉刷新
-			// recomend_list.setOnRefreshListener(new OnRefreshListener() {
-			//
-			// @Override
-			// public void onRefresh() {
-			// // TODO Auto-generated method stub
-			// mHandler.sendEmptyMessageDelayed(REFRESH_DATA_FINISH, 2000);
-			// }
-			// });
+			setRecommendGame(gameCanBetBeans);
+			mHandler.sendEmptyMessage(REFRESH_DATA_FINISH);
+
+			// 下拉刷新
+			recomend_list
+					.setOnRefreshListener(new CustomPullListView.OnRefreshListener() {
+
+						@Override
+						public void onRefresh() {
+							// TODO Auto-generated method stub
+							reLoad();
+							// mHandler.sendEmptyMessageDelayed(
+							// REFRESH_DATA_FINISH, 1000);
+						}
+					});
 
 			// 上拉加载
 			recomend_list.setOnLoadListener(new OnLoadMoreListener() {
@@ -471,6 +488,32 @@ public class RecomendFragment extends BaseFragment {
 					request();
 				}
 			});
+
+			// 滑动事件
+			recomend_list
+					.setMyOnScrollListener(new AbsListView.OnScrollListener() {
+
+						@Override
+						public void onScrollStateChanged(AbsListView view,
+								int scrollState) {
+							scroll_state = scrollState;
+						}
+
+						@Override
+						public void onScroll(AbsListView view,
+								int firstVisibleItem, int visibleItemCount,
+								int totalItemCount) {
+							if (scroll_state == OnScrollListener.SCROLL_STATE_IDLE) {
+
+								Message msg = new Message();
+								msg.what = LOAD_DATA_CHANGE;
+								msg.arg1 = firstVisibleItem;
+								mHandler.removeMessages(LOAD_DATA_CHANGE);
+								mHandler.sendMessage(msg);
+							}
+						}
+					});
+
 		} else {
 			gameCanBetBeans.addAll(gameCanBetResponse.gameCanBetBeans);
 			mHandler.sendEmptyMessage(LOAD_DATA_FINISH);
@@ -484,6 +527,7 @@ public class RecomendFragment extends BaseFragment {
 	 */
 	private void onFailure(String msg) {
 		ToastUtil.showCenterToast(getActivity(), msg);
+		mHandler.sendEmptyMessage(REFRESH_DATA_FINISH);
 		mHandler.sendEmptyMessage(LOAD_DATA_FINISH);
 	}
 
@@ -509,7 +553,15 @@ public class RecomendFragment extends BaseFragment {
 			case REFRESH_BET_INFO:
 				refresh();
 				break;
+			case LOAD_DATA_CHANGE:
+				String realDate = DateUtil.getRealDate(gameCanBetBeans.get(
+						msg.arg1).getGameTime());
+				recomend_date.setText(realDate);
+				Date date = DateUtil.stringToDateFormat(realDate, "yyyy-MM-dd");
+				String dayOfWeek = DateUtil.getWeek(date);
 
+				recomend_week.setText(dayOfWeek);
+				break;
 			default:
 				break;
 			}
@@ -564,6 +616,25 @@ public class RecomendFragment extends BaseFragment {
 	};
 
 	/**
+	 * 设置推荐比赛默认选中
+	 */
+	private void setRecommendGame(List<GameCanBetBean> gameCanBetBeans) {
+		for (GameCanBetBean gameCanBetBean : gameCanBetBeans) {
+			String spContent = gameCanBetBean.getSpContent();
+			if (!TextUtils.isEmpty(spContent)) {
+				List<Odds> oddsList = gameCanBetBean.getSpOddsList();
+				for (Odds odds : oddsList) {
+					if (odds.getResult().equals(spContent)) {
+						odds.setChecked(true);
+						break;
+					}
+				}
+			}
+		}
+		refreshBet();
+	}
+
+	/**
 	 * 初始化所有数据
 	 */
 	private void initData() {
@@ -592,7 +663,7 @@ public class RecomendFragment extends BaseFragment {
 			}
 			mAdapter.notifyDataSetChanged();
 		}
-		
+
 		gameCheckNum = 0;
 		lastCheckNum = 0;
 		isSupportDg = false;
@@ -637,14 +708,14 @@ public class RecomendFragment extends BaseFragment {
 			initPassType();
 
 			// 刷新投注信息
-			onRefreshBet();
+			refreshBet();
 		}
 	};
 
 	/**
 	 * 刷新比赛数据
 	 */
-	private void onRefreshBet() {
+	private void refreshBet() {
 		sendEmptyMessage(REFRESH_BET_INFO);
 	}
 
@@ -866,7 +937,7 @@ public class RecomendFragment extends BaseFragment {
 		sb.append("@");
 		sb.append(multiple);
 
-		// LogUtil.log("refreshData:" + sb.toString());
+		// LogUtil.log("getOddsData isSupportDg:" + isSupportDg);
 		return sb.toString();
 	}
 
