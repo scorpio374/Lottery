@@ -62,7 +62,8 @@ public class LoginFragment extends BaseFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-		if (spfs.getIsRememberPwd() && !TextUtils.isEmpty(spfs.getUserName())
+		if (spfs.getIsRememberPwd()
+				&& !TextUtils.isEmpty(spfs.getUserName())
 				&& !TextUtils.isEmpty(spfs.getUserPassward())) {
 			login(false);
 		}

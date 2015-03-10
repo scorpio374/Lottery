@@ -229,6 +229,9 @@ public class UserInfoFragment extends BaseFragment {
 
 			SharedPrefHelper spf = SharedPrefHelper.getInstance(getActivity());
 			spf.setIsLogin(false);
+			spf.setIsRememberPwd(false);
+			spf.cleanUserName();
+			spf.cleanPassword();
 			break;
 
 		default:
