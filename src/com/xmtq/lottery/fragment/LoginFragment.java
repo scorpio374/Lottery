@@ -224,5 +224,6 @@ public class LoginFragment extends BaseFragment {
 		if (imm != null) {
 			imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 		}
+		
 	}
 }

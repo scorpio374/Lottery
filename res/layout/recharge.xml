@@ -71,6 +71,7 @@
             android:cursorVisible="true"
             android:hint=""
             android:singleLine="true"
+            android:inputType="number"
             android:textColor="@color/white"
             android:textColorHint="@color/soft_gray"
             android:textCursorDrawable="@drawable/edit"

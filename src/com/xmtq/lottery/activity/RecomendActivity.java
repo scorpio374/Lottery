@@ -48,7 +48,6 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		// 开户APP默认不登陆
 		spfs.setIsLogin(false);
 		initView();
-		// test();
 	}
 
 	public void initView() {
