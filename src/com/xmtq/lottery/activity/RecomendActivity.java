@@ -51,13 +51,6 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		// test();
 	}
 
-	// private void test() {
-	// RequestMaker mRequestMaker = RequestMaker.getInstance("");
-	// HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-	// mAsyncTask.execute(mRequestMaker.getExtractCash("14244", "tq222222",
-	// "100"));
-	// }
-
 	public void initView() {
 		initMenuDrawer();
 		NewUserLoginBean newUserLoginBean = (NewUserLoginBean) getIntent()

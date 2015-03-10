@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.lottery.R;
+import com.xmtq.lottery.Consts;
+import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.GameCanBetBean;
 import com.xmtq.lottery.bean.Odds;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
@@ -24,6 +26,7 @@ import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.OddsUtil;
 import com.xmtq.lottery.utils.OnRefreshListener;
 import com.xmtq.lottery.utils.SharedPrefHelper;
+import com.xmtq.lottery.utils.ToastUtil;
 import com.xmtq.lottery.widget.AnalyzeDialog;
 import com.xmtq.lottery.widget.DisagreeDialog;
 import com.xmtq.lottery.widget.DisagreeDialog.OnCompleteListener;
@@ -128,7 +131,7 @@ public class RecomendListAdapter extends BaseAdapter {
 		}
 		String content = gameCanBetBeans.get(position).getContent();
 		String matchid = gameCanBetBeans.get(position).getMatchId();
-		
+
 		// 赛事分析
 		if (TextUtils.isEmpty(content)) {
 			holder.analyze.setVisibility(View.GONE);
@@ -164,7 +167,7 @@ public class RecomendListAdapter extends BaseAdapter {
 			holder.dis_agree.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
-					final String matchid = (String)arg0.getTag();
+					final String matchid = (String) arg0.getTag();
 					disagreeDialog = new DisagreeDialog(mContext);
 					disagreeDialog.show();
 					disagreeDialog
@@ -185,7 +188,7 @@ public class RecomendListAdapter extends BaseAdapter {
 				&& holder.analyze.getVisibility() == View.GONE) {
 			holder.recomend_ll_analyze.setVisibility(View.GONE);
 			holder.item_view.setVisibility(View.GONE);
-		}else{
+		} else {
 			holder.recomend_ll_analyze.setVisibility(View.VISIBLE);
 			holder.item_view.setVisibility(View.VISIBLE);
 		}
@@ -193,25 +196,38 @@ public class RecomendListAdapter extends BaseAdapter {
 		return convertView;
 	}
 
+	/**
+	 * 我不赞同
+	 * 
+	 * @param matchId
+	 * @param content
+	 */
 	private void requestDisagree(String matchId, String content) {
+		// vote = 0代表赞同，vote = 1代表不赞同
 		String userid = SharedPrefHelper.getInstance(mContext).getUid();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getGameTodayRecomend(
 				userid, matchId, "1", content));
-		// mAsyncTask.setOnCompleteListener(mDisagreeCompleteListener);
+		mAsyncTask.setOnCompleteListener(mDisagreeCompleteListener);
 
 	}
 
-	// private
-	// com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener<BaseResponse>
-	// mDisagreeCompleteListener=new OnCompleteListener<BaseResponse>() {
-	//
-	// @Override
-	// public void onComplete(BaseResponse result, String resultString) {
-	// // TODO Auto-generated method stub
-	//
-	// }
-	// };
+	private com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener<BaseResponse> mDisagreeCompleteListener = new com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener<BaseResponse>() {
+
+		@Override
+		public void onComplete(BaseResponse result, String resultString) {
+			// TODO Auto-generated method stub
+			if (result != null) {
+				if (result.errorcode.equals("0")) {
+					ToastUtil.showCenterToast(mContext, "投票成功");
+				} else {
+					ToastUtil.showCenterToast(mContext, result.errormsg);
+				}
+			} else {
+				ToastUtil.showCenterToast(mContext, Consts.REQUEST_ERROR);
+			}
+		}
+	};
 
 	public class Holder {
 		LinearLayout odds_more;

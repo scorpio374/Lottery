@@ -3,6 +3,7 @@ package com.xmtq.lottery.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,16 @@ public class LoginFragment extends BaseFragment {
 		return view;
 	}
 
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		if (spfs.getIsRememberPwd() && !TextUtils.isEmpty(spfs.getUserName())
+				&& !TextUtils.isEmpty(spfs.getUserPassward())) {
+			login(false);
+		}
+	}
+
 	public void dealLogicBeforeInitView() {
 		spfs = SharedPrefHelper.getInstance(getActivity());
 	}
@@ -93,7 +104,7 @@ public class LoginFragment extends BaseFragment {
 			startActivity(intent);
 			break;
 		case R.id.login:
-			login();
+			login(true);
 			break;
 		default:
 			break;
@@ -102,8 +113,11 @@ public class LoginFragment extends BaseFragment {
 
 	/**
 	 * 用户登陆
+	 * 
+	 * @param isShowDialog
+	 *            是否显示登录dialog
 	 */
-	private void login() {
+	private void login(boolean isShowDialog) {
 		String userName = user_name.getText().toString().trim();
 		String password = user_password.getText().toString().trim();
 
@@ -120,7 +134,10 @@ public class LoginFragment extends BaseFragment {
 			// "请输入6-16位密码,密码必须包含数字和字母");
 			// return;
 		}
-		mLoadingDialog.show("登录中，请稍候...");
+
+		if (isShowDialog) {
+			mLoadingDialog.show("登录中，请稍候...");
+		}
 
 		if (spfs.getIsRememberPwd()) {
 			spfs.setUserPassward(password);

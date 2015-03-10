@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.example.lottery.R;
 import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.adapter.AccountDetailListAdapter;
-import com.xmtq.lottery.adapter.BetRecordListAdapter;
 import com.xmtq.lottery.bean.AccountDetailBean;
 import com.xmtq.lottery.bean.AccountDetailResponse;
 import com.xmtq.lottery.bean.BaseResponse;

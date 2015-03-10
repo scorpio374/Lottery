@@ -115,7 +115,7 @@ public class RequestMaker {
 	}
 
 	/**
-	 * 用户注册
+	 * 3.1.1新用户注册（10001_1.1）
 	 */
 	public Request getUserRegister(String username, String mail,
 			String actpassword, String mobile, String serialuid, String type,
