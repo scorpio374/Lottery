@@ -3,7 +3,7 @@ package com.xmtq.lottery.activity;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 
 /**
  * 找回密码

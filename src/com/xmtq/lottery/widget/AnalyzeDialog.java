@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 
 public class AnalyzeDialog {
 

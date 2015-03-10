@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.view.slidingmenu.SlidingMenu;
 
 public class SlidingActivityHelper {

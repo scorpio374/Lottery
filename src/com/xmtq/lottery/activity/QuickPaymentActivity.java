@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.bean.PhoneMessageNotFirstResponse;
 import com.xmtq.lottery.bean.PhonePayNotFirstResponse;
 import com.xmtq.lottery.bean.UserBankBean;

@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.utils.ToastUtil;
 
 public class WelCheckDialog extends BaseDialog {

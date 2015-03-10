@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.widget.CheckChuanGuanDialog.OnCompleteListener;
 
 public class DisagreeDialog {

@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.BetInfoBean;

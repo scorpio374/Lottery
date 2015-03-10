@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.bean.PurchaseRecordsBean;
 import com.xmtq.lottery.utils.OddsUtil;
 

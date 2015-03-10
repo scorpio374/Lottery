@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.activity.BetDetailActivity;
 import com.xmtq.lottery.adapter.BetRecordListAdapter;

@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 
 public class GuideActivity extends BaseActivity {
 

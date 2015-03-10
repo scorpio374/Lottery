@@ -17,7 +17,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.adapter.RechargeBindingListAdapter;
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.CreateOrderBean;

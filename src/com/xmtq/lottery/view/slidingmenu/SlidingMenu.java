@@ -26,7 +26,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.view.slidingmenu.CustomViewAbove.OnPageChangeListener;
 
 public class SlidingMenu extends RelativeLayout {

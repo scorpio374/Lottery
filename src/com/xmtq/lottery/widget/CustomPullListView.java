@@ -23,7 +23,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 
 /**
  * ListView下拉刷新和加载更多

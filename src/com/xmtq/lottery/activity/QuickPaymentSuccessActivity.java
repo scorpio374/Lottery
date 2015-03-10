@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 
 /**
  * 快捷支付成功

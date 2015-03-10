@@ -11,7 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.adapter.AccountDetailListAdapter;
 import com.xmtq.lottery.bean.AccountDetailBean;
 import com.xmtq.lottery.bean.AccountDetailResponse;

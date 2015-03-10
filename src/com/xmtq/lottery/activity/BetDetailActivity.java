@@ -6,7 +6,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.adapter.BetOrderDetailListAdapter;
 import com.xmtq.lottery.bean.BetDetailAllBean;

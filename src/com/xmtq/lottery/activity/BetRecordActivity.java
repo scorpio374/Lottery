@@ -6,7 +6,7 @@ import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.fragment.BetRecordFragment;
 
 /**

@@ -17,7 +17,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.adapter.ChuanGuanMoreAdapter;
 import com.xmtq.lottery.bean.PassType;
 

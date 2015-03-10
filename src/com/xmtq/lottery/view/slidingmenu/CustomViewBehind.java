@@ -13,7 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.view.slidingmenu.SlidingMenu.CanvasTransformer;
 
 public class CustomViewBehind extends ViewGroup {

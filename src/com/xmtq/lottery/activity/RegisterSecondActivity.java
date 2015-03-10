@@ -7,7 +7,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.bean.BaseResponse;
 import com.xmtq.lottery.bean.NewUserLoginBean;

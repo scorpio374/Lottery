@@ -14,7 +14,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.activity.FindPasswordActivity;
 import com.xmtq.lottery.activity.RegisterActivity;

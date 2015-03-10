@@ -11,7 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ToggleButton;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.bean.PassType;
 
 public class ChuanGuanMoreAdapter extends BaseAdapter {

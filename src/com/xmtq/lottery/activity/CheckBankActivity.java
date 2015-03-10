@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.adapter.BankSavingCListAdapter;
 import com.xmtq.lottery.adapter.BankSavingListAdapter;
 import com.xmtq.lottery.bean.BankBean;

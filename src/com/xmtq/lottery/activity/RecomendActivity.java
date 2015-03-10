@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
-import com.example.lottery.R;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.adapter.FragmentPagerAdater;
 import com.xmtq.lottery.bean.NewUserLoginBean;
 import com.xmtq.lottery.fragment.LoginFragment;
