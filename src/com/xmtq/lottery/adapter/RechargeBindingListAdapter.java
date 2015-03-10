@@ -61,11 +61,9 @@ public class RechargeBindingListAdapter extends BaseAdapter {
 		}
 
 		if (selectedPosition == arg0) {
-			holder.recharge_ll_item.setBackground(mContext.getResources()
-					.getDrawable(R.color.bank_selected_color));
+			holder.recharge_ll_item.setBackgroundResource(R.color.bank_selected_color);
 		} else {
-			holder.recharge_ll_item.setBackground(mContext.getResources()
-					.getDrawable(R.color.soft_gray));
+			holder.recharge_ll_item.setBackgroundResource(R.color.soft_gray);
 		}
 
 		if (userBankList.get(arg0).getBankCardTypeUsed().equals("0")) {

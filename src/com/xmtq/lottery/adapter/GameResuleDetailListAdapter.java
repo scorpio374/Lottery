@@ -16,7 +16,6 @@ import com.xmtq.lottery.R;
 import com.xmtq.lottery.bean.RecomendHistoryBean;
 import com.xmtq.lottery.utils.OddsUtil;
 
-@SuppressLint("NewApi")
 public class GameResuleDetailListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<RecomendHistoryBean> mHistoryBeansList;
@@ -81,8 +80,7 @@ public class GameResuleDetailListAdapter extends BaseAdapter {
 		holder.tv_hostTeam.setText(mHistoryBeansList.get(arg0).getHostTeam());
 
 		if (mHistoryBeansList.get(arg0).getHit().equals("0")) {
-			holder.ll_gamedetail.setBackground(mContext.getResources()
-					.getDrawable(R.drawable.game_score_error));
+			holder.ll_gamedetail.setBackgroundResource(R.drawable.game_score_error);
 			holder.bfkj.setTextColor(mContext.getResources().getColor(
 					R.color.green));
 			holder.bfkjbj.setTextColor(mContext.getResources().getColor(
@@ -90,8 +88,7 @@ public class GameResuleDetailListAdapter extends BaseAdapter {
 		}
 
 		if (mHistoryBeansList.get(arg0).getHit().equals("1")) {
-			holder.ll_gamedetail.setBackground(mContext.getResources()
-					.getDrawable(R.drawable.game_score_right));
+			holder.ll_gamedetail.setBackgroundResource(R.drawable.game_score_right);
 			holder.bfkj.setTextColor(mContext.getResources().getColor(
 					R.color.text_gold));
 			holder.bfkjbj.setTextColor(mContext.getResources().getColor(

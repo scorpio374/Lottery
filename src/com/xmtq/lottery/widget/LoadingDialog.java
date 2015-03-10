@@ -32,10 +32,15 @@ public class LoadingDialog {
 		}
 
 	}
-	
-	public void dismiss(){
+
+	public void dismiss() {
 		if (mDialog != null) {
-			mDialog.dismiss();
+			try {
+				mDialog.dismiss();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
 		}
 	}
 

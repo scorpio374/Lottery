@@ -64,8 +64,7 @@ public class BankSavingListAdapter extends BaseAdapter {
 		} else {
 			holder = (Holder) convertView.getTag();
 		}
-		holder.img_bank_icon.setBackground(mContext.getResources().getDrawable(
-				a[arg0]));
+		holder.img_bank_icon.setBackgroundResource(a[arg0]);
 		holder.tv_bank_name.setText(bankList.get(arg0).getBankName());
 
 		return convertView;
