@@ -36,11 +36,8 @@ public class BetDetailActivity extends BaseActivity {
 	private TextView bet_detail_win_money;
 	private TextView bet_detail_date;
 	private TextView bet_detail_play_style;
-	private TextView bet_detail_time;
-	private TextView bet_detail_multiple;
 	private TextView bet_detail_pay_date;
 	private TextView bet_detail_project_num;
-	private TextView bet_detail_pay_time;
 
 	@Override
 	public void setContentLayout() {
@@ -67,16 +64,12 @@ public class BetDetailActivity extends BaseActivity {
 		bet_detail_win_money = (TextView) findViewById(R.id.bet_detail_win_money);
 		bet_detail_date = (TextView) findViewById(R.id.bet_detail_date);
 		bet_detail_play_style = (TextView) findViewById(R.id.bet_detail_play_style);
-		bet_detail_time = (TextView) findViewById(R.id.bet_detail_time);
-		bet_detail_multiple = (TextView) findViewById(R.id.bet_detail_multiple);
 		bet_detail_pay_date = (TextView) findViewById(R.id.bet_detail_pay_date);
 		bet_detail_project_num = (TextView) findViewById(R.id.bet_detail_project_num);
-		bet_detail_pay_time = (TextView) findViewById(R.id.bet_detail_pay_time);
 
 		bet_record_detail = (ListView) findViewById(R.id.bet_orderdetail_list);
 		btn_back = (ImageButton) findViewById(R.id.back);
 		btn_back.setOnClickListener(this);
-
 	}
 
 	@Override
@@ -120,32 +113,23 @@ public class BetDetailActivity extends BaseActivity {
 						bet_detail_periods.setText(mBetDetailAllBean
 								.getProjecttime());
 						bet_detail_pay_money.setText(mBetDetailAllBean
-								.getProjectprize());
+								.getProjectprize()+"元");
 						bet_detail_state.setText(mBetDetailAllBean.getState());
 
 						bet_detail_win_money.setText(mBetDetailAllBean
 								.getBonus() + "元");
-						bet_detail_date.setText(OddsUtil
-								.getGameData2(mBetDetailAllBean
-										.getProjecttime()));
+						bet_detail_date.setText(mBetDetailAllBean
+								.getProjecttime());
 						bet_detail_play_style.setText(mBetDetailAllBean
 								.getGuoguantype()
-								+ "     "
+								+ "    "
 								+ mBetDetailAllBean.getUserballot()
-								+ "注           ");
-						bet_detail_time
-								.setText(OddsUtil.getGameTime(mBetDetailAllBean
-										.getProjecttime()));
-
-						bet_detail_multiple.setText(mBetDetailAllBean
-								.getMultiple() + "倍");
+								+ "注    "
+								+ mBetDetailAllBean.getMultiple() + "倍");
 						bet_detail_pay_date.setText(mBetDetailAllBean
 								.getProjecttime());
 						bet_detail_project_num.setText(mBetDetailAllBean
 								.getProjectno());
-						// bet_detail_pay_time
-						// .setText(OddsUtil.getGameTime(mBetDetailAllBean
-						// .getProjecttime()));
 
 						BetOrderDetailListAdapter mAdapter = new BetOrderDetailListAdapter(
 								BetDetailActivity.this,
@@ -155,10 +139,12 @@ public class BetDetailActivity extends BaseActivity {
 					}
 
 				} else {
-					ToastUtil.showCenterToast(BetDetailActivity.this, result.errormsg);
+					ToastUtil.showCenterToast(BetDetailActivity.this,
+							result.errormsg);
 				}
 			} else {
-				ToastUtil.showCenterToast(BetDetailActivity.this, Consts.REQUEST_ERROR);
+				ToastUtil.showCenterToast(BetDetailActivity.this,
+						Consts.REQUEST_ERROR);
 			}
 			mLoadingDialog.dismiss();
 		}

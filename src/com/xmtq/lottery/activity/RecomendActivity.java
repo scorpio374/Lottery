@@ -52,17 +52,6 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 
 	public void initView() {
 		initMenuDrawer();
-		NewUserLoginBean newUserLoginBean = (NewUserLoginBean) getIntent()
-				.getSerializableExtra("newUserLoginBean");
-		if (newUserLoginBean != null) {
-			spfs.setIsLogin(true);
-			UserInfoFragment fragment = new UserInfoFragment();
-			Bundle b = new Bundle();
-			b.putSerializable("newUserLoginBean", newUserLoginBean);
-			fragment.setArguments(b);
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.menu_frame, fragment).commit();
-		}
 	}
 
 	@Override
@@ -75,20 +64,24 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	}
 
 	private void initMenuDrawer() {
-
-		// boolean isLogin = false;
-		// isLogin = spfs.getIsLogin();
-		// if (isLogin) {
-		// // left sliding menu
-		// setBehindContentView(R.layout.menu_frame);
-		// getSupportFragmentManager().beginTransaction()
-		// .replace(R.id.menu_frame, new UserInfoFragment()).commit();
-		//
-		// } else {
-		setBehindContentView(R.layout.menu_frame);
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.menu_frame, new LoginFragment()).commit();
-		// }
+		
+		// 用于提现后重新登录
+		NewUserLoginBean newUserLoginBean = (NewUserLoginBean) getIntent()
+				.getSerializableExtra("newUserLoginBean");
+		if (newUserLoginBean != null) {
+			spfs.setIsLogin(true);
+			UserInfoFragment fragment = new UserInfoFragment();
+			Bundle b = new Bundle();
+			b.putSerializable("newUserLoginBean", newUserLoginBean);
+			fragment.setArguments(b);
+			setBehindContentView(R.layout.menu_frame);
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.menu_frame, fragment).commit();
+		} else {
+			setBehindContentView(R.layout.menu_frame);
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.menu_frame, new LoginFragment()).commit();
+		}
 
 		menu = getSlidingMenu();
 		menu.setMode(SlidingMenu.LEFT);
@@ -106,7 +99,6 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		// // right sliding menu
 		// menu.setSecondaryMenu(R.layout.menu_frame_two);
 		// menu.setSecondaryShadowDrawable(R.drawable.shadowright);
-		//
 		// getSupportFragmentManager().beginTransaction()
 		// .replace(R.id.menu_frame_two, new BetRecordFragment()).commit();
 
