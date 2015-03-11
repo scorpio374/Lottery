@@ -283,6 +283,7 @@ public class UserInfoFragment extends BaseFragment {
 	}
 
 	private String update = "0";
+	private String message = "";
 	private OnCompleteListener<VersionResponse> mVersionCompleteListener = new OnCompleteListener<VersionResponse>() {
 
 		@Override
@@ -297,14 +298,14 @@ public class UserInfoFragment extends BaseFragment {
 					// mResponse.versionBean.getVersion());
 					final String appPath = mBean.getDowload();
 					update = mBean.getUpdate();
-
+					message=mBean.getMessage();
 					int oldVersion = VersionUtil.getVersionCode(getActivity());
 					if (Integer.parseInt(newVersion.replace(".", "")) > oldVersion) {
 						getActivity().runOnUiThread(new Runnable() {
 
 							public void run() {
 								WelCheckDialog dialog = new WelCheckDialog(
-										getActivity(), "", appPath, null,
+										getActivity(), message, appPath, null,
 										keylistener, update);
 								dialog.show();
 

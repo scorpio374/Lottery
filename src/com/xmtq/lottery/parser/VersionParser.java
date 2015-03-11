@@ -27,6 +27,7 @@ public class VersionParser extends BaseParser<VersionResponse> {
 			response.versionBean.setDowload(j.getString("dowload"));
 			response.versionBean.setUpdate(j.getString("update"));
 			response.versionBean.setVersion(j.getString("version"));
+			response.versionBean.setMessage(j.getString("message"));
 		}
 
 		return response;
