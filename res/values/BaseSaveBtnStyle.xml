@@ -9,8 +9,9 @@
 
     <style name="saveDialogBtnStyle" parent="@android:style/Widget.Button">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@drawable/base_dialog_color_selector</item>
+        <item name="android:textColor">@drawable/button_textcolor_selector</item>
         <item name="android:background">#393f4d</item>
+        <item name="android:padding">5dip</item>
     </style>
 
     <style name="quitBtnStyle" parent="@android:style/Widget.Button">

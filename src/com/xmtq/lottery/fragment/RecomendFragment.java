@@ -5,12 +5,15 @@ import java.util.Date;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +27,7 @@ import android.widget.TextView;
 import com.universe.lottery.util.SplitLotteryJCZC;
 import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.R;
+import com.xmtq.lottery.WelCheckDialog;
 import com.xmtq.lottery.activity.OddsDetailActivity;
 import com.xmtq.lottery.activity.RecomendActivity;
 import com.xmtq.lottery.adapter.RecomendListAdapter;
@@ -35,6 +39,8 @@ import com.xmtq.lottery.bean.Odds;
 import com.xmtq.lottery.bean.PassType;
 import com.xmtq.lottery.bean.RecomendWinRecordBean;
 import com.xmtq.lottery.bean.RecomendWinRecordResponse;
+import com.xmtq.lottery.bean.VersionBean;
+import com.xmtq.lottery.bean.VersionResponse;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.network.RequestMaker;
@@ -44,6 +50,7 @@ import com.xmtq.lottery.utils.OnRefreshListener;
 import com.xmtq.lottery.utils.PassTypeUtil;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.ToastUtil;
+import com.xmtq.lottery.utils.VersionUtil;
 import com.xmtq.lottery.widget.BalanceNotEnoughDialog;
 import com.xmtq.lottery.widget.BetConfirmDialog;
 import com.xmtq.lottery.widget.CheckChuanGuanDialog;
@@ -51,6 +58,7 @@ import com.xmtq.lottery.widget.ChuanGuanDialog;
 import com.xmtq.lottery.widget.CustomPullListView;
 import com.xmtq.lottery.widget.CustomPullListView.OnLoadMoreListener;
 import com.xmtq.lottery.widget.LoadingDialog;
+import com.xmtq.lottery.widget.MarqueeText;
 
 /**
  * 首页推荐
@@ -111,7 +119,7 @@ public class RecomendFragment extends BaseFragment {
 	private List<PassType> morePassList;
 	private LoadingDialog mLoadingDialog;
 	private CheckChuanGuanDialog mCheckChuanGuanDialog;
-	private TextView win_record;
+	private MarqueeText win_record;
 	private boolean isSupportDg = false;
 
 	// 选中的比赛场次
@@ -124,6 +132,7 @@ public class RecomendFragment extends BaseFragment {
 		super.onCreate(savedInstanceState);
 		mLoadingDialog = new LoadingDialog(getActivity());
 		requestWinRecord("10");
+		requestVersion();
 	}
 
 	@Override
@@ -240,7 +249,7 @@ public class RecomendFragment extends BaseFragment {
 	}
 
 	public void initView(View v) {
-		win_record = (TextView) v.findViewById(R.id.win_record);
+		win_record = (MarqueeText) v.findViewById(R.id.win_record);
 		imgBtnLeft = (ImageButton) v.findViewById(R.id.recomend_left);
 		imgBtnRight = (ImageButton) v.findViewById(R.id.recomend_right);
 		recomend_refresh = (ImageButton) v.findViewById(R.id.recomend_refresh);
@@ -970,5 +979,73 @@ public class RecomendFragment extends BaseFragment {
 		// LogUtil.log("getOddsData isSupportDg:" + isSupportDg);
 		return sb.toString();
 	}
+
+	private void requestVersion() {
+		mLoadingDialog.show("版本检查中...");
+		RequestMaker mRequestMaker = RequestMaker.getInstance();
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(mRequestMaker.getVersion(VersionUtil
+				.getVersionName(getActivity())));
+		mAsyncTask.setOnCompleteListener(mVersionCompleteListener);
+	}
+
+	private String update = "0";
+	private String message = "";
+	private OnCompleteListener<VersionResponse> mVersionCompleteListener = new OnCompleteListener<VersionResponse>() {
+
+		@Override
+		public void onComplete(VersionResponse result, String resultString) {
+			if (result != null) {
+				if (result.errorcode.equals("1")) {
+					VersionResponse mResponse = result;
+					VersionBean mBean = mResponse.versionBean;
+					String newVersion = mBean.getVersion();
+
+					// ToastUtil.showCenterToast(getActivity(),
+					// mResponse.versionBean.getVersion());
+					final String appPath = mBean.getDowload();
+					update = mBean.getUpdate();
+					message = mBean.getMessage();
+					int oldVersion = VersionUtil.getVersionCode(getActivity());
+					if (Integer.parseInt(newVersion.replace(".", "")) > oldVersion) {
+						getActivity().runOnUiThread(new Runnable() {
+
+							public void run() {
+								WelCheckDialog dialog = new WelCheckDialog(
+										getActivity(), message, appPath, null,
+										keylistener, update);
+								dialog.show();
+
+							}
+						});
+
+					} else {
+						ToastUtil.showCenterToast(getActivity(), "当前已是最新版本");
+					}
+
+				} else {
+					ToastUtil.showCenterToast(getActivity(), result.errormsg);
+				}
+
+			} else {
+				ToastUtil.showCenterToast(getActivity(), "数据请求失败");
+			}
+
+			mLoadingDialog.dismiss();
+
+		}
+	};
+
+	OnKeyListener keylistener = new DialogInterface.OnKeyListener() {
+		public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+			if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0
+					&& update.equals("1")) {
+				ToastUtil.showCenterToast(getActivity(), "升级后才可以正常使用");
+				return true;
+			} else {
+				return false;
+			}
+		}
+	};
 
 }
