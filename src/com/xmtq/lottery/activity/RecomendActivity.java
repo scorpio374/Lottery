@@ -3,7 +3,9 @@ package com.xmtq.lottery.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,13 +16,21 @@ import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import com.xmtq.lottery.R;
+import com.xmtq.lottery.WelCheckDialog;
 import com.xmtq.lottery.adapter.FragmentPagerAdater;
 import com.xmtq.lottery.bean.NewUserLoginBean;
+import com.xmtq.lottery.bean.VersionBean;
+import com.xmtq.lottery.bean.VersionResponse;
 import com.xmtq.lottery.fragment.LoginFragment;
 import com.xmtq.lottery.fragment.RecomendFragment;
 import com.xmtq.lottery.fragment.RecomendHistoryFragment;
 import com.xmtq.lottery.fragment.UserInfoFragment;
+import com.xmtq.lottery.network.HttpRequestAsyncTask;
+import com.xmtq.lottery.network.RequestMaker;
+import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
 import com.xmtq.lottery.utils.SharedPrefHelper;
+import com.xmtq.lottery.utils.ToastUtil;
+import com.xmtq.lottery.utils.VersionUtil;
 import com.xmtq.lottery.view.slidingmenu.SlidingMenu;
 import com.xmtq.lottery.view.slidingmenu.app.SlidingFragmentActivity;
 
@@ -64,7 +74,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	}
 
 	private void initMenuDrawer() {
-		
+
 		// 用于提现后重新登录
 		NewUserLoginBean newUserLoginBean = (NewUserLoginBean) getIntent()
 				.getSerializableExtra("newUserLoginBean");
@@ -81,6 +91,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 			setBehindContentView(R.layout.menu_frame);
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.menu_frame, new LoginFragment()).commit();
+			requestVersion();
 		}
 
 		menu = getSlidingMenu();
@@ -194,5 +205,73 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		recomendFragment.setIntentResult(requestCode, resultCode, data);
 		super.onActivityResult(requestCode, resultCode, data);
 	}
+
+	private void requestVersion() {
+		RequestMaker mRequestMaker = RequestMaker.getInstance();
+		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
+		mAsyncTask.execute(mRequestMaker.getVersion(VersionUtil
+				.getVersionName(this)));
+		mAsyncTask.setOnCompleteListener(mVersionCompleteListener);
+	}
+
+	private String update = "0";
+	private String message = "";
+	private OnCompleteListener<VersionResponse> mVersionCompleteListener = new OnCompleteListener<VersionResponse>() {
+
+		@Override
+		public void onComplete(VersionResponse result, String resultString) {
+			if (result != null) {
+				if (result.errorcode.equals("1")) {
+					VersionResponse mResponse = result;
+					VersionBean mBean = mResponse.versionBean;
+					String newVersion = mBean.getVersion();
+
+					// ToastUtil.showCenterToast(getActivity(),
+					// mResponse.versionBean.getVersion());
+					final String appPath = mBean.getDowload();
+					update = mBean.getUpdate();
+					message = mBean.getMessage();
+					int oldVersion = VersionUtil
+							.getVersionCode(RecomendActivity.this);
+					if (Integer.parseInt(newVersion.replace(".", "")) > oldVersion) {
+						RecomendActivity.this.runOnUiThread(new Runnable() {
+
+							public void run() {
+								WelCheckDialog dialog = new WelCheckDialog(
+										RecomendActivity.this, message,
+										appPath, null, keylistener, update);
+								dialog.show();
+
+							}
+						});
+
+					} else {
+						ToastUtil.showCenterToast(RecomendActivity.this,
+								"当前已是最新版本");
+					}
+
+				} else {
+					ToastUtil.showCenterToast(RecomendActivity.this,
+							result.errormsg);
+				}
+
+			} else {
+				ToastUtil.showCenterToast(RecomendActivity.this, "数据请求失败");
+			}
+
+		}
+	};
+
+	OnKeyListener keylistener = new DialogInterface.OnKeyListener() {
+		public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+			if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0
+					&& update.equals("1")) {
+				ToastUtil.showCenterToast(RecomendActivity.this, "升级后才可以正常使用");
+				return true;
+			} else {
+				return false;
+			}
+		}
+	};
 
 }

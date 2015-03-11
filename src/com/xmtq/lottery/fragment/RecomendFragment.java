@@ -132,7 +132,7 @@ public class RecomendFragment extends BaseFragment {
 		super.onCreate(savedInstanceState);
 		mLoadingDialog = new LoadingDialog(getActivity());
 		requestWinRecord("10");
-		requestVersion();
+		
 	}
 
 	@Override
@@ -980,72 +980,6 @@ public class RecomendFragment extends BaseFragment {
 		return sb.toString();
 	}
 
-	private void requestVersion() {
-		mLoadingDialog.show("版本检查中...");
-		RequestMaker mRequestMaker = RequestMaker.getInstance();
-		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		mAsyncTask.execute(mRequestMaker.getVersion(VersionUtil
-				.getVersionName(getActivity())));
-		mAsyncTask.setOnCompleteListener(mVersionCompleteListener);
-	}
-
-	private String update = "0";
-	private String message = "";
-	private OnCompleteListener<VersionResponse> mVersionCompleteListener = new OnCompleteListener<VersionResponse>() {
-
-		@Override
-		public void onComplete(VersionResponse result, String resultString) {
-			if (result != null) {
-				if (result.errorcode.equals("1")) {
-					VersionResponse mResponse = result;
-					VersionBean mBean = mResponse.versionBean;
-					String newVersion = mBean.getVersion();
-
-					// ToastUtil.showCenterToast(getActivity(),
-					// mResponse.versionBean.getVersion());
-					final String appPath = mBean.getDowload();
-					update = mBean.getUpdate();
-					message = mBean.getMessage();
-					int oldVersion = VersionUtil.getVersionCode(getActivity());
-					if (Integer.parseInt(newVersion.replace(".", "")) > oldVersion) {
-						getActivity().runOnUiThread(new Runnable() {
-
-							public void run() {
-								WelCheckDialog dialog = new WelCheckDialog(
-										getActivity(), message, appPath, null,
-										keylistener, update);
-								dialog.show();
-
-							}
-						});
-
-					} else {
-						ToastUtil.showCenterToast(getActivity(), "当前已是最新版本");
-					}
-
-				} else {
-					ToastUtil.showCenterToast(getActivity(), result.errormsg);
-				}
-
-			} else {
-				ToastUtil.showCenterToast(getActivity(), "数据请求失败");
-			}
-
-			mLoadingDialog.dismiss();
-
-		}
-	};
-
-	OnKeyListener keylistener = new DialogInterface.OnKeyListener() {
-		public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-			if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0
-					&& update.equals("1")) {
-				ToastUtil.showCenterToast(getActivity(), "升级后才可以正常使用");
-				return true;
-			} else {
-				return false;
-			}
-		}
-	};
+	
 
 }
