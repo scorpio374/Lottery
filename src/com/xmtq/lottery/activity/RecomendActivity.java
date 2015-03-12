@@ -220,29 +220,27 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 					VersionBean mBean = mResponse.versionBean;
 					String newVersion = mBean.getVersion();
 
-					// ToastUtil.showCenterToast(getActivity(),
-					// mResponse.versionBean.getVersion());
 					final String appPath = mBean.getDowload();
 					update = mBean.getUpdate();
 					message = mBean.getMessage();
 					int oldVersion = VersionUtil
 							.getVersionCode(RecomendActivity.this);
-					if (Integer.parseInt(newVersion.replace(".", "")) > oldVersion) {
-						RecomendActivity.this.runOnUiThread(new Runnable() {
+					// if (Integer.parseInt(newVersion.replace(".", "")) >
+					// oldVersion) {
+					RecomendActivity.this.runOnUiThread(new Runnable() {
 
-							public void run() {
-								WelCheckDialog dialog = new WelCheckDialog(
-										RecomendActivity.this, message,
-										appPath, null, keylistener, update);
-								dialog.show();
+						public void run() {
+							WelCheckDialog dialog = new WelCheckDialog(
+									RecomendActivity.this, message, appPath,
+									null, keylistener, update);
+							dialog.show();
 
-							}
-						});
-
-					} else {
-						// ToastUtil.showCenterToast(RecomendActivity.this,
-						// "当前已是最新版本");
-					}
+						}
+					});
+					// } else {
+					// // ToastUtil.showCenterToast(RecomendActivity.this,
+					// // "当前已是最新版本");
+					// }
 
 				} else {
 					ToastUtil.showCenterToast(RecomendActivity.this,
@@ -279,14 +277,15 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 			NewUserLoginBean newUserLoginBean = (NewUserLoginBean) intent
 					.getSerializableExtra("newUserLoginBean");
 
-			if(newUserLoginBean != null){
+			if (newUserLoginBean != null) {
 				spfs.setIsLogin(true);
 				UserInfoFragment fragment = new UserInfoFragment();
 				Bundle b = new Bundle();
 				b.putSerializable("newUserLoginBean", newUserLoginBean);
 				fragment.setArguments(b);
-				RecomendActivity.this.getSupportFragmentManager().beginTransaction()
-						.replace(R.id.menu_frame, fragment).commitAllowingStateLoss();
+				RecomendActivity.this.getSupportFragmentManager()
+						.beginTransaction().replace(R.id.menu_frame, fragment)
+						.commitAllowingStateLoss();
 			}
 		}
 

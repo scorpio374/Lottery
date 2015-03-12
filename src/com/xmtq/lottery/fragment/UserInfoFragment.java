@@ -315,27 +315,25 @@ public class UserInfoFragment extends BaseFragment {
 					VersionBean mBean = mResponse.versionBean;
 					String newVersion = mBean.getVersion();
 
-					// ToastUtil.showCenterToast(getActivity(),
-					// mResponse.versionBean.getVersion());
 					final String appPath = mBean.getDowload();
 					update = mBean.getUpdate();
 					message = mBean.getMessage();
 					int oldVersion = VersionUtil.getVersionCode(getActivity());
-					if (Integer.parseInt(newVersion.replace(".", "")) > oldVersion) {
-						getActivity().runOnUiThread(new Runnable() {
+					// if (Integer.parseInt(newVersion.replace(".", "")) >
+					// oldVersion) {
+					getActivity().runOnUiThread(new Runnable() {
 
-							public void run() {
-								WelCheckDialog dialog = new WelCheckDialog(
-										getActivity(), message, appPath, null,
-										keylistener, update);
-								dialog.show();
+						public void run() {
+							WelCheckDialog dialog = new WelCheckDialog(
+									getActivity(), message, appPath, null,
+									keylistener, update);
+							dialog.show();
 
-							}
-						});
-
-					} else {
-						ToastUtil.showCenterToast(getActivity(), "当前已是最新版本");
-					}
+						}
+					});
+					// } else {
+					// ToastUtil.showCenterToast(getActivity(), "当前已是最新版本");
+					// }
 
 				} else {
 					ToastUtil.showCenterToast(getActivity(), result.errormsg);

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.xmtq.lottery.R;
 import com.xmtq.lottery.bean.BetDetailBean;
+import com.xmtq.lottery.widget.CustomListView;
 
 public class BetOrderDetailListAdapter extends BaseAdapter {
 	private Context mContext;
@@ -51,12 +52,8 @@ public class BetOrderDetailListAdapter extends BaseAdapter {
 					.findViewById(R.id.bet_detail_week);
 			holder.bet_detail_team = (TextView) convertView
 					.findViewById(R.id.bet_detail_team);
-			holder.bet_detail_spf = (TextView) convertView
-					.findViewById(R.id.bet_detail_spf);
-			holder.bet_detail_f = (TextView) convertView
-					.findViewById(R.id.bet_detail_f);
-			holder.bet_detail_s = (TextView) convertView
-					.findViewById(R.id.bet_detail_s);
+			holder.bet_odds_listview = (CustomListView) convertView
+					.findViewById(R.id.bet_odds_listview);
 			convertView.setTag(holder);
 		} else {
 			holder = (Holder) convertView.getTag();
@@ -66,24 +63,17 @@ public class BetOrderDetailListAdapter extends BaseAdapter {
 				+ "\n" + mBetDetailBeans.get(arg0).getNumber());
 		holder.bet_detail_team.setText(mBetDetailBeans.get(arg0).getMatchteam()
 				+ "\nvs\n" + mBetDetailBeans.get(arg0).getHostteam());
-		holder.bet_detail_spf.setText(mBetDetailBeans.get(arg0)
-				.getmBetOddBeans().get(0).getPlayname());
-		holder.bet_detail_s.setText(mBetDetailBeans.get(arg0).getmBetOddBeans()
-				.get(0).getGameresult());
-		holder.bet_detail_f.setText(mBetDetailBeans.get(arg0).getmBetOddBeans()
-				.get(0).getBetinfo());
-		// holder.tv_program_name.setText(childList.get(position).getTitle());
 
+		BetOddsListAdapter adapter = new BetOddsListAdapter(mContext,
+				mBetDetailBeans.get(arg0).getmBetOddBeans());
+		holder.bet_odds_listview.setAdapter(adapter);
 		return convertView;
 	}
 
 	public class Holder {
 		TextView bet_detail_week;
 		TextView bet_detail_team;
-		TextView bet_detail_spf;
-		TextView bet_detail_f;
-		TextView bet_detail_s;
-
+		CustomListView bet_odds_listview;
 	}
 
 }
