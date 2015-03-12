@@ -9,9 +9,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.xmtq.lottery.R;
 import com.xmtq.lottery.Consts;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.bean.CheckUserResponse;
+import com.xmtq.lottery.bean.NewUserLoginBean;
 import com.xmtq.lottery.bean.UserBean;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
@@ -152,13 +153,12 @@ public class RegisterActivity extends BaseActivity {
 			return;
 		}
 
-		requestCheckUser(userName, phoneNum);
-
 		userBean = new UserBean();
 		userBean.setPassword(password);
 		userBean.setPhoneNum(phoneNum);
 		userBean.setUsername(userName);
 
+		requestCheckUser(userName, phoneNum);
 	}
 
 	/**
@@ -201,6 +201,7 @@ public class RegisterActivity extends BaseActivity {
 							RegisterSecondActivity.class);
 					intent.putExtra("userBean", userBean);
 					startActivity(intent);
+					finish();
 
 				} else {
 					Toast.makeText(RegisterActivity.this, result.errormsg, 2000)

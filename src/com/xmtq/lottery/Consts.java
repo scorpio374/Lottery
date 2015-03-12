@@ -76,4 +76,14 @@ public class Consts {
 	 * 下拉加载
 	 */
 	public static final int REFRESH_DATA_FINISH = 11;
+	
+	/**
+	 * 广播--更新用户信息
+	 */
+	public static final String ACTION_REFRESH_USERINFO = "com.action.refresh.userinfo";
+	
+	/**
+	 * 广播--注册完成自动登录
+	 */
+	public static final String ACTION_AUTO_LOGIN = "com.action.auto.login";
 }

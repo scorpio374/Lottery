@@ -96,7 +96,8 @@ public class BetRecordFragment extends BaseFragment {
 			@Override
 			public void onRefresh() {
 				// TODO Auto-generated method stub
-				mHandler.sendEmptyMessageDelayed(Consts.REFRESH_DATA_FINISH, 1000);
+				mHandler.sendEmptyMessageDelayed(Consts.REFRESH_DATA_FINISH,
+						1000);
 			}
 		});
 
@@ -171,6 +172,7 @@ public class BetRecordFragment extends BaseFragment {
 			mRecordsBeansList = response.purchaseRecordsBeans;
 			if (mRecordsBeansList.size() == 0) {
 				ToastUtil.showCenterToast(getActivity(), "没有投注记录");
+				mBetRecordListview.setVisibility(View.GONE);
 			}
 			mAdapter = new BetRecordListAdapter(getActivity(),
 					mRecordsBeansList);
@@ -188,12 +190,12 @@ public class BetRecordFragment extends BaseFragment {
 	 */
 	private void onFailure(String msg) {
 		ToastUtil.showCenterToast(getActivity(), msg);
+		mBetRecordListview.setVisibility(View.GONE);
 		mHandler.sendEmptyMessage(Consts.LOAD_DATA_FINISH);
 	}
 
 	/**
-	 * 投注详情
-	 * <li><strong>注意：ListView包含HeaderView时，position要减1 </strong></li>
+	 * 投注详情 <li><strong>注意：ListView包含HeaderView时，position要减1 </strong></li>
 	 */
 	private OnItemClickListener betDetailListener = new OnItemClickListener() {
 
@@ -233,14 +235,14 @@ public class BetRecordFragment extends BaseFragment {
 					mBetRecordListview.onRefreshComplete();
 				}
 				break;
-				
+
 			case Consts.LOAD_DATA_FINISH:
 				if (mAdapter != null) {
 					mAdapter.notifyDataSetChanged();
 					mBetRecordListview.onLoadMoreComplete();
 				}
 				break;
-				
+
 			default:
 				break;
 			}

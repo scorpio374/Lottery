@@ -1,8 +1,11 @@
 package com.xmtq.lottery.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -68,7 +71,16 @@ public class UserInfoFragment extends BaseFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		getActivity().registerReceiver(mBroadcastReceiver,
+				new IntentFilter(Consts.ACTION_REFRESH_USERINFO));
 		super.onActivityCreated(savedInstanceState);
+	}
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		getActivity().unregisterReceiver(mBroadcastReceiver);
+		super.onDestroy();
 	}
 
 	public void initView(View v) {
@@ -103,18 +115,27 @@ public class UserInfoFragment extends BaseFragment {
 		try {
 			NewUserLoginBean newUserLoginBean = (NewUserLoginBean) getArguments()
 					.getSerializable("newUserLoginBean");
-			if (newUserLoginBean != null) {
-				user_name.setText(newUserLoginBean.getUsername());
-				account_balance.setText(newUserLoginBean.getMoney());
-
-				SharedPrefHelper.getInstance(getActivity()).setUserName(
-						newUserLoginBean.getUsername());
-				SharedPrefHelper.getInstance(getActivity()).setAccountBalance(
-						newUserLoginBean.getMoney());
-			}
+			updateUserInfo(newUserLoginBean);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 更新用户信息
+	 * 
+	 * @param newUserLoginBean
+	 */
+	private void updateUserInfo(NewUserLoginBean newUserLoginBean) {
+		if (newUserLoginBean != null) {
+			user_name.setText(newUserLoginBean.getUsername());
+			account_balance.setText(newUserLoginBean.getMoney());
+
+			SharedPrefHelper.getInstance(getActivity()).setUserName(
+					newUserLoginBean.getUsername());
+			SharedPrefHelper.getInstance(getActivity()).setAccountBalance(
+					newUserLoginBean.getMoney());
 		}
 	}
 
@@ -298,7 +319,7 @@ public class UserInfoFragment extends BaseFragment {
 					// mResponse.versionBean.getVersion());
 					final String appPath = mBean.getDowload();
 					update = mBean.getUpdate();
-					message=mBean.getMessage();
+					message = mBean.getMessage();
 					int oldVersion = VersionUtil.getVersionCode(getActivity());
 					if (Integer.parseInt(newVersion.replace(".", "")) > oldVersion) {
 						getActivity().runOnUiThread(new Runnable() {
@@ -339,5 +360,20 @@ public class UserInfoFragment extends BaseFragment {
 				return false;
 			}
 		}
+	};
+
+	/**
+	 * 更新用户信息广播
+	 */
+	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			NewUserLoginBean newUserLoginBean = (NewUserLoginBean) intent
+					.getSerializableExtra("newUserLoginBean");
+			updateUserInfo(newUserLoginBean);
+		}
+
 	};
 }
