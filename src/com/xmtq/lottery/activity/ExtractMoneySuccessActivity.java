@@ -2,6 +2,7 @@ package com.xmtq.lottery.activity;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -65,14 +66,10 @@ public class ExtractMoneySuccessActivity extends BaseActivity {
 	public void onClickEvent(View view) {
 		switch (view.getId()) {
 		case R.id.back:
-			this.finish();
+			requestLogin();
 			break;
 		case R.id.extract_money_done:
-			// Intent intent = new Intent(ExtractMoneySuccessActivity.this,
-			// RecomendActivity.class);
-			// startActivity(intent);
 			requestLogin();
-			// finish();
 			break;
 
 		default:
@@ -104,8 +101,23 @@ public class ExtractMoneySuccessActivity extends BaseActivity {
 				onFailure(Consts.REQUEST_ERROR);
 			}
 			mLoadingDialog.dismiss();
+			finish();
 		}
 	};
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
+			requestLogin();
+			break;
+
+		default:
+			break;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
 	/**
 	 * 登陆成功
@@ -117,11 +129,11 @@ public class ExtractMoneySuccessActivity extends BaseActivity {
 		// 保存用户登陆状态及信息
 		spfs.setIsLogin(true);
 		spfs.setUid(newUserLoginBean.getUid());
-		// 登陆成功，跳转另一个页面
-		Intent intent = new Intent(ExtractMoneySuccessActivity.this,
-				RecomendActivity.class);
+
+		// 更新用户账户余额
+		Intent intent = new Intent(Consts.ACTION_REFRESH_USERINFO);
 		intent.putExtra("newUserLoginBean", newUserLoginBean);
-		startActivity(intent);
+		sendBroadcast(intent);
 	}
 
 	/**
@@ -132,5 +144,6 @@ public class ExtractMoneySuccessActivity extends BaseActivity {
 	private void onFailure(String msg) {
 		ToastUtil.showCenterToast(this, msg);
 	}
+	
 
 }

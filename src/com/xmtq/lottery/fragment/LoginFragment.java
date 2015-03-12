@@ -1,7 +1,9 @@
 package com.xmtq.lottery.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -67,6 +69,12 @@ public class LoginFragment extends BaseFragment {
 				&& !TextUtils.isEmpty(spfs.getUserPassward())) {
 			login(false);
 		}
+	}
+	
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
 	}
 
 	public void dealLogicBeforeInitView() {

@@ -234,10 +234,9 @@ public class RegisterSecondActivity extends BaseActivity {
 
 		String userName = userBean.getUsername();
 		String password = userBean.getPassword();
-		if (spfs.getIsRememberPwd()) {
-			spfs.setUserPassward(password);
-			spfs.setUserName(userName);
-		}
+		spfs.setIsRememberPwd(true);
+		spfs.setUserPassward(password);
+		spfs.setUserName(userName);
 
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
 		mAsyncTask.execute(RequestMaker.getInstance().getUserLogin(userName,
@@ -275,12 +274,14 @@ public class RegisterSecondActivity extends BaseActivity {
 		// 保存用户登陆状态及信息
 		spfs.setIsLogin(true);
 		spfs.setUid(newUserLoginBean.getUid());
+
 		ToastUtil.showCenterToast(this, "登录成功");
-		// 登陆成功，跳转另一个页面
-		Intent intent = new Intent(RegisterSecondActivity.this,
-				RecomendActivity.class);
+
+		// 自动登录，更新用户信息
+		Intent intent = new Intent(Consts.ACTION_AUTO_LOGIN);
 		intent.putExtra("newUserLoginBean", newUserLoginBean);
-		startActivity(intent);
+		sendBroadcast(intent);
+		finish();
 	}
 
 	/**

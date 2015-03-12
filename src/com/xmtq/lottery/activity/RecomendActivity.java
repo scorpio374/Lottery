@@ -3,9 +3,12 @@ package com.xmtq.lottery.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnKeyListener;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import com.xmtq.lottery.Consts;
 import com.xmtq.lottery.R;
 import com.xmtq.lottery.WelCheckDialog;
 import com.xmtq.lottery.adapter.FragmentPagerAdater;
@@ -26,8 +30,8 @@ import com.xmtq.lottery.fragment.RecomendFragment;
 import com.xmtq.lottery.fragment.RecomendHistoryFragment;
 import com.xmtq.lottery.fragment.UserInfoFragment;
 import com.xmtq.lottery.network.HttpRequestAsyncTask;
-import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.network.HttpRequestAsyncTask.OnCompleteListener;
+import com.xmtq.lottery.network.RequestMaker;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.ToastUtil;
 import com.xmtq.lottery.utils.VersionUtil;
@@ -58,6 +62,8 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 		// 开户APP默认不登陆
 		spfs.setIsLogin(false);
 		initView();
+		registerReceiver(mBroadcastReceiver, new IntentFilter(
+				Consts.ACTION_AUTO_LOGIN));
 	}
 
 	public void initView() {
@@ -76,23 +82,10 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	private void initMenuDrawer() {
 
 		// 用于提现后重新登录
-		NewUserLoginBean newUserLoginBean = (NewUserLoginBean) getIntent()
-				.getSerializableExtra("newUserLoginBean");
-		if (newUserLoginBean != null) {
-			spfs.setIsLogin(true);
-			UserInfoFragment fragment = new UserInfoFragment();
-			Bundle b = new Bundle();
-			b.putSerializable("newUserLoginBean", newUserLoginBean);
-			fragment.setArguments(b);
-			setBehindContentView(R.layout.menu_frame);
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.menu_frame, fragment).commit();
-		} else {
-			setBehindContentView(R.layout.menu_frame);
-			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.menu_frame, new LoginFragment()).commit();
-			requestVersion();
-		}
+		setBehindContentView(R.layout.menu_frame);
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.menu_frame, new LoginFragment()).commit();
+		requestVersion();
 
 		menu = getSlidingMenu();
 		menu.setMode(SlidingMenu.LEFT);
@@ -172,6 +165,7 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
+		unregisterReceiver(mBroadcastReceiver);
 		super.onDestroy();
 	}
 
@@ -246,8 +240,8 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 						});
 
 					} else {
-						ToastUtil.showCenterToast(RecomendActivity.this,
-								"当前已是最新版本");
+						// ToastUtil.showCenterToast(RecomendActivity.this,
+						// "当前已是最新版本");
 					}
 
 				} else {
@@ -272,6 +266,30 @@ public class RecomendActivity extends SlidingFragmentActivity implements
 				return false;
 			}
 		}
+	};
+
+	/**
+	 * 自动登录广播
+	 */
+	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			NewUserLoginBean newUserLoginBean = (NewUserLoginBean) intent
+					.getSerializableExtra("newUserLoginBean");
+
+			if(newUserLoginBean != null){
+				spfs.setIsLogin(true);
+				UserInfoFragment fragment = new UserInfoFragment();
+				Bundle b = new Bundle();
+				b.putSerializable("newUserLoginBean", newUserLoginBean);
+				fragment.setArguments(b);
+				RecomendActivity.this.getSupportFragmentManager().beginTransaction()
+						.replace(R.id.menu_frame, fragment).commitAllowingStateLoss();
+			}
+		}
+
 	};
 
 }

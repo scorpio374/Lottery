@@ -124,8 +124,10 @@ public class AccountFragment extends BaseFragment {
 		mLoadingDialog.show("数据加载中...");
 		RequestMaker mRequestMaker = RequestMaker.getInstance();
 		HttpRequestAsyncTask mAsyncTask = new HttpRequestAsyncTask();
-		mAsyncTask.execute(mRequestMaker.getAccountDetail("", "", userid,
-				mFlag, String.valueOf(currentPageNum), String.valueOf(pageSize)));
+		mAsyncTask
+				.execute(mRequestMaker.getAccountDetail("", "", userid, mFlag,
+						String.valueOf(currentPageNum),
+						String.valueOf(pageSize)));
 		mAsyncTask.setOnCompleteListener(mOnCompleteListener);
 	}
 
@@ -158,14 +160,18 @@ public class AccountFragment extends BaseFragment {
 		if (currentPageNum == 1) {
 			count = Integer.parseInt(response.getCount());
 			mBeanList = response.accountDetailList;
-			if (mBeanList != null) {
-				mAdapter = new AccountDetailListAdapter(
-						getActivity(), mBeanList);
+			if (mBeanList.size() == 0) {
+				mListView.setVisibility(View.GONE);
+				ToastUtil.showCenterToast(getActivity(), "没有账户明细");
+			} else {
+				mAdapter = new AccountDetailListAdapter(getActivity(),
+						mBeanList);
 				mListView.setAdapter(mAdapter);
 				pay = response.getPay();
 				income = response.getIncome();
+
 			}
-		}else{
+		} else {
 			mBeanList.addAll(response.accountDetailList);
 			mHandler.sendEmptyMessage(Consts.LOAD_DATA_FINISH);
 		}
@@ -178,6 +184,7 @@ public class AccountFragment extends BaseFragment {
 	 */
 	private void onFailure(String msg) {
 		ToastUtil.showCenterToast(getActivity(), msg);
+		mListView.setVisibility(View.GONE);
 		mHandler.sendEmptyMessage(Consts.LOAD_DATA_FINISH);
 	}
 
