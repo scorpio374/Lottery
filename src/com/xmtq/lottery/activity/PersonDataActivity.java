@@ -179,8 +179,13 @@ public class PersonDataActivity extends BaseActivity {
 			real_name_added = (TextView) findViewById(R.id.real_name_added);
 			id_card_add = (TextView) findViewById(R.id.id_card_add);
 			uid_added.setText(SharedPrefHelper.getInstance(this).getUserName());
-			real_name_added.setText(userInfoBean.getRealname());
-			id_card_add.setText(userInfoBean.getCardid());
+			if (userInfoBean.getRealname().length() > 1) {
+				real_name_added.setText(userInfoBean.getRealname().substring(0,
+						1)
+						+ " * *");
+			}
+			id_card_add.setText(userInfoBean.getCardid().substring(0, 6)
+					+ "**********");
 		}
 		if (isAddBankInfo) {
 			bankcard_no_add.setVisibility(View.GONE);
@@ -193,7 +198,6 @@ public class PersonDataActivity extends BaseActivity {
 						userInfoBean.getBankaccount().length());
 				bank_card_tail_num.setText("尾号 " + tail);
 			}
-
 		}
 	}
 

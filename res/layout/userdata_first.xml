@@ -257,7 +257,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dip"
-                    android:text="用户名："
+                    android:text="用  户  名："
                     android:textColor="@color/white"
                     android:textSize="@dimen/main_textsize" />
 
