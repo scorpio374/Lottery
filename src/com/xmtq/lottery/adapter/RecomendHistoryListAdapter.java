@@ -57,6 +57,13 @@ public class RecomendHistoryListAdapter extends BaseAdapter {
 		holder.game_date.setText(mList.get(arg0).getDate());
 		holder.hitcount_count.setText(mList.get(arg0).getHitcount() + "/"
 				+ mList.get(arg0).getCount());
+		if (mList.get(arg0).getHitcount().equals(mList.get(arg0).getCount())) {
+			holder.hitcount_count.setTextColor(mContext.getResources()
+					.getColor(R.color.text_gold));
+		} else {
+			holder.hitcount_count.setTextColor(mContext.getResources()
+					.getColor(R.color.white));
+		}
 		// holder.tv_program_name.setText(childList.get(position).getTitle());
 
 		return convertView;

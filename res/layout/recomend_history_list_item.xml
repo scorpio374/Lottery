@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:gravity="right"
             android:text="4/5"
-            android:textColor="@color/yellow"
+            android:textColor="@color/white"
             android:textSize="@dimen/main_textsize" />
 
         <ImageView
