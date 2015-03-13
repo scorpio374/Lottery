@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xmtq.lottery.R;
 import com.xmtq.lottery.Consts;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.adapter.AccountDetailListAdapter;
 import com.xmtq.lottery.bean.AccountDetailBean;
 import com.xmtq.lottery.bean.AccountDetailResponse;

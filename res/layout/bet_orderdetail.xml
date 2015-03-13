@@ -184,15 +184,15 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dip"
             android:gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:orientation="horizontal" 
+            android:visibility="gone" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="预计开奖"
                 android:textColor="#848baf" />
-
-            <TextView
+<TextView
                 android:id="@+id/bet_detail_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -204,9 +204,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip"
+            android:layout_margin="10dip"
             android:gravity="center_vertical"
             android:orientation="horizontal" >
 
