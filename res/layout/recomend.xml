@@ -126,7 +126,7 @@
                     android:layout_marginLeft="20dip"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="暂无推荐比赛"
+                    android:text="推荐0场比赛"
                     android:textColor="@color/white_shallow"
                     android:textSize="@dimen/main_textsize4" />
 
@@ -152,7 +152,6 @@
                 android:fadingEdge="none"
                 android:scrollbars="none" />
         </LinearLayout>
-
     </FrameLayout>
 
     <LinearLayout
@@ -207,9 +206,9 @@
                 android:id="@+id/betting_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="5dip"
                 android:text="0注1倍  共0元"
-                android:textColor="#878eb4"
-                android:padding="5dip"/>
+                android:textColor="#878eb4" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -224,7 +223,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="0注"
-                    android:textColor="#878eb4"/>
+                    android:textColor="#878eb4" />
 
                 <TextView
                     android:id="@+id/betting_multiple"
@@ -232,27 +231,27 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="1倍"
-                    android:textColor="#878eb4"/>
+                    android:textColor="#878eb4" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dip"
                     android:text="共"
-                    android:textColor="#878eb4"/>
+                    android:textColor="#878eb4" />
 
                 <TextView
                     android:id="@+id/betting_buymoney"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textColor="@color/green"/>
+                    android:textColor="@color/green" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="元"
-                    android:textColor="#878eb4"/>
+                    android:textColor="#878eb4" />
             </LinearLayout>
 
             <LinearLayout
