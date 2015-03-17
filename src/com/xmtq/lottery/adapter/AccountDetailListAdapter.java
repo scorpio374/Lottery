@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.xmtq.lottery.R;
 import com.xmtq.lottery.bean.AccountDetailBean;
+import com.xmtq.lottery.utils.OddsUtil;
 
 public class AccountDetailListAdapter extends BaseAdapter {
 	private Context mContext;
@@ -60,9 +61,8 @@ public class AccountDetailListAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 
-		String date = "";
-		String[] d = mList.get(arg0).getEntertime().split("-");
-		date = d[1] + "/" + d[2];
+		String date = OddsUtil.getGameData(mList.get(arg0).getEntertime());
+		String time = OddsUtil.getGameTime(mList.get(arg0).getEntertime());
 
 		String style = "";
 		String money = "";
@@ -89,19 +89,19 @@ public class AccountDetailListAdapter extends BaseAdapter {
 				holder.bet_count.setTextColor(mContext.getResources().getColor(
 						R.color.white));
 			}
-			holder.bet_date.setText(date);
 			holder.bet_style.setText(style);
 
 			holder.bet_date.setVisibility(View.VISIBLE);
 			if (arg0 > 0) {
-				if (mList.get(arg0).getEntertime()
-						.equals(mList.get(arg0 - 1).getEntertime())) {
-					holder.bet_date.setVisibility(View.INVISIBLE);
+				if (OddsUtil.getGameData((mList.get(arg0).getEntertime()))
+						.equals(OddsUtil.getGameData((mList.get(arg0 - 1)
+								.getEntertime())))) {
+					holder.bet_date.setVisibility(View.GONE);
 				}
 			}
 
-			holder.bet_time.setText(date);
-			holder.bet_time.setVisibility(View.GONE);
+			holder.bet_date.setText(date);
+			holder.bet_time.setText(time);
 		}
 
 		return convertView;

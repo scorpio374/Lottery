@@ -75,11 +75,11 @@ public class RechargeBindingListAdapter extends BaseAdapter {
 		}
 
 		if (userBankList.get(arg0).getBankCardTypeUsed().equals("0")) {
-			holder.bank_tail_num.setText("卡号："
-					+ userBankList.get(arg0).getBankAccount() + "     储蓄卡");
+			holder.bank_tail_num.setText("尾号  "
+					+ userBankList.get(arg0).getBankAccount().replace("*", "") + "     储蓄卡");
 		} else if (userBankList.get(arg0).getBankCardTypeUsed().equals("1")) {
-			holder.bank_tail_num.setText("卡号："
-					+ userBankList.get(arg0).getBankAccount() + "     信用卡");
+			holder.bank_tail_num.setText("尾号  "
+					+ userBankList.get(arg0).getBankAccount().replace("*", "") + "     信用卡");
 		}
 
 		return convertView;
