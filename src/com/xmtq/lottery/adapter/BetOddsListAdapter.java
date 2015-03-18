@@ -11,13 +11,13 @@ import android.widget.TextView;
 
 import com.xmtq.lottery.R;
 import com.xmtq.lottery.bean.BetOddBean;
+import com.xmtq.lottery.utils.LogUtil;
 
 public class BetOddsListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<BetOddBean> mBetOddBeans;
 
-	public BetOddsListAdapter(Context c,
-			List<BetOddBean> betOddBeans) {
+	public BetOddsListAdapter(Context c, List<BetOddBean> betOddBeans) {
 		this.mContext = c;
 		this.mBetOddBeans = betOddBeans;
 	}
@@ -61,6 +61,13 @@ public class BetOddsListAdapter extends BaseAdapter {
 		holder.bet_detail_spf.setText(mBetOddBeans.get(arg0).getPlayname());
 		holder.bet_detail_s.setText(mBetOddBeans.get(arg0).getGameresult());
 		holder.bet_detail_f.setText(mBetOddBeans.get(arg0).getBetinfo());
+
+		LogUtil.log("mBetOddBeans.get(arg0).getPlayname()："
+				+ mBetOddBeans.get(arg0).getPlayname());
+		LogUtil.log("mBetOddBeans.get(arg0).getGameresult():"
+				+ mBetOddBeans.get(arg0).getGameresult());
+		LogUtil.log("mBetOddBeans.get(arg0).getBetinfo():"
+				+ mBetOddBeans.get(arg0).getBetinfo());
 		return convertView;
 	}
 

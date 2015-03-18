@@ -82,19 +82,20 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/tv_bfkj"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" "
-            android:textColor="#e5af0b"
-            android:textSize="14sp" />
-
-        <TextView
             android:id="@+id/tv_bfkjbc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
-            android:text=" "
+            android:text="半："
+            android:textColor="#e5af0b"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_bfkj"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:text="全："
             android:textColor="#e5af0b"
             android:textSize="14sp" />
     </LinearLayout>

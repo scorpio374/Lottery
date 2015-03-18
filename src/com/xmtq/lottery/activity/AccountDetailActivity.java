@@ -23,8 +23,8 @@ public class AccountDetailActivity extends BaseActivity implements
 	private TextView head_right;
 	private String mFormerTag;
 	private final static String TOTAL_TAG = "";
-	private final static String RECHARGE_TAG = "93,1";
-	private final static String DEPOSIT_TAG = "5,6";
+	private final static String RECHARGE_TAG = "0,76,77,93";
+	private final static String DEPOSIT_TAG = "6";
 	private AccountFragment totalAccountFragment;
 	private AccountFragment rechargeAccountFragment;
 	private AccountFragment depositAccountFragment;

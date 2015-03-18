@@ -59,7 +59,7 @@ public class RecomendHistoryListAdapter extends BaseAdapter {
 				+ mList.get(arg0).getCount());
 		if (mList.get(arg0).getHitcount().equals(mList.get(arg0).getCount())) {
 			holder.hitcount_count.setTextColor(mContext.getResources()
-					.getColor(R.color.text_gold));
+					.getColor(R.color.green));
 		} else {
 			holder.hitcount_count.setTextColor(mContext.getResources()
 					.getColor(R.color.white));

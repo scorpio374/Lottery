@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dip"
+            android:layout_marginLeft="10dip"
             android:text="充值金额："
             android:textColor="@color/white"
             android:textSize="@dimen/main_textsize" />
@@ -70,8 +70,8 @@
             android:background="@null"
             android:cursorVisible="true"
             android:hint=""
-            android:singleLine="true"
             android:inputType="number"
+            android:singleLine="true"
             android:textColor="@color/white"
             android:textColorHint="@color/soft_gray"
             android:textCursorDrawable="@drawable/edit"
@@ -159,13 +159,25 @@
         </RadioGroup>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_select_bank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="10dip"
+        android:layout_marginLeft="10dip"
+        android:text="请选择银行卡进行充值"
+        android:textColor="#A4A5A9"
+        android:textSize="@dimen/normal_textsize"
+        android:visibility="gone" />
+
     <ListView
         android:id="@+id/recharge_binding_list"
         android:layout_width="match_parent"
+        android:layout_marginTop="10dip"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
-        android:layout_marginTop="10dip"
         android:visibility="gone" >
     </ListView>
 
@@ -180,6 +192,7 @@
         android:orientation="horizontal" >
 
         <ImageView
+            android:id="@+id/add_bank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

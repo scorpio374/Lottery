@@ -93,22 +93,21 @@ public class GameResuleDetailListAdapter extends BaseAdapter {
 			holder.bfkjbj.setTextColor(mContext.getResources().getColor(
 					R.color.text_gold));
 		}
-
-		if (!TextUtils.isEmpty(mHistoryBeansList.get(arg0).getBfkj())) {
-			holder.bfkj.setVisibility(View.VISIBLE);
-			holder.bfkj.setText("全 " + mHistoryBeansList.get(arg0).getBfkj());
-		} else {
-			holder.bfkj.setVisibility(View.GONE);
-		}
-
+		
 		if (!TextUtils.isEmpty(mHistoryBeansList.get(arg0).getBfkjBc())) {
 			holder.bfkjbj.setVisibility(View.VISIBLE);
-			holder.bfkjbj.setText("半 "
+			holder.bfkjbj.setText("半"
 					+ mHistoryBeansList.get(arg0).getBfkjBc());
 		} else {
 			holder.bfkjbj.setVisibility(View.GONE);
 		}
 
+		if (!TextUtils.isEmpty(mHistoryBeansList.get(arg0).getBfkj())) {
+			holder.bfkj.setVisibility(View.VISIBLE);
+			holder.bfkj.setText("全" + mHistoryBeansList.get(arg0).getBfkj());
+		} else {
+			holder.bfkj.setVisibility(View.GONE);
+		}
 		return convertView;
 	}
 

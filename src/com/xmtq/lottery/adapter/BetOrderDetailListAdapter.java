@@ -3,6 +3,7 @@ package com.xmtq.lottery.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.support.v4.widget.SlidingPaneLayout.LayoutParams;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

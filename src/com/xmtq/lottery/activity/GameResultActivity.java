@@ -68,6 +68,9 @@ public class GameResultActivity extends BaseActivity {
 		tv_gametime.setText(mDateBean.getDate());
 		tv_game_result.setText(mDateBean.getHitcount() + "/"
 				+ mDateBean.getCount());
+		if(Integer.parseInt(mDateBean.getHitcount()) > 0){
+			tv_game_result.setTextColor(getResources().getColor(R.color.text_gold));
+		}
 
 		game_result_detail_list = (ListView) findViewById(R.id.game_result_detail_list);
 		btn_back = (ImageButton) findViewById(R.id.back);
@@ -114,7 +117,6 @@ public class GameResultActivity extends BaseActivity {
 						GameResuleDetailListAdapter mAdapter = new GameResuleDetailListAdapter(
 								GameResultActivity.this, mHistoryBeansList);
 						game_result_detail_list.setAdapter(mAdapter);
-
 					}
 				} else {
 					ToastUtil.showCenterToast(GameResultActivity.this,

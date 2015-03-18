@@ -1,9 +1,7 @@
 package com.xmtq.lottery.fragment;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,8 +14,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.xmtq.lottery.R;
 import com.xmtq.lottery.Consts;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.activity.FindPasswordActivity;
 import com.xmtq.lottery.activity.RegisterActivity;
 import com.xmtq.lottery.bean.BaseResponse;

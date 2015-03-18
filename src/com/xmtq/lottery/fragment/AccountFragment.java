@@ -6,12 +6,15 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.xmtq.lottery.R;
 import com.xmtq.lottery.Consts;
+import com.xmtq.lottery.R;
 import com.xmtq.lottery.adapter.AccountDetailListAdapter;
 import com.xmtq.lottery.bean.AccountDetailBean;
 import com.xmtq.lottery.bean.AccountDetailResponse;
@@ -40,12 +43,13 @@ public class AccountFragment extends BaseFragment {
 	private CustomPullListView mListView;
 	private List<AccountDetailBean> mBeanList;
 	private AccountDetailListAdapter mAdapter;
+	private LinearLayout account_ll;
+	private TextView income;
+	private TextView pay;
 	private String mFlag = "0";
 	private int currentPageNum = 1;
 	private int pageSize = 10;
 	private int count = 0;
-	private String pay;
-	private String income;
 
 	public AccountFragment() {
 		// TODO Auto-generated constructor stub
@@ -82,6 +86,9 @@ public class AccountFragment extends BaseFragment {
 	}
 
 	public void initView(View v) {
+		income = (TextView) v.findViewById(R.id.income);
+		pay = (TextView) v.findViewById(R.id.pay);
+		account_ll = (LinearLayout) v.findViewById(R.id.account_ll);
 		mListView = (CustomPullListView) v.findViewById(R.id.account_listview);
 		mListView.setCanRefresh(true);
 		mListView.setCanLoadMore(true);
@@ -163,13 +170,29 @@ public class AccountFragment extends BaseFragment {
 			if (mBeanList.size() == 0) {
 				mListView.setVisibility(View.GONE);
 				ToastUtil.showCenterToast(getActivity(), "没有账户明细");
+				income.setText("");
+				income.setText("");
 			} else {
 				mAdapter = new AccountDetailListAdapter(getActivity(),
 						mBeanList);
 				mListView.setAdapter(mAdapter);
-				pay = response.getPay();
-				income = response.getIncome();
 
+				// 总帐户显示这个字段
+				if (mFlag == "") {
+					account_ll.setVisibility(View.VISIBLE);
+					if (TextUtils.isEmpty(response.getPay())) {
+						pay.setText("");
+					} else {
+						pay.setText("支出：" + response.getPay() + "元");
+					}
+					if (TextUtils.isEmpty(response.getIncome())) {
+						income.setText("");
+					} else {
+						income.setText("收入：" + response.getIncome() + "元");
+					}
+				} else {
+					account_ll.setVisibility(View.GONE);
+				}
 			}
 		} else {
 			mBeanList.addAll(response.accountDetailList);

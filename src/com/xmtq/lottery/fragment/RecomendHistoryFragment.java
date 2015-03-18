@@ -31,7 +31,7 @@ import com.xmtq.lottery.widget.CustomPullListView.OnLoadMoreListener;
 import com.xmtq.lottery.widget.CustomPullListView.OnRefreshListener;
 
 /*
- * 投注记录
+ * 推荐历史
  * 
  * @author mwz123
  * 

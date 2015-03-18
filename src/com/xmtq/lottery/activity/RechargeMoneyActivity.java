@@ -46,6 +46,7 @@ public class RechargeMoneyActivity extends BaseActivity {
 	// 订单号
 	private String requestId;
 	private ListView recharge_binding_list;
+	private TextView tv_select_bank;
 
 	private RechargeBindingListAdapter adapter;
 	private boolean isCheckedBank = false;
@@ -80,6 +81,7 @@ public class RechargeMoneyActivity extends BaseActivity {
 
 		recharge_commit.setOnClickListener(this);
 		recharge_binding_list = (ListView) findViewById(R.id.recharge_binding_list);
+		tv_select_bank = (TextView) findViewById(R.id.tv_select_bank);
 
 		recharge_binding_list.setOnItemClickListener(bindingBankListener);
 
@@ -344,6 +346,7 @@ public class RechargeMoneyActivity extends BaseActivity {
 					RechargeMoneyActivity.this,
 					mCreateOrderBean.getUserBankList());
 			recharge_binding_list.setAdapter(adapter);
+			tv_select_bank.setVisibility(View.VISIBLE);
 			recharge_binding_list.setVisibility(View.VISIBLE);
 			recharge_commit.setVisibility(View.VISIBLE);
 		}

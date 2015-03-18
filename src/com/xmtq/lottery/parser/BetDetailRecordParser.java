@@ -91,6 +91,7 @@ public class BetDetailRecordParser extends BaseParser<BetDetailAllResponse> {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			JSONObject odd = j.getJSONObject("odd");
 			if (odd != null) {
 				BetOddBean mOddBean = new BetOddBean();

@@ -75,7 +75,7 @@ public class BetRecordListAdapter extends BaseAdapter {
 					.getGameData((mRecordsBeansList.get(arg0).getAddtime()))
 					.equals(OddsUtil.getGameData((mRecordsBeansList
 							.get(arg0 - 1).getAddtime())))) {
-				holder.bet_date.setVisibility(View.INVISIBLE);
+				holder.bet_date.setVisibility(View.GONE);
 			}
 		}
 

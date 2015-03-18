@@ -66,6 +66,7 @@
             android:layout_marginBottom="5dip"
             android:layout_marginRight="5dip"
             android:layout_marginTop="5dip"
+            android:layout_marginLeft="5dip"
             android:layout_weight="1"
             android:text="周一"
             android:textColor="@color/white" />
@@ -87,7 +88,7 @@
             android:layout_marginRight="5dip"
             android:layout_marginTop="5dip"
             android:text="3/6"
-            android:textColor="@color/text_gold" />
+            android:textColor="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
