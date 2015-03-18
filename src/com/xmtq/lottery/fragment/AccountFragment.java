@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xmtq.lottery.Consts;
@@ -42,6 +43,7 @@ public class AccountFragment extends BaseFragment {
 	private CustomPullListView mListView;
 	private List<AccountDetailBean> mBeanList;
 	private AccountDetailListAdapter mAdapter;
+	private LinearLayout account_ll;
 	private TextView income;
 	private TextView pay;
 	private String mFlag = "0";
@@ -86,6 +88,7 @@ public class AccountFragment extends BaseFragment {
 	public void initView(View v) {
 		income = (TextView) v.findViewById(R.id.income);
 		pay = (TextView) v.findViewById(R.id.pay);
+		account_ll = (LinearLayout) v.findViewById(R.id.account_ll);
 		mListView = (CustomPullListView) v.findViewById(R.id.account_listview);
 		mListView.setCanRefresh(true);
 		mListView.setCanLoadMore(true);
@@ -173,15 +176,22 @@ public class AccountFragment extends BaseFragment {
 				mAdapter = new AccountDetailListAdapter(getActivity(),
 						mBeanList);
 				mListView.setAdapter(mAdapter);
-				if (TextUtils.isEmpty(response.getPay())) {
-					pay.setText("");
+
+				// 总帐户显示这个字段
+				if (mFlag == "") {
+					account_ll.setVisibility(View.VISIBLE);
+					if (TextUtils.isEmpty(response.getPay())) {
+						pay.setText("");
+					} else {
+						pay.setText("支出：" + response.getPay() + "元");
+					}
+					if (TextUtils.isEmpty(response.getIncome())) {
+						income.setText("");
+					} else {
+						income.setText("收入：" + response.getIncome() + "元");
+					}
 				} else {
-					pay.setText("支出：" + response.getPay() + "元");
-				}
-				if (TextUtils.isEmpty(response.getIncome())) {
-					income.setText("");
-				} else {
-					income.setText("收入：" + response.getIncome() + "元");
+					account_ll.setVisibility(View.GONE);
 				}
 			}
 		} else {

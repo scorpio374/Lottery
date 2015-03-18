@@ -5,26 +5,41 @@
     android:orientation="vertical" >
 
     <LinearLayout
+        android:id="@+id/account_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dip" >
+        android:background="#323642"
+        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/pay"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/main_textsize" />
+            android:orientation="horizontal"
+            android:padding="10dip" >
 
-        <TextView
-            android:id="@+id/income"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dip"
-            android:singleLine="true"
-            android:textColor="@color/green"
-            android:textSize="@dimen/main_textsize" />
+            <TextView
+                android:id="@+id/pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/main_textsize" />
+
+            <TextView
+                android:id="@+id/income"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:singleLine="true"
+                android:textColor="@color/green"
+                android:textSize="@dimen/main_textsize" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dip"
+            android:background="#3e424e" />
     </LinearLayout>
 
     <com.xmtq.lottery.widget.CustomPullListView

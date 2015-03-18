@@ -84,7 +84,7 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="1dip"
+        android:layout_height="2dip"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dip"
