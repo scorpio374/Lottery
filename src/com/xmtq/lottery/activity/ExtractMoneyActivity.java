@@ -71,7 +71,7 @@ public class ExtractMoneyActivity extends BaseActivity {
 		str = str.substring(str.length() - 4, str.length());
 
 		tv_bank_name.setText(userInfoBean.getBankname());
-		bank_card_tail_num.setText("尾号：" + str);
+		bank_card_tail_num.setText("尾号" + str);
 		tv_balance.setText(accountbalance);
 
 		// img_checkbank = (ImageView) findViewById(R.id.img_checkbank);
