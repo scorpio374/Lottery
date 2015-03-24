@@ -43,11 +43,13 @@ public class GuideActivity extends BaseActivity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
-		mSharedPrefHelper.setFirstLogin(false);
-
-		Intent intent = new Intent(GuideActivity.this, RecomendActivity.class);
-		startActivity(intent);
-		finish();
+		if (mSharedPrefHelper.getFirstLogin()) {
+			mSharedPrefHelper.setFirstLogin(false);
+			Intent intent = new Intent(GuideActivity.this,
+					RecomendActivity.class);
+			startActivity(intent);
+			finish();
+		}
 		return super.onTouchEvent(event);
 	}
 }

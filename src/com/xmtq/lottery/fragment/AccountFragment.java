@@ -190,9 +190,7 @@ public class AccountFragment extends BaseFragment {
 					} else {
 						income.setText("收入：" + response.getIncome() + "元");
 					}
-				} else {
-					account_ll.setVisibility(View.GONE);
-				}
+				} 
 			}
 		} else {
 			mBeanList.addAll(response.accountDetailList);
