@@ -48,7 +48,7 @@
         <com.xmtq.lottery.widget.CustomListView
             android:id="@+id/bet_odds_listview"
             android:layout_width="0dip"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="4"
             android:divider="@color/line_color"
             android:dividerHeight="1dip"
