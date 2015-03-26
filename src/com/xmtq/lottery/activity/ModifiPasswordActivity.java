@@ -15,6 +15,10 @@ import com.xmtq.lottery.utils.SharedPrefHelper;
 import com.xmtq.lottery.utils.StringUtil;
 import com.xmtq.lottery.utils.ToastUtil;
 
+/**
+ * 修改密码
+ *
+ */
 public class ModifiPasswordActivity extends BaseActivity {
 	private ImageButton btn_back;
 	private TextView repassword_commit;

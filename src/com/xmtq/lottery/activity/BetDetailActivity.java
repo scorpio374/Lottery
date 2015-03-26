@@ -28,6 +28,7 @@ public class BetDetailActivity extends BaseActivity {
 	private ListView bet_record_detail;
 	private ImageButton btn_back;
 	private BetDetailAllBean mBetDetailAllBean;
+	private String winMoney;
 
 	private TextView bet_detail_guoguantype;
 	private TextView bet_detail_periods;
@@ -149,6 +150,6 @@ public class BetDetailActivity extends BaseActivity {
 			mLoadingDialog.dismiss();
 		}
 	};
-	private String winMoney;
+	
 
 }

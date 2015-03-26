@@ -13,6 +13,10 @@ import android.view.animation.Animation.AnimationListener;
 import com.xmtq.lottery.R;
 import com.xmtq.lottery.utils.SharedPrefHelper;
 
+/**
+ * 启动加载页面
+ *
+ */
 public class LoadingActivity extends Activity {
 	private AlphaAnimation aa = null;
 	private View view = null;

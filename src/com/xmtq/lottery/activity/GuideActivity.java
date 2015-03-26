@@ -6,6 +6,10 @@ import android.view.View;
 
 import com.xmtq.lottery.R;
 
+/**
+ * 用户引导页面
+ *
+ */
 public class GuideActivity extends BaseActivity {
 
 	@Override
